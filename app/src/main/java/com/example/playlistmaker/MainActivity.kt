@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -33,10 +34,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(displayLibrary)
         }
 
-        settingsButton.setOnClickListener{
-            val displaySettings = Intent(this, SettingsActivity::class.java)
-            startActivity(displaySettings)
-        }
 
+        val settingsButtonClickListener: View.OnClickListener = object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                val displaySettings = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(displaySettings)
+            }
+        }
+        settingsButton.setOnClickListener(settingsButtonClickListener)
     }
 }
