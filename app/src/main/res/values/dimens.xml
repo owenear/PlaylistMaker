@@ -1,11 +1,13 @@
 <resources>
-    <dimen name="button_margin">8dp</dimen>
+    <dimen name="button_margin_vertical">4dp</dimen>
+    <dimen name="button_margin_horizontal">16dp</dimen>
+    <dimen name="button_margin_top_bottom">24dp</dimen>
     <dimen name="button_weight">1</dimen>
     <dimen name="button_corner">16dp</dimen>
     <dimen name="text_size">22sp</dimen>
-    <dimen name="icon_padding">5dp</dimen>
+    <dimen name="icon_padding">4dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
-    <dimen name="settings_frame_padding_start">15dp</dimen>
-    <dimen name="settings_frame_padding_end">25dp</dimen>
-    <dimen name="settings_frame_height">61dp</dimen>
+    <dimen name="settings_frame_padding_start">16dp</dimen>
+    <dimen name="settings_frame_padding_end">24dp</dimen>
+    <dimen name="settings_frame_height">64dp</dimen>
 </resources>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings"
+    tools:context=".SettingsActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -13,16 +15,17 @@
         >
 
         <ImageButton
-            android:id="@+id/back_button"
+            android:id="@+id/backButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:srcCompat="@drawable/arrow_back"
             android:background="@color/white"
             android:layout_gravity="start|center_vertical"
+            android:foreground="?attr/selectableItemBackground"
             />
 
         <TextView
-            android:id="@+id/settings_head"
+            android:id="@+id/settingsHeaderTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="@color/white"
@@ -46,7 +49,7 @@
         >
 
         <TextView
-            android:id="@+id/textViewNightTheme"
+            android:id="@+id/nightThemeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_night"
@@ -56,7 +59,7 @@
             />
 
         <Switch
-            android:id="@+id/switchNightTheme"
+            android:id="@+id/nightThemeSwitch"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="end|center_vertical"
@@ -72,7 +75,7 @@
         >
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/shareTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_share"
@@ -82,7 +85,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/shareImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/share"
@@ -101,7 +104,7 @@
         >
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/supportTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_support"
@@ -111,7 +114,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/supportImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/support"
@@ -130,7 +133,7 @@
         >
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/userAgrTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_agreement"
@@ -140,7 +143,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/userAgrImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/arrow_forward"
