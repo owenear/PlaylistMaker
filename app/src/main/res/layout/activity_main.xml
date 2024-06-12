@@ -15,12 +15,14 @@
         android:id="@+id/headerTextView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/yandex_sans_text_medium"
         android:gravity="center_vertical"
         android:text="@string/app_name"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size"
-        android:layout_marginHorizontal="@dimen/button_margin_horizontal"/>
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:letterSpacing="@dimen/letter_spacing"
+        />
 
     <Button
         android:id="@+id/searchButton"
@@ -31,7 +33,7 @@
         android:layout_marginHorizontal="@dimen/button_margin_horizontal"
         android:layout_weight="@dimen/button_weight"
         android:backgroundTint="@color/white"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/yandex_sans_text_medium"
         android:text="@string/search_button"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size"
@@ -42,6 +44,7 @@
         app:iconTint="@color/black"
         android:textAllCaps="false"
         android:foreground="?attr/selectableItemBackground"
+        android:letterSpacing="@dimen/letter_spacing"
         />
 
     <Button
@@ -52,7 +55,7 @@
         android:layout_marginVertical="@dimen/button_margin_vertical"
         android:layout_marginHorizontal="@dimen/button_margin_horizontal"
         android:backgroundTint="@color/white"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/yandex_sans_text_medium"
         android:text="@string/library_button"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size"
@@ -62,7 +65,9 @@
         app:iconGravity="textStart"
         app:iconPadding="@dimen/icon_padding"
         android:textAllCaps="false"
-        android:foreground="?attr/selectableItemBackground"/>
+        android:foreground="?attr/selectableItemBackground"
+        android:letterSpacing="@dimen/letter_spacing"
+        />
 
     <Button
         android:id="@+id/settingsButton"
@@ -73,7 +78,7 @@
         android:layout_marginBottom="@dimen/button_margin_top_bottom"
         android:layout_marginHorizontal="@dimen/button_margin_horizontal"
         android:backgroundTint="@color/white"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/yandex_sans_text_medium"
         android:text="@string/settings_button"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size"
@@ -83,6 +88,8 @@
         app:iconGravity="textStart"
         app:iconPadding="@dimen/icon_padding"
         android:textAllCaps="false"
-        android:foreground="?attr/selectableItemBackground"/>
+        android:foreground="?attr/selectableItemBackground"
+        android:letterSpacing="@dimen/letter_spacing"
+        />
 
 </LinearLayout>
