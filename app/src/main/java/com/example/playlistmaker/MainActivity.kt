@@ -35,11 +35,9 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        val settingsButtonClickListener: View.OnClickListener = object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                val displaySettings = Intent(this@MainActivity, SettingsActivity::class.java)
-                startActivity(displaySettings)
-            }
+        val settingsButtonClickListener: View.OnClickListener = View.OnClickListener {
+            val displaySettings = Intent(this@MainActivity, SettingsActivity::class.java)
+            startActivity(displaySettings)
         }
         settingsButton.setOnClickListener(settingsButtonClickListener)
     }
