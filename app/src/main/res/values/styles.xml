@@ -22,6 +22,8 @@
         <item name="android:layout_height">@dimen/settings_frame_height</item>
         <item name="android:paddingStart">@dimen/settings_frame_padding_start</item>
         <item name="android:paddingEnd">@dimen/settings_frame_padding_end</item>
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
     <style name="settingsTextStyle">
         <item name="android:layout_width">wrap_content</item>

@@ -1,7 +1,9 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,5 +29,29 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(displayMain)
         }
 
+        val shareButton = findViewById<FrameLayout>(R.id.shareFrame)
+        shareButton.setOnClickListener{
+            val shareIntent = Intent(Intent.ACTION_SENDTO)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.practicum_android_link))
+            shareIntent.type = "text/plain"
+            startActivity(Intent.createChooser(shareIntent, "Share with:"))
+        }
+
+        val supportButton = findViewById<FrameLayout>(R.id.supportFrame)
+        supportButton.setOnClickListener{
+            val supportIntent = Intent(Intent.ACTION_SENDTO)
+            supportIntent.data = Uri.parse("mailto:")
+            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_student)))
+            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject))
+            supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_message))
+            startActivity(supportIntent)
+        }
+
+        val agreementButton = findViewById<FrameLayout>(R.id.usrAgrFrame)
+        agreementButton.setOnClickListener{
+            val agreementIntent = Intent(Intent.ACTION_VIEW)
+            agreementIntent.data = Uri.parse(getString(R.string.practicum_offer_link))
+            startActivity(agreementIntent)
+        }
     }
 }
