@@ -58,7 +58,6 @@
             app:boxBackgroundColor="?attr/colorSecondary"
             app:cursorColor="@color/cursor"
             android:gravity="center_vertical"
-            android:textColorHint="?attr/colorOnSecondary"
             app:hintEnabled="false"
             >
 
@@ -75,6 +74,7 @@
                 android:paddingVertical="@dimen/search_padding_horizontal"
                 android:paddingHorizontal="@dimen/search_padding_vertical"
                 android:textColor="?attr/colorOnSecondary"
+                android:textColorHint="?attr/colorOnSecondary"
                 android:textFontWeight="400"
                 android:textSize="@dimen/search_text_size"
                 android:hint="@string/search_button"
