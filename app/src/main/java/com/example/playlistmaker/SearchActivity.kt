@@ -12,6 +12,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 
 class SearchActivity : AppCompatActivity() {
+
+	private var searchString: String = SEARCH_STRING_DEF
+
+	override fun onSaveInstanceState(outState: Bundle) {
+		super.onSaveInstanceState(outState)
+		outState.putString(SEARCH_STRING_KEY, searchString)
+	}
+
+	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+		super.onRestoreInstanceState(savedInstanceState)
+		searchString = savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
@@ -24,10 +37,11 @@ class SearchActivity : AppCompatActivity() {
 		}
 
 		val inputEditText = findViewById<TextInputEditText>(R.id.searchInputEditText)
-		val clearButton = findViewById<ImageView>(R.id.searchClearIcon)
+		if (savedInstanceState != null) inputEditText.setText(searchString)
 
+		val clearButton = findViewById<ImageView>(R.id.searchClearIcon)
 		clearButton.setOnClickListener {
-			inputEditText.setText("")
+			inputEditText.setText(SEARCH_STRING_DEF)
 		}
 
 		val searchTextWatcher = object : TextWatcher {
@@ -41,11 +55,15 @@ class SearchActivity : AppCompatActivity() {
 			}
 
 			override fun afterTextChanged(s: Editable?) {
-				//empty
+				if (s.isNullOrEmpty()) searchString = s.toString()
 			}
 		}
-
 		inputEditText.addTextChangedListener(searchTextWatcher)
 	}
 
+
+	companion object {
+		const val SEARCH_STRING_KEY = "SEARCH_STRING"
+		const val SEARCH_STRING_DEF = ""
+	}
 }
