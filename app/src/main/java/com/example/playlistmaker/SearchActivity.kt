@@ -1,10 +1,12 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -40,8 +42,11 @@ class SearchActivity : AppCompatActivity() {
 		if (savedInstanceState != null) inputEditText.setText(searchString)
 
 		val clearButton = findViewById<ImageView>(R.id.searchClearIcon)
+
 		clearButton.setOnClickListener {
 			inputEditText.setText(SEARCH_STRING_DEF)
+			val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
 		}
 
 		val searchTextWatcher = object : TextWatcher {
