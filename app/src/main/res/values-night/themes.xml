@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="android:background">@color/black</item>
+        <item name="colorAccent">@color/blue</item>
     </style>
     <style name="Theme.Main.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
     </style>
