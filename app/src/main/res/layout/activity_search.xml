@@ -59,6 +59,7 @@
             app:cursorColor="@color/cursor"
             android:gravity="center_vertical"
             app:hintEnabled="false"
+            app:boxStrokeWidthFocused="0dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -73,7 +74,7 @@
                 android:gravity="center_vertical"
                 android:paddingVertical="@dimen/search_padding_horizontal"
                 android:paddingHorizontal="@dimen/search_padding_vertical"
-                android:textColor="?attr/colorOnSecondary"
+                android:textColor="@color/black"
                 android:textColorHint="?attr/colorOnSecondary"
                 android:textFontWeight="400"
                 android:textSize="@dimen/search_text_size"
