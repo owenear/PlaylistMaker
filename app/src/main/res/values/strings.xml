@@ -12,4 +12,5 @@
     <string name="email_student">earowen@yandex.ru</string>
     <string name="email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="email_message">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="share_prompt">Поделиться c</string>
 </resources>

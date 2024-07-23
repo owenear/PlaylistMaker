@@ -34,7 +34,7 @@ class SettingsActivity : AppCompatActivity() {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.practicum_android_link))
             shareIntent.type = "text/plain"
-            startActivity(shareIntent)
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_prompt)))
         }
 
         val supportButton = findViewById<FrameLayout>(R.id.supportFrame)
