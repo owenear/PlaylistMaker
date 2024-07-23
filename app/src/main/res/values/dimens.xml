@@ -11,4 +11,12 @@
     <dimen name="settings_frame_padding_end">24dp</dimen>
     <dimen name="settings_frame_height">64dp</dimen>
     <dimen name="letter_spacing">0</dimen>
+
+    <dimen name="search_corner_radius">8dp</dimen>
+    <dimen name="search_layout_margin_horizontal">16dp</dimen>
+    <dimen name="search_layout_margin_vertical">8dp</dimen>
+    <dimen name="search_padding_horizontal">12dp</dimen>
+    <dimen name="search_padding_vertical">8dp</dimen>
+    <dimen name="search_text_size">16sp</dimen>
+
 </resources>
