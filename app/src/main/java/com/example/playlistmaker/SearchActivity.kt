@@ -80,7 +80,6 @@ class SearchActivity : AppCompatActivity() {
 		recyclerView.adapter = SearchAdapter(searchList)
 	}
 
-
 	companion object {
 		const val SEARCH_STRING_KEY = "SEARCH_STRING"
 		const val SEARCH_STRING_DEF = ""
