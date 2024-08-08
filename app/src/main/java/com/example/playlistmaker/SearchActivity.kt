@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 
 class SearchActivity : AppCompatActivity() {
@@ -64,6 +65,19 @@ class SearchActivity : AppCompatActivity() {
 			}
 		}
 		inputEditText.addTextChangedListener(searchTextWatcher)
+
+
+		val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+
+		val searchList =
+			listOf(
+				Track(getString(R.string.search_track1_name), getString(R.string.search_track1_artist), getString(R.string.search_track1_time), getString(R.string.search_track1_cover)),
+				Track(getString(R.string.search_track2_name), getString(R.string.search_track2_artist), getString(R.string.search_track2_time), getString(R.string.search_track2_cover)),
+				Track(getString(R.string.search_track3_name), getString(R.string.search_track3_artist), getString(R.string.search_track3_time), getString(R.string.search_track3_cover)),
+				Track(getString(R.string.search_track4_name), getString(R.string.search_track4_artist), getString(R.string.search_track4_time), getString(R.string.search_track4_cover)),
+				Track(getString(R.string.search_track5_name), getString(R.string.search_track5_artist), getString(R.string.search_track5_time), getString(R.string.search_track5_cover)),
+			)
+		recyclerView.adapter = SearchAdapter(searchList)
 	}
 
 
