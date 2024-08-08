@@ -19,4 +19,6 @@
     <dimen name="search_padding_vertical">8dp</dimen>
     <dimen name="search_text_size">16sp</dimen>
 
+    <dimen name="search_small_text_size">11sp</dimen>
+    <dimen name="search_view_margin">8dp</dimen>
 </resources>
