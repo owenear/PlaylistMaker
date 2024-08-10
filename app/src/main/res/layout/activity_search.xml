@@ -41,7 +41,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:orientation="horizontal"
     >
 
         <com.google.android.material.textfield.TextInputLayout
@@ -96,6 +95,21 @@
             app:tint="?attr/colorOnSecondary"
             android:visibility="gone"
             />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/search_layout_margin_horizontal"
+        android:layout_marginVertical="@dimen/search_layout_margin_vertical"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     </FrameLayout>
 

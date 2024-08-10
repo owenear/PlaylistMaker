@@ -11,6 +11,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 
 class SearchActivity : AppCompatActivity() {
@@ -49,23 +51,28 @@ class SearchActivity : AppCompatActivity() {
 			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
 		}
 
-		val searchTextWatcher = object : TextWatcher {
-			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-				//empty
-			}
-
-			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-				if (s.isNullOrEmpty()) clearButton.visibility = View.GONE
+		inputEditText.addTextChangedListener(
+			onTextChanged = { charSequence, _, _, _ ->
+				if (charSequence.isNullOrEmpty()) clearButton.visibility = View.GONE
 				else clearButton.visibility = View.VISIBLE
+			},
+			afterTextChanged = { editable ->
+				if (editable.isNullOrEmpty()) searchString = editable.toString()
 			}
+		)
 
-			override fun afterTextChanged(s: Editable?) {
-				if (s.isNullOrEmpty()) searchString = s.toString()
-			}
-		}
-		inputEditText.addTextChangedListener(searchTextWatcher)
+		val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+
+		val searchList =
+			listOf(
+				Track(getString(R.string.search_track1_name), getString(R.string.search_track1_artist), getString(R.string.search_track1_time), getString(R.string.search_track1_cover)),
+				Track(getString(R.string.search_track2_name), getString(R.string.search_track2_artist), getString(R.string.search_track2_time), getString(R.string.search_track2_cover)),
+				Track(getString(R.string.search_track3_name), getString(R.string.search_track3_artist), getString(R.string.search_track3_time), getString(R.string.search_track3_cover)),
+				Track(getString(R.string.search_track4_name), getString(R.string.search_track4_artist), getString(R.string.search_track4_time), getString(R.string.search_track4_cover)),
+				Track(getString(R.string.search_track5_name), getString(R.string.search_track5_artist), getString(R.string.search_track5_time), getString(R.string.search_track5_cover)),
+			)
+		recyclerView.adapter = SearchAdapter(searchList)
 	}
-
 
 	companion object {
 		const val SEARCH_STRING_KEY = "SEARCH_STRING"
