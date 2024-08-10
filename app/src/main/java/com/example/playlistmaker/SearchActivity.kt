@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 
@@ -50,22 +51,15 @@ class SearchActivity : AppCompatActivity() {
 			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
 		}
 
-		val searchTextWatcher = object : TextWatcher {
-			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-				//empty
-			}
-
-			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-				if (s.isNullOrEmpty()) clearButton.visibility = View.GONE
+		inputEditText.addTextChangedListener(
+			onTextChanged = { charSequence, _, _, _ ->
+				if (charSequence.isNullOrEmpty()) clearButton.visibility = View.GONE
 				else clearButton.visibility = View.VISIBLE
+			},
+			afterTextChanged = { editable ->
+				if (editable.isNullOrEmpty()) searchString = editable.toString()
 			}
-
-			override fun afterTextChanged(s: Editable?) {
-				if (s.isNullOrEmpty()) searchString = s.toString()
-			}
-		}
-		inputEditText.addTextChangedListener(searchTextWatcher)
-
+		)
 
 		val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
