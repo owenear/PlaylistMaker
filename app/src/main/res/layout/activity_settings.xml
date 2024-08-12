@@ -52,21 +52,15 @@
             android:text="@string/settings_night"
             />
 
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/nightThemeSwitch"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="end|center_vertical"
-            tools:ignore="UseSwitchCompatOrMaterialXml"/>
+            app:thumbTint="?attr/colorOnSecondary"
+            app:trackTint="?attr/colorSecondary"
+        />
 
-        <!--
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/nightThemeSwitch"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end|center_vertical"
-            />
-        -->
     </FrameLayout>
 
     <FrameLayout

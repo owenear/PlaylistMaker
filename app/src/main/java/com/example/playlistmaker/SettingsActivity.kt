@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -53,5 +54,13 @@ class SettingsActivity : AppCompatActivity() {
             agreementIntent.data = Uri.parse(getString(R.string.practicum_offer_link))
             startActivity(agreementIntent)
         }
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.nightThemeSwitch)
+        themeSwitcher.isChecked = App.nightTheme
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+
     }
+
 }
