@@ -6,12 +6,13 @@ import androidx.appcompat.app.AppCompatDelegate
 
 class App: Application() {
 
-	private lateinit var sharedPrefs : SharedPreferences
+	lateinit var sharedPreferences : SharedPreferences
+	var nightTheme: Boolean = NIGHT_THEME_DEF
 
 	override fun onCreate() {
 		super.onCreate()
-		sharedPrefs = getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
-		val nightTheme = sharedPrefs.getBoolean(NIGHT_THEME_KEY, NIGHT_THEME_DEF)
+		sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
+		nightTheme = sharedPreferences.getBoolean(NIGHT_THEME_KEY, NIGHT_THEME_DEF)
 		switchTheme(nightTheme)
 	}
 
@@ -24,7 +25,13 @@ class App: Application() {
 				AppCompatDelegate.MODE_NIGHT_NO
 			}
 		)
-		sharedPrefs.edit()
+		sharedPreferences.edit()
+			.putBoolean(NIGHT_THEME_KEY, nightTheme)
+			.apply()
+	}
+
+	fun saveTheme(){
+		sharedPreferences.edit()
 			.putBoolean(NIGHT_THEME_KEY, nightTheme)
 			.apply()
 	}
@@ -33,7 +40,6 @@ class App: Application() {
 		const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
 		const val NIGHT_THEME_KEY = "NIGHT_THEME"
 		const val NIGHT_THEME_DEF = false
-		var nightTheme: Boolean = NIGHT_THEME_DEF
 	}
 
 }

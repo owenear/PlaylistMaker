@@ -24,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val backButton = findViewById<ImageButton>(R.id.backButton)
+        val backButton = findViewById<ImageButton>(R.id.settingsBackButton)
         backButton.setOnClickListener{
             val displayMain = Intent(this, MainActivity::class.java)
             startActivity(displayMain)
@@ -56,8 +56,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.nightThemeSwitch)
-        themeSwitcher.isChecked = App.nightTheme
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+
+        themeSwitcher.isChecked = (applicationContext as App).nightTheme
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
 

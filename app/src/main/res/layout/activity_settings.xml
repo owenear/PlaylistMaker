@@ -15,7 +15,7 @@
         >
 
         <ImageButton
-            android:id="@+id/backButton"
+            android:id="@+id/settingsBackButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:srcCompat="@drawable/arrow_back"
