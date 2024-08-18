@@ -121,6 +121,7 @@ class SearchActivity : AppCompatActivity() {
 					historyAdapter.notifyDataSetChanged()
 					searchHistoryLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
 					searchRecyclerView.visibility = View.GONE
+					showMessage()
 				} else {
 					searchHistoryLayout.visibility = View.GONE
 					searchRecyclerView.visibility = View.VISIBLE
@@ -147,6 +148,7 @@ class SearchActivity : AppCompatActivity() {
 			searchHistory.historyList.clear()
 			historyAdapter.notifyDataSetChanged()
 			searchHistoryLayout.visibility = View.GONE
+			showMessage()
 		}
 
 	}
