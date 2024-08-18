@@ -12,22 +12,16 @@ class App: Application() {
 	override fun onCreate() {
 		super.onCreate()
 		sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
-		nightTheme = sharedPreferences.getBoolean(NIGHT_THEME_KEY, NIGHT_THEME_DEF)
+		nightTheme = sharedPreferences.getBoolean(NIGHT_THEME_KEY, nightTheme)
 		switchTheme(nightTheme)
 	}
 
 	fun switchTheme(nightThemeEnabled: Boolean) {
 		nightTheme = nightThemeEnabled
 		AppCompatDelegate.setDefaultNightMode(
-			if (nightTheme) {
-				AppCompatDelegate.MODE_NIGHT_YES
-			} else {
-				AppCompatDelegate.MODE_NIGHT_NO
-			}
+			if (nightTheme) AppCompatDelegate.MODE_NIGHT_YES
+			else AppCompatDelegate.MODE_NIGHT_NO
 		)
-		sharedPreferences.edit()
-			.putBoolean(NIGHT_THEME_KEY, nightTheme)
-			.apply()
 	}
 
 	fun saveTheme(){

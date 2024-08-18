@@ -7,16 +7,25 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
+
+    override fun onStop() {
+        (applicationContext as App).saveTheme()
+        super.onStop()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
+
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
+        themeSwitcher.setChecked((applicationContext as App).nightTheme)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -55,11 +64,8 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(agreementIntent)
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.nightThemeSwitch)
-
-        themeSwitcher.isChecked = (applicationContext as App).nightTheme
-        themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            if(switcher.isPressed) (applicationContext as App).switchTheme(checked)
         }
 
     }
