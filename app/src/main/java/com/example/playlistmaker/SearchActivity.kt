@@ -153,27 +153,27 @@ class SearchActivity : AppCompatActivity() {
 
 	private fun search() {
 		if (searchString.isNotEmpty())
-		itunesApiService.search(searchString).enqueue(object : Callback<SearchResponse> {
-				override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse> ) {
-					when (response.code()) {
-						200 -> {
-							if (response.body()?.searchList?.isNotEmpty() == true) {
-								searchList.clear()
-								searchList.addAll(response.body()?.searchList!!)
-								searchAdapter.notifyDataSetChanged()
-								showMessage()
-							} else {
-								showMessage(getString(R.string.search_nothing_found), R.drawable.ic_nothing_found, View.GONE)
+			itunesApiService.search(searchString).enqueue(object : Callback<SearchResponse> {
+					override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse> ) {
+						when (response.code()) {
+							200 -> {
+								if (response.body()?.searchList?.isNotEmpty() == true) {
+									searchList.clear()
+									searchList.addAll(response.body()?.searchList!!)
+									searchAdapter.notifyDataSetChanged()
+									showMessage()
+								} else {
+									showMessage(getString(R.string.search_nothing_found), R.drawable.ic_nothing_found, View.GONE)
+								}
 							}
+							else -> showMessage(getString(R.string.search_net_error), R.drawable.ic_net_error, View.VISIBLE)
 						}
-						else -> showMessage(getString(R.string.search_net_error), R.drawable.ic_net_error, View.VISIBLE)
 					}
-				}
 
-				override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-					showMessage(getString(R.string.search_net_error), R.drawable.ic_net_error, View.VISIBLE)
-				}
-		})
+					override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+						showMessage(getString(R.string.search_net_error), R.drawable.ic_net_error, View.VISIBLE)
+					}
+			})
 	}
 
 	private fun showMessage(text: String? = null, imgRes: Int? = null, updateButtonVisibility: Int = View.GONE) =
