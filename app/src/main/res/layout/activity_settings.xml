@@ -15,7 +15,7 @@
         >
 
         <ImageButton
-            android:id="@+id/backButton"
+            android:id="@+id/settingsBackButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:srcCompat="@drawable/arrow_back"
@@ -52,21 +52,15 @@
             android:text="@string/settings_night"
             />
 
-        <Switch
-            android:id="@+id/nightThemeSwitch"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end|center_vertical"
-            tools:ignore="UseSwitchCompatOrMaterialXml"/>
-
-        <!--
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/nightThemeSwitch"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="end|center_vertical"
-            />
-        -->
+            app:thumbTint="?attr/colorOnSecondary"
+            app:trackTint="?attr/colorSecondary"
+        />
+
     </FrameLayout>
 
     <FrameLayout

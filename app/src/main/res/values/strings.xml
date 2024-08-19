@@ -13,7 +13,9 @@
     <string name="email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="email_message">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="share_prompt">Поделиться c</string>
-    <string name="nothing_found">Ничего не нашлось</string>
-    <string name="net_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
-    <string name="update_button">Обновить</string>
+    <string name="search_nothing_found">Ничего не нашлось</string>
+    <string name="search_net_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="search_update_button">Обновить</string>
+    <string name="search_history">Вы искали</string>
+    <string name="search_history_clear_button">Очистить историю</string>
 </resources>

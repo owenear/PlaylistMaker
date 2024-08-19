@@ -17,8 +17,12 @@
     <dimen name="search_layout_margin_vertical">8dp</dimen>
     <dimen name="search_padding_horizontal">12dp</dimen>
     <dimen name="search_padding_vertical">8dp</dimen>
-    <dimen name="search_text_size">16sp</dimen>
 
+    <dimen name="search_text_size">16sp</dimen>
     <dimen name="search_small_text_size">11sp</dimen>
     <dimen name="search_view_margin">8dp</dimen>
+    <dimen name="search_button_text_size">14sp</dimen>
+    <dimen name="search_button_corner">54dp</dimen>
+    <dimen name="search_placeholder_text_size">19sp</dimen>
+
 </resources>

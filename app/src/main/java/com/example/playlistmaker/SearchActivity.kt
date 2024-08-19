@@ -9,9 +9,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
@@ -24,14 +27,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
 	private var searchString: String = SEARCH_STRING_DEF
-	private val apiUrl = API_URL
 	private val retrofit = Retrofit.Builder()
-		.baseUrl(apiUrl)
+		.baseUrl(API_URL)
 		.addConverterFactory(GsonConverterFactory.create())
 		.build()
 	private val itunesApiService = retrofit.create(ItunesApi::class.java)
-	private val searchList = ArrayList<Track>()
-	private val searchAdapter = SearchAdapter(searchList)
+
+	private lateinit var searchList: ArrayList<Track>
+	private lateinit var searchAdapter: SearchAdapter
+	private lateinit var searchHistory: SearchHistory
+	private lateinit var historyAdapter: SearchAdapter
 
 	private lateinit var placeholderMessage: TextView
 	private lateinit var placeholderImage: ImageView
@@ -47,14 +52,33 @@ class SearchActivity : AppCompatActivity() {
 		searchString = savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
 	}
 
+	override fun onStop() {
+		searchHistory.save()
+		super.onStop()
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
 		setContentView(R.layout.activity_search)
 
+		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
+			val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+			insets
+		}
+
+		searchHistory = SearchHistory((applicationContext as App).sharedPreferences)
+		searchList = ArrayList<Track>()
+		searchAdapter = SearchAdapter(searchList, searchHistory)
+		historyAdapter = SearchAdapter(searchHistory.historyList)
+
 		placeholderMessage = findViewById<TextView>(R.id.placeholderTextView)
 		placeholderImage = findViewById<ImageView>(R.id.placeholderImageView)
 		updateButton = findViewById<Button>(R.id.updateButton)
+
+		val clearSearchButton = findViewById<ImageView>(R.id.searchClearIcon)
+		val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
 
 		val backButton = findViewById<ImageButton>(R.id.searchBackButton)
 		backButton.setOnClickListener{
@@ -65,8 +89,7 @@ class SearchActivity : AppCompatActivity() {
 		val inputEditText = findViewById<TextInputEditText>(R.id.searchInputEditText)
 		if (savedInstanceState != null) inputEditText.setText(searchString)
 
-		val clearButton = findViewById<ImageView>(R.id.searchClearIcon)
-		clearButton.setOnClickListener {
+		clearSearchButton.setOnClickListener {
 			inputEditText.setText(SEARCH_STRING_DEF)
 			searchList.clear()
 			searchAdapter.notifyDataSetChanged()
@@ -75,23 +98,45 @@ class SearchActivity : AppCompatActivity() {
 			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
 		}
 
+		val searchRecyclerView = findViewById<RecyclerView>(R.id.searchRecyclerView)
+		val searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryRecyclerView)
+
+		val searchHistoryLayout = findViewById<LinearLayout>(R.id.searchHistoryLayout)
+
+		inputEditText.setOnFocusChangeListener { view, hasFocus ->
+			if (hasFocus) {
+				historyAdapter.notifyDataSetChanged()
+				searchHistoryLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+				searchRecyclerView.visibility = View.GONE
+			} else {
+				searchHistoryLayout.visibility = View.GONE
+				searchRecyclerView.visibility = View.VISIBLE
+			}
+		}
+
 		inputEditText.addTextChangedListener(
 			onTextChanged = { charSequence, _, _, _ ->
-				if (charSequence.isNullOrEmpty()) clearButton.visibility = View.GONE
-				else clearButton.visibility = View.VISIBLE
+				clearSearchButton.visibility = if  (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
+				if (inputEditText.hasFocus() && charSequence.isNullOrEmpty()) {
+					historyAdapter.notifyDataSetChanged()
+					searchHistoryLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+					searchRecyclerView.visibility = View.GONE
+					showMessage()
+				} else {
+					searchHistoryLayout.visibility = View.GONE
+					searchRecyclerView.visibility = View.VISIBLE
+				}
 			},
 			afterTextChanged = { editable ->
 				if (!editable.isNullOrEmpty()) searchString = editable.toString()
 			}
 		)
 
-		val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-		recyclerView.adapter = searchAdapter
+		searchRecyclerView.adapter = searchAdapter
+		searchHistoryRecyclerView.adapter = historyAdapter
 
 		inputEditText.setOnEditorActionListener { _, actionId, _ ->
-			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				search()
-			}
+			if (actionId == EditorInfo.IME_ACTION_DONE) search()
 			false
 		}
 
@@ -99,29 +144,37 @@ class SearchActivity : AppCompatActivity() {
 			search()
 		}
 
+		clearHistoryButton.setOnClickListener {
+			searchHistory.historyList.clear()
+			historyAdapter.notifyDataSetChanged()
+			searchHistoryLayout.visibility = View.GONE
+			showMessage()
+		}
+
 	}
 
 	private fun search() {
-		itunesApiService.search(searchString).enqueue(object : Callback<SearchResponse> {
-				override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse> ) {
-					when (response.code()) {
-						200 -> {
-							if (response.body()?.searchList?.isNotEmpty() == true) {
-								searchList.clear()
-								searchList.addAll(response.body()?.searchList!!)
-								searchAdapter.notifyDataSetChanged()
-								showMessage()
-							} else {
-								showMessage(getString(R.string.nothing_found), R.drawable.ic_nothing_found, View.GONE)
+		if (searchString.isNotEmpty())
+			itunesApiService.search(searchString).enqueue(object : Callback<SearchResponse> {
+					override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse> ) {
+						when (response.code()) {
+							200 -> {
+								if (response.body()?.searchList?.isNotEmpty() == true) {
+									searchList.clear()
+									searchList.addAll(response.body()?.searchList!!)
+									searchAdapter.notifyDataSetChanged()
+									showMessage()
+								} else {
+									showMessage(getString(R.string.search_nothing_found), R.drawable.ic_nothing_found, View.GONE)
+								}
 							}
+							else -> showMessage(getString(R.string.search_net_error), R.drawable.ic_net_error, View.VISIBLE)
 						}
-						else -> showMessage(getString(R.string.net_error), R.drawable.ic_net_error, View.VISIBLE)
 					}
-				}
 
-				override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-					showMessage(getString(R.string.net_error), R.drawable.ic_net_error, View.VISIBLE)
-				}
+					override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+						showMessage(getString(R.string.search_net_error), R.drawable.ic_net_error, View.VISIBLE)
+					}
 			})
 	}
 

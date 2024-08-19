@@ -7,15 +7,25 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class SettingsActivity : AppCompatActivity() {
 
+
+    override fun onStop() {
+        (applicationContext as App).saveTheme()
+        super.onStop()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
+
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
+        themeSwitcher.setChecked((applicationContext as App).nightTheme)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -23,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val backButton = findViewById<ImageButton>(R.id.backButton)
+        val backButton = findViewById<ImageButton>(R.id.settingsBackButton)
         backButton.setOnClickListener{
             val displayMain = Intent(this, MainActivity::class.java)
             startActivity(displayMain)
@@ -53,5 +63,11 @@ class SettingsActivity : AppCompatActivity() {
             agreementIntent.data = Uri.parse(getString(R.string.practicum_offer_link))
             startActivity(agreementIntent)
         }
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            if(switcher.isPressed) (applicationContext as App).switchTheme(checked)
+        }
+
     }
+
 }
