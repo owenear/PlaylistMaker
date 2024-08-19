@@ -146,6 +146,7 @@
                         android:id="@+id/clearHistoryButton"
                         android:layout_marginVertical="@dimen/search_layout_margin_horizontal"
                         android:text="@string/search_history_clear_button"
+                        android:textFontWeight="500"
                         android:visibility="visible"
                      />
              </LinearLayout>
@@ -191,6 +192,7 @@
                 android:id="@+id/updateButton"
                 android:layout_marginTop="120dp"
                 android:text="@string/search_update_button"
+                android:textFontWeight="500"
                 android:visibility="invisible"
                 />
     </FrameLayout>
