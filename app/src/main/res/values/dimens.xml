@@ -14,9 +14,10 @@
 
     <dimen name="search_corner_radius">8dp</dimen>
     <dimen name="search_layout_margin_horizontal">16dp</dimen>
-    <dimen name="search_layout_margin_vertical">8dp</dimen>
-    <dimen name="search_padding_horizontal">12dp</dimen>
-    <dimen name="search_padding_vertical">8dp</dimen>
+    <dimen name="search_header_margin_vertical">8dp</dimen>
+    <dimen name="search_view_margin_vertical">24dp</dimen>
+    <dimen name="search_padding_horizontal">8dp</dimen>
+    <dimen name="search_padding_vertical">12dp</dimen>
 
     <dimen name="search_text_size">16sp</dimen>
     <dimen name="search_small_text_size">11sp</dimen>
@@ -24,5 +25,9 @@
     <dimen name="search_button_text_size">14sp</dimen>
     <dimen name="search_button_corner">54dp</dimen>
     <dimen name="search_placeholder_text_size">19sp</dimen>
+
+    <dimen name="player_track_info_height">32dp</dimen>
+    <dimen name="player_track_text_size">13sp</dimen>
+
 
 </resources>

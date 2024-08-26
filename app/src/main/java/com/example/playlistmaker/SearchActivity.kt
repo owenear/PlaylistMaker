@@ -9,10 +9,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
@@ -52,9 +52,14 @@ class SearchActivity : AppCompatActivity() {
 		searchString = savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
 	}
 
-	override fun onStop() {
+	override fun onPause() {
 		searchHistory.save()
-		super.onStop()
+		super.onPause()
+	}
+
+	override fun onResume() {
+		super.onResume()
+		historyAdapter.notifyDataSetChanged()
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,8 +75,8 @@ class SearchActivity : AppCompatActivity() {
 
 		searchHistory = SearchHistory((applicationContext as App).sharedPreferences)
 		searchList = ArrayList<Track>()
-		searchAdapter = SearchAdapter(searchList, searchHistory)
-		historyAdapter = SearchAdapter(searchHistory.historyList)
+		searchAdapter = SearchAdapter(searchList, searchHistory, this)
+		historyAdapter = SearchAdapter(searchHistory.historyList, searchHistory, this)
 
 		placeholderMessage = findViewById<TextView>(R.id.placeholderTextView)
 		placeholderImage = findViewById<ImageView>(R.id.placeholderImageView)
@@ -101,15 +106,15 @@ class SearchActivity : AppCompatActivity() {
 		val searchRecyclerView = findViewById<RecyclerView>(R.id.searchRecyclerView)
 		val searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryRecyclerView)
 
-		val searchHistoryLayout = findViewById<LinearLayout>(R.id.searchHistoryLayout)
+		val searchHistoryGroup = findViewById<Group>(R.id.searchHistoryGroup)
 
 		inputEditText.setOnFocusChangeListener { view, hasFocus ->
 			if (hasFocus) {
 				historyAdapter.notifyDataSetChanged()
-				searchHistoryLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+				searchHistoryGroup.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
 				searchRecyclerView.visibility = View.GONE
 			} else {
-				searchHistoryLayout.visibility = View.GONE
+				searchHistoryGroup.visibility = View.GONE
 				searchRecyclerView.visibility = View.VISIBLE
 			}
 		}
@@ -119,11 +124,11 @@ class SearchActivity : AppCompatActivity() {
 				clearSearchButton.visibility = if  (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
 				if (inputEditText.hasFocus() && charSequence.isNullOrEmpty()) {
 					historyAdapter.notifyDataSetChanged()
-					searchHistoryLayout.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
+					searchHistoryGroup.visibility = if (searchHistory.historyList.isEmpty()) View.GONE else View.VISIBLE
 					searchRecyclerView.visibility = View.GONE
 					showMessage()
 				} else {
-					searchHistoryLayout.visibility = View.GONE
+					searchHistoryGroup.visibility = View.GONE
 					searchRecyclerView.visibility = View.VISIBLE
 				}
 			},
@@ -147,7 +152,7 @@ class SearchActivity : AppCompatActivity() {
 		clearHistoryButton.setOnClickListener {
 			searchHistory.historyList.clear()
 			historyAdapter.notifyDataSetChanged()
-			searchHistoryLayout.visibility = View.GONE
+			searchHistoryGroup.visibility = View.GONE
 			showMessage()
 		}
 

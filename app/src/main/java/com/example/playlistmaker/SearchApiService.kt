@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.Objects
 
 data class Track (
@@ -11,7 +13,11 @@ data class Track (
 	val trackName: String,
 	val artistName: String,
 	@SerializedName("trackTimeMillis") val trackTime: Int,
-	val artworkUrl100: String
+	val artworkUrl100: String,
+	val collectionName: String,
+	val releaseDate: String,
+	val primaryGenreName: String,
+	val country: String
 ) {
 
 	override fun hashCode(): Int {
@@ -23,6 +29,18 @@ data class Track (
 			return false
 		return trackId == other.trackId
 	}
+
+	fun getFormatTrackTime(format: String): String {
+		return SimpleDateFormat(format,
+			Locale.getDefault()).format(trackTime)
+	}
+
+	fun getReleaseYear(): String {
+		return if (releaseDate.isNotEmpty())
+			releaseDate.substring(0..3)
+		else ""
+	}
+
 }
 
 class SearchResponse(@SerializedName("results") val searchList: List<Track>)

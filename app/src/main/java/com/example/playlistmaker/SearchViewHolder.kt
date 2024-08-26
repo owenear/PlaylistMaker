@@ -7,8 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 	LayoutInflater.from(parent.context).inflate(R.layout.view_search, parent, false)
@@ -23,14 +21,14 @@ class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
 		Glide.with(itemView)
 			.load(item.artworkUrl100)
-			.placeholder(R.drawable.baseline_accessible_forward_44)
+			.placeholder(R.drawable.baseline_gesture_24)
 			.fitCenter()
 			.transform(RoundedCorners(2))
 			.into(coverIV)
 
 		trackNameTV.text = item.trackName
 		artistNameTV.text = item.artistName
-		trackTimeTV.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTime)
+		trackTimeTV.text = item.getFormatTrackTime("mm:ss")
 
 	}
 
