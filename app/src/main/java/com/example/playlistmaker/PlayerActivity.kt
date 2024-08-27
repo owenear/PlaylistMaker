@@ -73,7 +73,9 @@ class PlayerActivity : AppCompatActivity() {
 			viewGroup.visibility = if (textView.text.isNullOrEmpty()) View.GONE else View.VISIBLE
 		}
 
-		val coverURL = searchHistory.historyList[0].artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+		val artworkUrl100 = searchHistory.historyList[0].artworkUrl100
+		val coverURL = if (artworkUrl100.isEmpty()) R.drawable.baseline_gesture_24 else
+			artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
 
 		Glide.with(this)
 			.load(coverURL)
