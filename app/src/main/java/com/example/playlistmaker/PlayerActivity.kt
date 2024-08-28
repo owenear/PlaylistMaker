@@ -74,7 +74,7 @@ class PlayerActivity : AppCompatActivity() {
 		}
 
 		val artworkUrl100 = searchHistory.historyList[0].artworkUrl100
-		val coverURL = if (artworkUrl100.isEmpty()) R.drawable.baseline_gesture_24 else
+		val coverURL = if (artworkUrl100.isNullOrEmpty()) R.drawable.baseline_gesture_24 else
 			artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
 
 		Glide.with(this)
