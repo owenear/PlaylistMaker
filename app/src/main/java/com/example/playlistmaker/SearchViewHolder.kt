@@ -19,8 +19,11 @@ class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
 	fun bind(item: Track) {
 
+		val coverURL = if (item.artworkUrl100.isNullOrEmpty()) R.drawable.baseline_gesture_24
+			else item.artworkUrl100
+
 		Glide.with(itemView)
-			.load(item.artworkUrl100)
+			.load(coverURL)
 			.placeholder(R.drawable.baseline_gesture_24)
 			.fitCenter()
 			.transform(RoundedCorners(2))
