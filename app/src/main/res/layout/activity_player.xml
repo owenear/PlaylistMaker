@@ -245,13 +245,6 @@
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintBottom_toTopOf="@id/yearTextViewValue" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/durationTextViewGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:constraint_referenced_ids="durationTextView,durationTextViewValue" />
-
     <TextView
         android:id="@+id/durationTextView"
         style="@style/playerTrackInfoTextStyle"

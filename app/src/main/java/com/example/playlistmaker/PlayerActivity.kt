@@ -43,7 +43,6 @@ class PlayerActivity : AppCompatActivity() {
 		val genreTextView = findViewById<TextView>(R.id.genreTextViewValue)
 		val countryTextView = findViewById<TextView>(R.id.countryTextViewValue)
 
-		val durationGroup = findViewById<Group>(R.id.durationTextViewGroup)
 		val albumGroup = findViewById<Group>(R.id.albumTextViewGroup)
 		val yearGroup = findViewById<Group>(R.id.yearTextViewGroup)
 		val genreGroup = findViewById<Group>(R.id.genreTextViewGroup)
@@ -54,15 +53,14 @@ class PlayerActivity : AppCompatActivity() {
 
 		titleTextView.text = searchHistory.historyList[0].trackName
 		artistTextView.text = searchHistory.historyList[0].artistName
-
 		durationTextView.text = searchHistory.historyList[0].getFormatTrackTime("mm:ss")
+
 		albumTextView.text = searchHistory.historyList[0].collectionName
 		yearTextView.text = searchHistory.historyList[0].getReleaseYear()
 		genreTextView.text = searchHistory.historyList[0].primaryGenreName
 		countryTextView.text = searchHistory.historyList[0].country
 
 		val trackInfoMap = mapOf(
-			durationTextView to durationGroup,
 			albumTextView to albumGroup,
 			yearTextView to yearGroup,
 			genreTextView to genreGroup,
