@@ -13,11 +13,11 @@ data class Track (
 	val trackName: String,
 	val artistName: String,
 	@SerializedName("trackTimeMillis") val trackTime: Int,
-	val artworkUrl100: String,
-	val collectionName: String,
-	val releaseDate: String,
-	val primaryGenreName: String,
-	val country: String
+	val artworkUrl100: String?,
+	val collectionName: String?,
+	val releaseDate: String?,
+	val primaryGenreName: String?,
+	val country: String?
 ) {
 
 	override fun hashCode(): Int {
@@ -36,7 +36,7 @@ data class Track (
 	}
 
 	fun getReleaseYear(): String {
-		return if (releaseDate.isNotEmpty())
+		return if (!releaseDate.isNullOrEmpty())
 			releaseDate.substring(0..3)
 		else ""
 	}
