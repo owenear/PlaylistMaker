@@ -31,7 +31,8 @@
 
         <TextView
             android:id="@+id/trackTextView"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:textColor="?attr/colorOnPrimary"
             tools:text="Smells Like Teen Spirit"
@@ -40,19 +41,22 @@
             android:textSize="@dimen/search_text_size"
             android:fontFamily="@font/ys_display_regular"
             android:textFontWeight="400"
-            android:layout_marginEnd="@dimen/search_layout_margin_horizontal"
+            android:layout_marginEnd="24dp"
             android:lines="1"
         />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             >
 
             <TextView
                 android:id="@+id/artistTextView"
                 style="@style/searchViewTextSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 tools:text="Nirvana"
                 android:textFontWeight="400"
                 />
@@ -71,6 +75,8 @@
             <TextView
                 android:id="@+id/timeTextView"
                 style="@style/searchViewTextSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 tools:text="5:03"
                 android:textFontWeight="400"
                 />
