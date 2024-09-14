@@ -14,6 +14,7 @@ data class Track (
 	val artistName: String,
 	@SerializedName("trackTimeMillis") val trackTime: Int,
 	val artworkUrl100: String?,
+	val previewUrl: String?,
 	val collectionName: String?,
 	val releaseDate: String?,
 	val primaryGenreName: String?,

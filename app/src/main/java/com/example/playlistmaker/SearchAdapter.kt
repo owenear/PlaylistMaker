@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 class SearchAdapter (private val items: ArrayList<Track>, private val searchHistory: SearchHistory,
                      private val context: Context) : RecyclerView.Adapter<SearchViewHolder> (){
 
-	private val handler = Handler(Looper.getMainLooper())
+	private val mainHandler = Handler(Looper.getMainLooper())
 	private var isClickAllowed = true
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
@@ -38,7 +38,7 @@ class SearchAdapter (private val items: ArrayList<Track>, private val searchHist
 		val current = isClickAllowed
 		if (isClickAllowed) {
 			isClickAllowed = false
-			handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+			mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
 		}
 		return current
 	}

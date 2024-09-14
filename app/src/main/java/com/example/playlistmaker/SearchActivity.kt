@@ -178,6 +178,7 @@ class SearchActivity : AppCompatActivity() {
 	private fun search() {
 		searchList.clear()
 		searchAdapter.notifyDataSetChanged()
+		showMessage()
 		progressBar.visibility = View.VISIBLE
 		if (searchString.isNotEmpty())
 			itunesApiService.search(searchString).enqueue(object : Callback<SearchResponse> {
