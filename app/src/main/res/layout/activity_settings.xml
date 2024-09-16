@@ -46,7 +46,7 @@
         style="@style/settingsFrameStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_frame_height"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="24dp"
         android:paddingEnd="15dp"
         >
 

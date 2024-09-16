@@ -20,7 +20,6 @@
 
     <dimen name="search_text_size">16sp</dimen>
     <dimen name="search_small_text_size">11sp</dimen>
-    <dimen name="search_view_margin">8dp</dimen>
     <dimen name="search_button_text_size">14sp</dimen>
     <dimen name="search_button_corner">54dp</dimen>
     <dimen name="search_placeholder_text_size">19sp</dimen>
@@ -32,7 +31,7 @@
     <dimen name="player_guide_vertical_margin">16dp</dimen>
 
     <dimen name="back_button_size">48dp</dimen>
-    <dimen name="back_button_margin">8dp</dimen>
+    <dimen name="back_button_margin">4dp</dimen>
     <dimen name="header_size">48dp</dimen>
-    <dimen name="header_margin">8dp</dimen>
+    <dimen name="header_margin">4dp</dimen>
 </resources>

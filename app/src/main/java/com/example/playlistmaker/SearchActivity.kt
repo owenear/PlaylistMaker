@@ -36,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
 		.build()
 	private val itunesApiService = retrofit.create(ItunesApi::class.java)
 
-	private lateinit var searchList: ArrayList<Track>
+	private var searchList = mutableListOf<Track>()
 	private lateinit var searchAdapter: SearchAdapter
 	private lateinit var searchHistory: SearchHistory
 	private lateinit var historyAdapter: SearchAdapter
@@ -82,9 +82,8 @@ class SearchActivity : AppCompatActivity() {
 		}
 
 		searchHistory = SearchHistory((applicationContext as App).sharedPreferences)
-		searchList = ArrayList<Track>()
-		searchAdapter = SearchAdapter(searchList, searchHistory, this)
-		historyAdapter = SearchAdapter(searchHistory.historyList, searchHistory, this)
+		searchAdapter = SearchAdapter(searchList) { trackItem -> trackListClickListener(trackItem) }
+		historyAdapter = SearchAdapter(searchHistory.historyList) { trackItem -> trackListClickListener(trackItem) }
 
 		placeholderMessage = findViewById<TextView>(R.id.placeholderTextView)
 		placeholderImage = findViewById<ImageView>(R.id.placeholderImageView)
@@ -220,6 +219,12 @@ class SearchActivity : AppCompatActivity() {
 			updateButton.visibility = View.GONE
 		}
 
+	private fun trackListClickListener(trackItem: Track) {
+		searchHistory.addItem(trackItem)
+		searchHistory.save()
+		val player = Intent(this, PlayerActivity::class.java)
+		this.startActivity(player)
+	}
 
 	companion object {
 		const val SEARCH_STRING_KEY = "SEARCH_STRING"
