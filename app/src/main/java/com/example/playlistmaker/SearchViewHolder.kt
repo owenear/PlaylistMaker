@@ -26,7 +26,7 @@ class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 			.load(coverURL)
 			.placeholder(R.drawable.baseline_gesture_24)
 			.fitCenter()
-			.transform(RoundedCorners(2))
+			.transform(RoundedCorners((2 * App.DISPLAY_DENSITY).toInt()))
 			.into(coverIV)
 
 		trackNameTV.text = item.trackName

@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.content.res.Resources.getSystem
 import androidx.appcompat.app.AppCompatDelegate
 
 class App: Application() {
@@ -34,6 +35,7 @@ class App: Application() {
 		const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
 		const val NIGHT_THEME_KEY = "NIGHT_THEME"
 		const val NIGHT_THEME_DEF = false
+		var DISPLAY_DENSITY = getSystem().displayMetrics.density
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.example.playlistmaker
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.GET
@@ -8,18 +10,20 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Objects
 
+@Parcelize
 data class Track (
-	val trackId: Int,
-	val trackName: String,
-	val artistName: String,
-	@SerializedName("trackTimeMillis") val trackTime: Int,
+	val trackId: Int?,
+	val trackName: String?,
+	val artistName: String?,
+	@SerializedName("trackTimeMillis") val trackTime: Int?,
 	val artworkUrl100: String?,
 	val previewUrl: String?,
 	val collectionName: String?,
 	val releaseDate: String?,
 	val primaryGenreName: String?,
 	val country: String?
-) {
+): Parcelable {
+
 
 	override fun hashCode(): Int {
 		return Objects.hash(trackId)

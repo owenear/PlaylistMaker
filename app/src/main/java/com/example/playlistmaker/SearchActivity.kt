@@ -1,10 +1,12 @@
 package com.example.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -65,11 +67,13 @@ class SearchActivity : AppCompatActivity() {
 		super.onPause()
 	}
 
+	@SuppressLint("NotifyDataSetChanged")
 	override fun onResume() {
 		super.onResume()
 		historyAdapter.notifyDataSetChanged()
 	}
 
+	@SuppressLint("NotifyDataSetChanged")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
@@ -174,6 +178,7 @@ class SearchActivity : AppCompatActivity() {
 		handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
 	}
 
+	@SuppressLint("NotifyDataSetChanged")
 	private fun search() {
 		searchList.clear()
 		searchAdapter.notifyDataSetChanged()
@@ -204,6 +209,7 @@ class SearchActivity : AppCompatActivity() {
 			})
 	}
 
+	@SuppressLint("NotifyDataSetChanged")
 	private fun showMessage(text: String? = null, imgRes: Int? = null, updateButtonVisibility: Int = View.GONE) =
 		if (text != null && imgRes != null) {
 			placeholderMessage.visibility = View.VISIBLE
@@ -223,6 +229,8 @@ class SearchActivity : AppCompatActivity() {
 		searchHistory.addItem(trackItem)
 		searchHistory.save()
 		val player = Intent(this, PlayerActivity::class.java)
+		Log.d("Track", trackItem.trackName ?: "null here")
+		intent.putExtra("trackItem",trackItem)
 		this.startActivity(player)
 	}
 

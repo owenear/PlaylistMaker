@@ -2,9 +2,11 @@ package com.example.playlistmaker
 
 import android.content.Intent
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -25,11 +27,12 @@ class PlayerActivity : AppCompatActivity() {
 	private lateinit var playButton: ImageButton
 	private var mediaPlayer = MediaPlayer()
 	private var playerState = STATE_DEFAULT
-	private lateinit var searchHistory : SearchHistory
+	//private lateinit var searchHistory : SearchHistory
 
 	private val mainHandler = Handler(Looper.getMainLooper())
 	private lateinit var timeTextView: TextView
 	private val playTime = updatePlayTime()
+	private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
 	override fun onPause() {
 		super.onPause()
@@ -75,7 +78,9 @@ class PlayerActivity : AppCompatActivity() {
 
 		val coverImageView = findViewById<ImageView>(R.id.coverImageView)
 
-		searchHistory = SearchHistory((applicationContext as App).sharedPreferences)
+		//searchHistory = SearchHistory((applicationContext as App).sharedPreferences)
+
+		/*
 		titleTextView.text = searchHistory.historyList[0].trackName
 		artistTextView.text = searchHistory.historyList[0].artistName
 		durationTextView.text = searchHistory.historyList[0].getFormatTrackTime("mm:ss")
@@ -84,6 +89,29 @@ class PlayerActivity : AppCompatActivity() {
 		yearTextView.text = searchHistory.historyList[0].getReleaseYear()
 		genreTextView.text = searchHistory.historyList[0].primaryGenreName
 		countryTextView.text = searchHistory.historyList[0].country
+		*/
+
+		val trackItem = intent.getParcelableExtra<Track>("trackItem")
+		/*
+		val trackItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+		//	intent.getParcelableExtra("trackItem", Track::class.java)
+			intent.extras?.getParcelable("trackItem", Track::class.java)
+		} else {
+			intent.extras?.getParcelable<Track>("trackItem")
+			//intent.getParcelableExtra<Track>("trackItem")
+		}
+		*/
+		Log.d("TRACK", trackItem?.toString() ?: "null here")
+
+		titleTextView.text = trackItem?.trackName
+		artistTextView.text = trackItem?.artistName
+		durationTextView.text = trackItem?.getFormatTrackTime("mm:ss")
+
+		albumTextView.text = trackItem?.collectionName
+		yearTextView.text = trackItem?.getReleaseYear()
+		genreTextView.text = trackItem?.primaryGenreName
+		countryTextView.text = trackItem?.country
+
 
 		val trackInfoMap = mapOf(
 			albumTextView to albumGroup,
@@ -96,7 +124,8 @@ class PlayerActivity : AppCompatActivity() {
 			viewGroup.visibility = if (textView.text.isNullOrEmpty()) View.GONE else View.VISIBLE
 		}
 
-		val artworkUrl100 = searchHistory.historyList[0].artworkUrl100
+		//val artworkUrl100 = searchHistory.historyList[0].artworkUrl100
+		val artworkUrl100 = trackItem?.artworkUrl100
 		val coverURL = if (artworkUrl100.isNullOrEmpty()) R.drawable.baseline_gesture_24 else
 			artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
 
@@ -104,19 +133,21 @@ class PlayerActivity : AppCompatActivity() {
 			.load(coverURL)
 			.placeholder(R.drawable.baseline_gesture_24)
 			.centerCrop()
-			.transform(RoundedCorners(8))
+			.transform(RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
 			.into(coverImageView)
 
 		playButton = findViewById<ImageButton>(R.id.playerPlayButton)
-		preparePlayer()
+		preparePlayer(trackItem)
 		playButton.setOnClickListener {
 			playbackControl()
 		}
 	}
 
-	private fun preparePlayer() {
-		val previewUrl = if (searchHistory.historyList[0].previewUrl.isNullOrEmpty())
-			R.string.player_default_preview_url.toString() else searchHistory.historyList[0].previewUrl
+	private fun preparePlayer(trackItem: Track?) {
+		//val previewUrl = if (searchHistory.historyList[0].previewUrl.isNullOrEmpty())
+		//	R.string.player_default_preview_url.toString() else searchHistory.historyList[0].previewUrl
+		val previewUrl = if (trackItem?.previewUrl.isNullOrEmpty())
+			R.string.player_default_preview_url.toString() else trackItem?.previewUrl
 		mediaPlayer.setDataSource(previewUrl)
 		mediaPlayer.prepareAsync()
 		mediaPlayer.setOnPreparedListener {
@@ -159,10 +190,7 @@ class PlayerActivity : AppCompatActivity() {
 	private fun updatePlayTime(): Runnable {
 		return object : Runnable {
 			override fun run() {
-				timeTextView.text = SimpleDateFormat(
-					"mm:ss",
-					Locale.getDefault()
-				).format(mediaPlayer.currentPosition)
+				timeTextView.text = dateFormat.format(mediaPlayer.currentPosition)
 				mainHandler.postDelayed(this, PLAY_TIME_DELAY)
 			}
 		}
