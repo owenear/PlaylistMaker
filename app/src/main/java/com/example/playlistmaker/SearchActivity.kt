@@ -1,6 +1,5 @@
 package com.example.playlistmaker
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -67,13 +66,11 @@ class SearchActivity : AppCompatActivity() {
 		super.onPause()
 	}
 
-	@SuppressLint("NotifyDataSetChanged")
 	override fun onResume() {
 		super.onResume()
 		historyAdapter.notifyDataSetChanged()
 	}
 
-	@SuppressLint("NotifyDataSetChanged")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
@@ -146,6 +143,7 @@ class SearchActivity : AppCompatActivity() {
 			},
 			afterTextChanged = { editable ->
 				if (!editable.isNullOrEmpty()) {
+					Log.d("TEXTSTRING", editable.toString())
 					searchString = editable.toString()
 					searchDebounce()
 				}
@@ -156,7 +154,10 @@ class SearchActivity : AppCompatActivity() {
 		searchHistoryRecyclerView.adapter = historyAdapter
 
 		inputEditText.setOnEditorActionListener { _, actionId, _ ->
-			if (actionId == EditorInfo.IME_ACTION_DONE) search()
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				searchString = inputEditText.text.toString()
+				search()
+			}
 			false
 		}
 
@@ -178,13 +179,10 @@ class SearchActivity : AppCompatActivity() {
 		handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
 	}
 
-	@SuppressLint("NotifyDataSetChanged")
 	private fun search() {
-		searchList.clear()
-		searchAdapter.notifyDataSetChanged()
 		showMessage()
-		progressBar.visibility = View.VISIBLE
 		if (searchString.isNotEmpty())
+			progressBar.visibility = View.VISIBLE
 			itunesApiService.search(searchString).enqueue(object : Callback<SearchResponse> {
 					override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse> ) {
 						progressBar.visibility = View.GONE
@@ -209,7 +207,6 @@ class SearchActivity : AppCompatActivity() {
 			})
 	}
 
-	@SuppressLint("NotifyDataSetChanged")
 	private fun showMessage(text: String? = null, imgRes: Int? = null, updateButtonVisibility: Int = View.GONE) =
 		if (text != null && imgRes != null) {
 			placeholderMessage.visibility = View.VISIBLE
@@ -228,10 +225,9 @@ class SearchActivity : AppCompatActivity() {
 	private fun trackListClickListener(trackItem: Track) {
 		searchHistory.addItem(trackItem)
 		searchHistory.save()
-		val player = Intent(this, PlayerActivity::class.java)
-		Log.d("Track", trackItem.trackName ?: "null here")
-		intent.putExtra("trackItem",trackItem)
-		this.startActivity(player)
+		val playerIntent = Intent(this, PlayerActivity::class.java)
+		playerIntent.putExtra("trackItem",trackItem)
+		this.startActivity(playerIntent)
 	}
 
 	companion object {

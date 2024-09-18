@@ -12,10 +12,10 @@ import java.util.Objects
 
 @Parcelize
 data class Track (
-	val trackId: Int?,
-	val trackName: String?,
-	val artistName: String?,
-	@SerializedName("trackTimeMillis") val trackTime: Int?,
+	val trackId: Int,
+	val trackName: String,
+	val artistName: String,
+	@SerializedName("trackTimeMillis") val trackTime: Int,
 	val artworkUrl100: String?,
 	val previewUrl: String?,
 	val collectionName: String?,
@@ -23,7 +23,6 @@ data class Track (
 	val primaryGenreName: String?,
 	val country: String?
 ): Parcelable {
-
 
 	override fun hashCode(): Int {
 		return Objects.hash(trackId)

@@ -27,8 +27,6 @@ class PlayerActivity : AppCompatActivity() {
 	private lateinit var playButton: ImageButton
 	private var mediaPlayer = MediaPlayer()
 	private var playerState = STATE_DEFAULT
-	//private lateinit var searchHistory : SearchHistory
-
 	private val mainHandler = Handler(Looper.getMainLooper())
 	private lateinit var timeTextView: TextView
 	private val playTime = updatePlayTime()
@@ -78,30 +76,11 @@ class PlayerActivity : AppCompatActivity() {
 
 		val coverImageView = findViewById<ImageView>(R.id.coverImageView)
 
-		//searchHistory = SearchHistory((applicationContext as App).sharedPreferences)
-
-		/*
-		titleTextView.text = searchHistory.historyList[0].trackName
-		artistTextView.text = searchHistory.historyList[0].artistName
-		durationTextView.text = searchHistory.historyList[0].getFormatTrackTime("mm:ss")
-
-		albumTextView.text = searchHistory.historyList[0].collectionName
-		yearTextView.text = searchHistory.historyList[0].getReleaseYear()
-		genreTextView.text = searchHistory.historyList[0].primaryGenreName
-		countryTextView.text = searchHistory.historyList[0].country
-		*/
-
-		val trackItem = intent.getParcelableExtra<Track>("trackItem")
-		/*
 		val trackItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-		//	intent.getParcelableExtra("trackItem", Track::class.java)
-			intent.extras?.getParcelable("trackItem", Track::class.java)
+			intent.getParcelableExtra("trackItem", Track::class.java)
 		} else {
-			intent.extras?.getParcelable<Track>("trackItem")
-			//intent.getParcelableExtra<Track>("trackItem")
+			intent.getParcelableExtra<Track>("trackItem")
 		}
-		*/
-		Log.d("TRACK", trackItem?.toString() ?: "null here")
 
 		titleTextView.text = trackItem?.trackName
 		artistTextView.text = trackItem?.artistName
@@ -111,7 +90,6 @@ class PlayerActivity : AppCompatActivity() {
 		yearTextView.text = trackItem?.getReleaseYear()
 		genreTextView.text = trackItem?.primaryGenreName
 		countryTextView.text = trackItem?.country
-
 
 		val trackInfoMap = mapOf(
 			albumTextView to albumGroup,
@@ -124,7 +102,6 @@ class PlayerActivity : AppCompatActivity() {
 			viewGroup.visibility = if (textView.text.isNullOrEmpty()) View.GONE else View.VISIBLE
 		}
 
-		//val artworkUrl100 = searchHistory.historyList[0].artworkUrl100
 		val artworkUrl100 = trackItem?.artworkUrl100
 		val coverURL = if (artworkUrl100.isNullOrEmpty()) R.drawable.baseline_gesture_24 else
 			artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
@@ -144,8 +121,6 @@ class PlayerActivity : AppCompatActivity() {
 	}
 
 	private fun preparePlayer(trackItem: Track?) {
-		//val previewUrl = if (searchHistory.historyList[0].previewUrl.isNullOrEmpty())
-		//	R.string.player_default_preview_url.toString() else searchHistory.historyList[0].previewUrl
 		val previewUrl = if (trackItem?.previewUrl.isNullOrEmpty())
 			R.string.player_default_preview_url.toString() else trackItem?.previewUrl
 		mediaPlayer.setDataSource(previewUrl)
