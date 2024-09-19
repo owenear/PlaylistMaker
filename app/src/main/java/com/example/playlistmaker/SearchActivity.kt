@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -137,15 +136,18 @@ class SearchActivity : AppCompatActivity() {
 					searchRecyclerView.visibility = View.GONE
 					showMessage()
 				} else {
+					searchList.clear()
+					searchAdapter.notifyDataSetChanged()
 					searchHistoryGroup.visibility = View.GONE
 					searchRecyclerView.visibility = View.VISIBLE
 				}
 			},
 			afterTextChanged = { editable ->
 				if (!editable.isNullOrEmpty()) {
-					Log.d("TEXTSTRING", editable.toString())
 					searchString = editable.toString()
 					searchDebounce()
+				} else {
+					handler.removeCallbacks(searchRunnable)
 				}
 			}
 		)
@@ -154,8 +156,9 @@ class SearchActivity : AppCompatActivity() {
 		searchHistoryRecyclerView.adapter = historyAdapter
 
 		inputEditText.setOnEditorActionListener { _, actionId, _ ->
-			if (actionId == EditorInfo.IME_ACTION_DONE) {
+			if (actionId == EditorInfo.IME_ACTION_DONE && !inputEditText.text.isNullOrEmpty()) {
 				searchString = inputEditText.text.toString()
+				handler.removeCallbacks(searchRunnable)
 				search()
 			}
 			false
@@ -180,8 +183,8 @@ class SearchActivity : AppCompatActivity() {
 	}
 
 	private fun search() {
-		showMessage()
 		if (searchString.isNotEmpty())
+			showMessage()
 			progressBar.visibility = View.VISIBLE
 			itunesApiService.search(searchString).enqueue(object : Callback<SearchResponse> {
 					override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse> ) {
