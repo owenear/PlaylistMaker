@@ -1,6 +1,5 @@
 package com.example.playlistmaker.data.dto
 
-import android.util.Log
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,8 +18,6 @@ data class TrackDto (
 	) {
 
 		fun getFormatTrackTime(format: String): String {
-			Log.d("TIME TO FORMAT", trackTime.toString())
-			Log.d("FORMAT", SimpleDateFormat(format,Locale.getDefault()).format(trackTime))
 			return SimpleDateFormat(format,
 				Locale.getDefault()).format(trackTime)
 		}

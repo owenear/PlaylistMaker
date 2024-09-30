@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(displayLibrary)
         }
 
-
         val settingsButtonClickListener: View.OnClickListener = View.OnClickListener {
             val displaySettings = Intent(this@MainActivity, SettingsActivity::class.java)
             startActivity(displaySettings)
