@@ -5,11 +5,14 @@ import com.example.playlistmaker.data.ThemeRepositoryImpl
 import com.example.playlistmaker.data.TrackHistoryRepositoryImpl
 import com.example.playlistmaker.data.TrackRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.data.storage.ThemeSharedStorage
+import com.example.playlistmaker.data.storage.TrackHistorySharedStorage
+import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.api.TrackRepository
-import com.example.playlistmaker.domain.api.SharedRepository
+import com.example.playlistmaker.domain.api.ThemeRepository
 import com.example.playlistmaker.domain.api.ThemeInteractor
 import com.example.playlistmaker.domain.api.TrackHistoryInteractor
+import com.example.playlistmaker.domain.api.TrackHistoryRepository
 import com.example.playlistmaker.domain.impl.ThemeInteractorImpl
 import com.example.playlistmaker.domain.impl.TrackHistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.TracksInteractorImpl
@@ -20,15 +23,15 @@ object Creator {
 		return TrackRepositoryImpl(RetrofitNetworkClient())
 	}
 
-	private fun getHistoryRepository(context: Context): SharedRepository {
-		return TrackHistoryRepositoryImpl(context)
+	private fun getHistoryRepository(context: Context): TrackHistoryRepository {
+		return TrackHistoryRepositoryImpl(TrackHistorySharedStorage(context))
 	}
 
-	private fun getThemeRepository(context: Context): SharedRepository {
-		return ThemeRepositoryImpl(context)
+	private fun getThemeRepository(context: Context): ThemeRepository {
+		return ThemeRepositoryImpl(ThemeSharedStorage(context))
 	}
 
-	fun provideTracksInteractor(): TracksInteractor {
+	fun provideTracksInteractor(): TrackInteractor {
 		return TracksInteractorImpl(getTrackRepository())
 	}
 

@@ -1,26 +1,19 @@
 package com.example.playlistmaker.data
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import com.example.playlistmaker.domain.api.SharedRepository
+import com.example.playlistmaker.data.dto.NightThemeDto
+import com.example.playlistmaker.domain.api.ThemeRepository
+import com.example.playlistmaker.domain.models.NightTheme
 
-class ThemeRepositoryImpl(private val context: Context) : SharedRepository {
+class ThemeRepositoryImpl(private val sharedStorage: SharedStorage) : ThemeRepository {
 
-	private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
-
-	override fun getData(): Any {
-		return sharedPreferences.getBoolean(NIGHT_THEME_KEY, false)
+	override fun getTheme(): NightTheme {
+		val nightThemeDto = sharedStorage.getData() as NightThemeDto
+		NightTheme.nightTheme = nightThemeDto.nightTheme
+		return NightTheme
 	}
 
-	override fun putData(data: Any) {
-		sharedPreferences.edit()
-			.putBoolean(NIGHT_THEME_KEY, data as Boolean)
-			.apply()
-	}
-
-	companion object {
-		const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
-		const val NIGHT_THEME_KEY = "NIGHT_THEME"
+	override fun saveTheme(nightTheme: NightTheme) {
+		sharedStorage.putData(NightThemeDto(nightTheme.nightTheme))
 	}
 
 }

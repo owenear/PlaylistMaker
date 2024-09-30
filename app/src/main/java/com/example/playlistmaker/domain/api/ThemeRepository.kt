@@ -2,9 +2,10 @@ package com.example.playlistmaker.domain.api
 
 import com.example.playlistmaker.domain.models.NightTheme
 
-interface ThemeInteractor {
+interface ThemeRepository {
 
-	fun saveTheme(nightTheme : NightTheme)
+	fun saveTheme(nightTheme: NightTheme)
 
-	fun getTheme(): NightTheme
+	fun getTheme() : NightTheme
+
 }

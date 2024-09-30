@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.ThemeInteractor
-import com.example.playlistmaker.domain.models.Theme
+import com.example.playlistmaker.domain.models.NightTheme
 import com.example.playlistmaker.ui.main.MainActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var themeInteractor : ThemeInteractor
 
     override fun onStop() {
-        themeInteractor.saveTheme(Theme.nightTheme)
+        themeInteractor.saveTheme(NightTheme)
         super.onStop()
     }
 
@@ -30,9 +30,9 @@ class SettingsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
 
-        themeInteractor = Creator.provideThemeInteractor(this)
+        themeInteractor = Creator.provideThemeInteractor(applicationContext)
         val themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
-        themeSwitcher.setChecked(Theme.nightTheme)
+        themeSwitcher.setChecked(NightTheme.nightTheme)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -72,7 +72,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            if(switcher.isPressed) Theme.switchTheme(checked)
+            if(switcher.isPressed) NightTheme.switchTheme(checked)
         }
 
     }

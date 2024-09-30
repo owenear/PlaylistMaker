@@ -25,7 +25,7 @@ import com.example.playlistmaker.ui.main.MainActivity
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.TrackHistoryInteractor
-import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.models.TrackHistory
 import com.example.playlistmaker.presentation.SearchAdapter
@@ -41,7 +41,7 @@ class SearchActivity : AppCompatActivity() {
 	private lateinit var historyAdapter: SearchAdapter
 	private lateinit var trackHistory: TrackHistory
 
-	private lateinit var tracksInteractor: TracksInteractor
+	private lateinit var tracksInteractor: TrackInteractor
 	private lateinit var trackHistoryInteractor: TrackHistoryInteractor
 
 	private lateinit var placeholderMessage: TextView
@@ -84,7 +84,7 @@ class SearchActivity : AppCompatActivity() {
 		}
 
 		tracksInteractor = Creator.provideTracksInteractor()
-		trackHistoryInteractor = Creator.provideTrackHistoryInteractor(this)
+		trackHistoryInteractor = Creator.provideTrackHistoryInteractor(applicationContext)
 
 		searchAdapter = SearchAdapter(searchList) { trackItem -> trackListClickListener(trackItem) }
 		trackHistory = trackHistoryInteractor.getHistory()
@@ -191,7 +191,7 @@ class SearchActivity : AppCompatActivity() {
 			showMessage()
 			progressBar.visibility = View.VISIBLE
 			tracksInteractor.searchTracks(searchString,
-				object : TracksInteractor.TrackConsumer {
+				object : TrackInteractor.TrackConsumer {
 					override fun consume(foundTrack: List<Track>?) {
 						handler.post { progressBar.visibility = View.GONE }
 

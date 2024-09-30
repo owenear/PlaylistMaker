@@ -3,7 +3,7 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.res.Resources.getSystem
 import com.example.playlistmaker.domain.api.ThemeInteractor
-import com.example.playlistmaker.domain.models.Theme
+import com.example.playlistmaker.domain.models.NightTheme
 
 class App: Application() {
 
@@ -12,7 +12,7 @@ class App: Application() {
 	override fun onCreate() {
 		super.onCreate()
 		themeInteractor = Creator.provideThemeInteractor(this)
-		Theme.switchTheme(themeInteractor.getTheme())
+		NightTheme.switchTheme(themeInteractor.getTheme().nightTheme)
 	}
 
 	companion object {

@@ -14,7 +14,9 @@ data class TrackDto (
 	val collectionName: String?,
 	val releaseDate: String?,
 	val primaryGenreName: String?,
-	val country: String?
+	val country: String?,
+	val releaseYear: String?,
+	val trackTimeFormat: String,
 	) {
 
 		fun getFormatTrackTime(format: String): String {
@@ -22,7 +24,7 @@ data class TrackDto (
 				Locale.getDefault()).format(trackTime)
 		}
 
-		fun getReleaseYear(): String {
+		fun getYearRelease(): String {
 			return if (!releaseDate.isNullOrEmpty())
 				releaseDate.substring(0..3)
 			else ""

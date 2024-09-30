@@ -2,7 +2,7 @@ package com.example.playlistmaker.domain.models
 
 import androidx.appcompat.app.AppCompatDelegate
 
-object Theme {
+object NightTheme {
 
 	var nightTheme : Boolean = false
 
