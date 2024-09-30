@@ -141,15 +141,15 @@ class PlayerActivity : AppCompatActivity() {
 	}
 
 	private fun startPlayer() {
-		mediaPlayer.start()
 		playButton.setBackgroundResource(R.drawable.ic_pause_button)
+		mediaPlayer.start()
 		playerState = STATE_PLAYING
 		mainHandler.post(playTime)
 	}
 
 	private fun pausePlayer() {
-		mediaPlayer.pause()
 		playButton.setBackgroundResource(R.drawable.ic_play_button)
+		mediaPlayer.pause()
 		mainHandler.removeCallbacks(playTime)
 		playerState = STATE_PAUSED
 	}
