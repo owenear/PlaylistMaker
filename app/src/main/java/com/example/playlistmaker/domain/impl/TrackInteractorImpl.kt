@@ -4,7 +4,7 @@ import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.api.TrackRepository
 import java.util.concurrent.Executors
 
-class TracksInteractorImpl(private val networkRepository: TrackRepository) : TrackInteractor {
+class TrackInteractorImpl(private val networkRepository: TrackRepository) : TrackInteractor {
 
 	private val executor = Executors.newCachedThreadPool()
 

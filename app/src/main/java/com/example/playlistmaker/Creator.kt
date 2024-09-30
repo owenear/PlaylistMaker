@@ -15,7 +15,7 @@ import com.example.playlistmaker.domain.api.TrackHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackHistoryRepository
 import com.example.playlistmaker.domain.impl.ThemeInteractorImpl
 import com.example.playlistmaker.domain.impl.TrackHistoryInteractorImpl
-import com.example.playlistmaker.domain.impl.TracksInteractorImpl
+import com.example.playlistmaker.domain.impl.TrackInteractorImpl
 
 object Creator {
 
@@ -32,7 +32,7 @@ object Creator {
 	}
 
 	fun provideTracksInteractor(): TrackInteractor {
-		return TracksInteractorImpl(getTrackRepository())
+		return TrackInteractorImpl(getTrackRepository())
 	}
 
 	fun provideTrackHistoryInteractor(context: Context): TrackHistoryInteractor {
