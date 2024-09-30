@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.search
+package com.example.playlistmaker.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -21,14 +21,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
-import com.example.playlistmaker.ui.main.MainActivity
-import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.TrackHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.models.TrackHistory
-import com.example.playlistmaker.presentation.SearchAdapter
 import com.google.android.material.textfield.TextInputEditText
 
 
