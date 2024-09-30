@@ -1,19 +1,19 @@
 package com.example.playlistmaker
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.content.res.Resources.getSystem
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.domain.api.ThemeInteractor
 
 class App: Application() {
 
-	lateinit var sharedPreferences : SharedPreferences
-	var nightTheme: Boolean = NIGHT_THEME_DEF
+	private lateinit var themeInteractor : ThemeInteractor
+	var nightTheme: Boolean = false
 
 	override fun onCreate() {
 		super.onCreate()
-		sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
-		nightTheme = sharedPreferences.getBoolean(NIGHT_THEME_KEY, nightTheme)
+		themeInteractor = Creator.provideThemeInteractor(this)
+		nightTheme = themeInteractor.getTheme()
 		switchTheme(nightTheme)
 	}
 
@@ -26,15 +26,10 @@ class App: Application() {
 	}
 
 	fun saveTheme(){
-		sharedPreferences.edit()
-			.putBoolean(NIGHT_THEME_KEY, nightTheme)
-			.apply()
+		themeInteractor.saveTheme(nightTheme)
 	}
 
 	companion object {
-		const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
-		const val NIGHT_THEME_KEY = "NIGHT_THEME"
-		const val NIGHT_THEME_DEF = false
 		var DISPLAY_DENSITY = getSystem().displayMetrics.density
 	}
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.player
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -17,6 +17,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.ui.search.SearchActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -83,10 +87,10 @@ class PlayerActivity : AppCompatActivity() {
 
 		titleTextView.text = trackItem?.trackName
 		artistTextView.text = trackItem?.artistName
-		durationTextView.text = trackItem?.getFormatTrackTime("mm:ss")
+		durationTextView.text = trackItem?.trackTimeFormat
 
 		albumTextView.text = trackItem?.collectionName
-		yearTextView.text = trackItem?.getReleaseYear()
+		yearTextView.text = trackItem?.releaseYear
 		genreTextView.text = trackItem?.primaryGenreName
 		countryTextView.text = trackItem?.country
 
