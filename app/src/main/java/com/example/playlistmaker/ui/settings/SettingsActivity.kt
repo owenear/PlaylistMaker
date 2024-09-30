@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.App
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.ThemeInteractor
@@ -72,7 +73,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            if(switcher.isPressed) NightTheme.switchTheme(checked)
+            if(switcher.isPressed) (applicationContext as App).switchTheme(checked)
         }
 
     }
