@@ -9,7 +9,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -26,6 +25,7 @@ import com.example.playlistmaker.domain.api.TrackHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.models.TrackHistory
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 
 
@@ -94,7 +94,7 @@ class SearchActivity : AppCompatActivity() {
 
 		val clearSearchButton = findViewById<ImageView>(R.id.searchClearIcon)
 		val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
-		val backButton = findViewById<ImageButton>(R.id.searchBackButton)
+		val backButtonToolbar = findViewById<MaterialToolbar>(R.id.searchToolbar)
 		val inputEditText = findViewById<TextInputEditText>(R.id.searchInputEditText)
 
 		val searchRecyclerView = findViewById<RecyclerView>(R.id.searchRecyclerView)
@@ -106,9 +106,8 @@ class SearchActivity : AppCompatActivity() {
 
 		if (savedInstanceState != null) inputEditText.setText(searchString)
 
-		backButton.setOnClickListener{
-			val displayMain = Intent(this, MainActivity::class.java)
-			startActivity(displayMain)
+		backButtonToolbar.setNavigationOnClickListener {
+			finish()
 		}
 
 		clearSearchButton.setOnClickListener {

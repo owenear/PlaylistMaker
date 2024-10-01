@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation
 
-import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
+import com.google.android.material.appbar.MaterialToolbar
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -54,10 +54,9 @@ class PlayerActivity : AppCompatActivity() {
 			insets
 		}
 
-		val backButton = findViewById<ImageButton>(R.id.playerBackButton)
-		backButton.setOnClickListener{
-			val displaySearch = Intent(this, SearchActivity::class.java)
-			startActivity(displaySearch)
+		val backButtonToolbar = findViewById<MaterialToolbar>(R.id.playerToolbar)
+		backButtonToolbar.setNavigationOnClickListener {
+			finish()
 		}
 
 		val titleTextView = findViewById<TextView>(R.id.titleTextView)

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -14,6 +13,7 @@ import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.ThemeInteractor
 import com.example.playlistmaker.domain.models.NightTheme
+import com.google.android.material.appbar.MaterialToolbar
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -39,10 +39,9 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val backButton = findViewById<ImageButton>(R.id.settingsBackButton)
-        backButton.setOnClickListener{
-            val displayMain = Intent(this, MainActivity::class.java)
-            startActivity(displayMain)
+        val backButtonToolbar = findViewById<MaterialToolbar>(R.id.settingsToolbar)
+        backButtonToolbar.setOnClickListener{
+            finish()
         }
 
         val shareButton = findViewById<FrameLayout>(R.id.shareFrame)
