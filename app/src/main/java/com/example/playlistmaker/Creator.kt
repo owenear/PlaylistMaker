@@ -1,25 +1,25 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import com.example.playlistmaker.data.MediaPlayerRepositoryImpl
-import com.example.playlistmaker.data.ThemeRepositoryImpl
-import com.example.playlistmaker.data.TrackHistoryRepositoryImpl
-import com.example.playlistmaker.data.TrackRepositoryImpl
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.storage.ThemeSharedStorage
-import com.example.playlistmaker.data.storage.TrackHistorySharedStorage
-import com.example.playlistmaker.domain.api.MediaPlayerInteractor
-import com.example.playlistmaker.domain.api.MediaPlayerRepository
-import com.example.playlistmaker.domain.api.TrackInteractor
-import com.example.playlistmaker.domain.api.TrackRepository
-import com.example.playlistmaker.domain.api.ThemeRepository
-import com.example.playlistmaker.domain.api.ThemeInteractor
-import com.example.playlistmaker.domain.api.TrackHistoryInteractor
-import com.example.playlistmaker.domain.api.TrackHistoryRepository
-import com.example.playlistmaker.domain.impl.MediaPlayerInteractorImpl
-import com.example.playlistmaker.domain.impl.ThemeInteractorImpl
-import com.example.playlistmaker.domain.impl.TrackHistoryInteractorImpl
-import com.example.playlistmaker.domain.impl.TrackInteractorImpl
+import com.example.playlistmaker.data.player.MediaPlayerRepositoryImpl
+import com.example.playlistmaker.data.settings.ThemeRepositoryImpl
+import com.example.playlistmaker.data.search.TrackHistoryRepositoryImpl
+import com.example.playlistmaker.data.search.TrackRepositoryImpl
+import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
+import com.example.playlistmaker.data.settings.storage.ThemeSharedStorage
+import com.example.playlistmaker.data.search.storage.TrackHistorySharedStorage
+import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
+import com.example.playlistmaker.domain.player.api.MediaPlayerRepository
+import com.example.playlistmaker.domain.search.api.TrackInteractor
+import com.example.playlistmaker.domain.search.api.TrackRepository
+import com.example.playlistmaker.domain.settings.api.ThemeRepository
+import com.example.playlistmaker.domain.settings.api.ThemeInteractor
+import com.example.playlistmaker.domain.search.api.TrackHistoryInteractor
+import com.example.playlistmaker.domain.search.api.TrackHistoryRepository
+import com.example.playlistmaker.domain.player.impl.MediaPlayerInteractorImpl
+import com.example.playlistmaker.domain.settings.impl.ThemeInteractorImpl
+import com.example.playlistmaker.domain.search.impl.TrackHistoryInteractorImpl
+import com.example.playlistmaker.domain.search.impl.TrackInteractorImpl
 
 object Creator {
 

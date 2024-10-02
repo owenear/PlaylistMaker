@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.res.Resources.getSystem
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.Creator
-import com.example.playlistmaker.domain.api.ThemeInteractor
-import com.example.playlistmaker.domain.models.NightTheme
+import com.example.playlistmaker.domain.settings.api.ThemeInteractor
+import com.example.playlistmaker.domain.settings.models.NightTheme
 
 
 class App: Application() {
