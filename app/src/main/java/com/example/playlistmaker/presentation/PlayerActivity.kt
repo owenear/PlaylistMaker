@@ -77,9 +77,9 @@ class PlayerActivity : AppCompatActivity() {
 		val coverImageView = findViewById<ImageView>(R.id.coverImageView)
 
 		val trackItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			intent.getParcelableExtra("trackItem", Track::class.java)
+			intent.getSerializableExtra("trackItem", Track::class.java)
 		} else {
-			intent.getParcelableExtra<Track>("trackItem")
+			intent.getSerializableExtra("trackItem") as Track
 		}
 
 		titleTextView.text = trackItem?.trackName
