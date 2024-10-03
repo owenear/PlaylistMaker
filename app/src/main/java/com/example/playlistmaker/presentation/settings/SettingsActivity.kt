@@ -12,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.settings.api.ThemeInteractor
-import com.example.playlistmaker.domain.settings.models.NightTheme
 import com.example.playlistmaker.presentation.App
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -21,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var themeInteractor : ThemeInteractor
 
     override fun onStop() {
-        themeInteractor.saveTheme(NightTheme)
+        themeInteractor.saveTheme((applicationContext as App).nightTheme)
         super.onStop()
     }
 
@@ -32,7 +31,7 @@ class SettingsActivity : AppCompatActivity() {
 
         themeInteractor = Creator.provideThemeInteractor(applicationContext)
         val themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
-        themeSwitcher.setChecked(NightTheme.nightTheme)
+        themeSwitcher.setChecked((applicationContext as App).nightTheme)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

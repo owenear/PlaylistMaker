@@ -5,21 +5,22 @@ import android.content.res.Resources.getSystem
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.domain.settings.api.ThemeInteractor
-import com.example.playlistmaker.domain.settings.models.NightTheme
 
 
 class App: Application() {
 
 	private lateinit var themeInteractor : ThemeInteractor
+	var nightTheme = false
 
 	override fun onCreate() {
 		super.onCreate()
 		themeInteractor = Creator.provideThemeInteractor(this)
-		switchTheme(themeInteractor.getTheme().nightTheme)
+		nightTheme = themeInteractor.getTheme()
+		switchTheme(nightTheme)
 	}
 
-	fun switchTheme(nightTheme : Boolean) {
-		NightTheme.nightTheme = nightTheme
+	fun switchTheme(newTheme : Boolean) {
+		nightTheme = newTheme
 		AppCompatDelegate.setDefaultNightMode(
 			if (nightTheme) AppCompatDelegate.MODE_NIGHT_YES
 			else AppCompatDelegate.MODE_NIGHT_NO
@@ -27,7 +28,7 @@ class App: Application() {
 	}
 
 	companion object {
-		var DISPLAY_DENSITY = getSystem().displayMetrics.density
+		val DISPLAY_DENSITY = getSystem().displayMetrics.density
 	}
 
 }

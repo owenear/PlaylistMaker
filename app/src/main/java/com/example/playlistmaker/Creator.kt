@@ -23,16 +23,28 @@ import com.example.playlistmaker.domain.search.impl.TrackInteractorImpl
 
 object Creator {
 
+	private fun getRetrofitNetworkClient(): RetrofitNetworkClient {
+		return RetrofitNetworkClient()
+	}
+
+	private fun getHistorySharedStorage(context: Context): TrackHistorySharedStorage {
+		return TrackHistorySharedStorage(context)
+	}
+
+	private fun getThemeSharedStorage(context: Context): ThemeSharedStorage {
+		return ThemeSharedStorage(context)
+	}
+
 	private fun getTrackRepository(): TrackRepository {
-		return TrackRepositoryImpl(RetrofitNetworkClient())
+		return TrackRepositoryImpl(getRetrofitNetworkClient())
 	}
 
 	private fun getHistoryRepository(context: Context): TrackHistoryRepository {
-		return TrackHistoryRepositoryImpl(TrackHistorySharedStorage(context))
+		return TrackHistoryRepositoryImpl(getHistorySharedStorage(context))
 	}
 
 	private fun getThemeRepository(context: Context): ThemeRepository {
-		return ThemeRepositoryImpl(ThemeSharedStorage(context))
+		return ThemeRepositoryImpl(getThemeSharedStorage(context))
 	}
 
 	private fun getMediaPlayerRepository(): MediaPlayerRepository {

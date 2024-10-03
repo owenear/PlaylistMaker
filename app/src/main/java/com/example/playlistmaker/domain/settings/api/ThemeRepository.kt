@@ -1,11 +1,10 @@
 package com.example.playlistmaker.domain.settings.api
 
-import com.example.playlistmaker.domain.settings.models.NightTheme
 
 interface ThemeRepository {
 
-	fun saveTheme(nightTheme: NightTheme)
+	fun saveTheme(nightTheme: Boolean)
 
-	fun getTheme() : NightTheme
+	fun getTheme() : Boolean
 
 }

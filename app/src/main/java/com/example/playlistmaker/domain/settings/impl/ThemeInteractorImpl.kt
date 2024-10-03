@@ -2,15 +2,15 @@ package com.example.playlistmaker.domain.settings.impl
 
 import com.example.playlistmaker.domain.settings.api.ThemeRepository
 import com.example.playlistmaker.domain.settings.api.ThemeInteractor
-import com.example.playlistmaker.domain.settings.models.NightTheme
 
 class ThemeInteractorImpl(private val themeRepository: ThemeRepository) : ThemeInteractor {
 
-	override fun saveTheme(nightTheme: NightTheme) {
+	override fun saveTheme(nightTheme: Boolean) {
 		themeRepository.saveTheme(nightTheme)
 	}
 
-	override fun getTheme() : NightTheme {
+	override fun getTheme() : Boolean {
 		return themeRepository.getTheme()
 	}
+
 }
