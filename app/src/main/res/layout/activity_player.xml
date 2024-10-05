@@ -5,20 +5,20 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlayerActivity"
+    tools:context=".presentation.player.PlayerActivity"
     >
 
-    <ImageButton
-        android:id="@+id/playerBackButton"
-        android:layout_width="@dimen/back_button_size"
-        android:layout_height="@dimen/back_button_size"
-        android:layout_margin="@dimen/back_button_margin"
-        app:srcCompat="@drawable/arrow_back"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/playerToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
         android:background="?attr/colorPrimary"
-        app:tint="?attr/colorOnPrimary"
+        app:titleTextAppearance="@style/toolbarStyle"
+        app:navigationIcon="@drawable/arrow_back"
+        app:navigationIconTint="?attr/colorOnPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:foreground="?attr/selectableItemBackground"
+        app:titleMargins="0dp"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -53,7 +53,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@+id/playerBackButton"
+        app:layout_constraintTop_toBottomOf="@id/playerToolbar"
         app:layout_constraintVertical_bias="1"
         />
 
