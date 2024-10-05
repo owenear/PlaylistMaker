@@ -1,6 +1,9 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import android.media.MediaPlayer
 import com.example.playlistmaker.data.player.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.settings.ThemeRepositoryImpl
 import com.example.playlistmaker.data.search.TrackHistoryRepositoryImpl
@@ -23,16 +26,26 @@ import com.example.playlistmaker.domain.search.impl.TrackInteractorImpl
 
 object Creator {
 
+	private const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
+
+	private fun getSharedPreferences(context: Context): SharedPreferences {
+		return context.getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
+	}
+
+	private fun getMediaPlayer(): MediaPlayer {
+		return MediaPlayer()
+	}
+
 	private fun getRetrofitNetworkClient(): RetrofitNetworkClient {
 		return RetrofitNetworkClient()
 	}
 
 	private fun getHistorySharedStorage(context: Context): TrackHistorySharedStorage {
-		return TrackHistorySharedStorage(context)
+		return TrackHistorySharedStorage(getSharedPreferences(context))
 	}
 
 	private fun getThemeSharedStorage(context: Context): ThemeSharedStorage {
-		return ThemeSharedStorage(context)
+		return ThemeSharedStorage(getSharedPreferences(context))
 	}
 
 	private fun getTrackRepository(): TrackRepository {
@@ -48,7 +61,7 @@ object Creator {
 	}
 
 	private fun getMediaPlayerRepository(): MediaPlayerRepository {
-		return MediaPlayerRepositoryImpl()
+		return MediaPlayerRepositoryImpl(getMediaPlayer())
 	}
 
 	fun provideTracksInteractor(): TrackInteractor {

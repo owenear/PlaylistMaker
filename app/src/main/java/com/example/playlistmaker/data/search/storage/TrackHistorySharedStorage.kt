@@ -1,14 +1,11 @@
 package com.example.playlistmaker.data.search.storage
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import com.example.playlistmaker.data.SharedStorage
 import com.example.playlistmaker.data.search.dto.TrackHistoryDto
 import com.google.gson.Gson
 
-class TrackHistorySharedStorage(context: Context) : SharedStorage {
-
-	private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
+class TrackHistorySharedStorage(private val sharedPreferences: SharedPreferences) : SharedStorage {
 
 	override fun getData(): Any {
 		return Gson().fromJson(
@@ -23,7 +20,6 @@ class TrackHistorySharedStorage(context: Context) : SharedStorage {
 	}
 
 	companion object {
-		const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
 		const val SEARCH_HISTORY_KEY = "SEARCH_HISTORY"
 		const val SEARCH_HISTORY_DEF = """{"trackList": [] }"""
 	}
