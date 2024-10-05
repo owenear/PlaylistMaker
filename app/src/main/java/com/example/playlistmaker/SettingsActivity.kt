@@ -1,26 +1,21 @@
-package com.example.playlistmaker.presentation.settings
+package com.example.playlistmaker
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.playlistmaker.Creator
-import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.settings.api.ThemeInteractor
-import com.example.playlistmaker.presentation.App
-import com.google.android.material.appbar.MaterialToolbar
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var themeInteractor : ThemeInteractor
 
     override fun onStop() {
-        themeInteractor.saveTheme((applicationContext as App).nightTheme)
+        (applicationContext as App).saveTheme()
         super.onStop()
     }
 
@@ -29,7 +24,6 @@ class SettingsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
 
-        themeInteractor = Creator.provideThemeInteractor(applicationContext)
         val themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
         themeSwitcher.setChecked((applicationContext as App).nightTheme)
 
@@ -39,9 +33,10 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val backButtonToolbar = findViewById<MaterialToolbar>(R.id.settingsToolbar)
-        backButtonToolbar.setOnClickListener{
-            finish()
+        val backButton = findViewById<ImageButton>(R.id.settingsBackButton)
+        backButton.setOnClickListener{
+            val displayMain = Intent(this, MainActivity::class.java)
+            startActivity(displayMain)
         }
 
         val shareButton = findViewById<FrameLayout>(R.id.shareFrame)

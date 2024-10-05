@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.search
+package com.example.playlistmaker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,9 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.search.models.Track
-import com.example.playlistmaker.presentation.App
 
 class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 	LayoutInflater.from(parent.context).inflate(R.layout.view_search, parent, false)
@@ -34,7 +31,7 @@ class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
 		trackNameTV.text = item.trackName
 		artistNameTV.text = item.artistName
-		trackTimeTV.text = item.trackTimeFormat
+		trackTimeTV.text = item.getFormatTrackTime("mm:ss")
 
 	}
 

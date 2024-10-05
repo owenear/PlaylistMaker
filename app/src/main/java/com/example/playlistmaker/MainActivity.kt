@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.main
+package com.example.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,10 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.library.LibraryActivity
-import com.example.playlistmaker.presentation.search.SearchActivity
-import com.example.playlistmaker.presentation.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             val displayLibrary = Intent(this, LibraryActivity::class.java)
             startActivity(displayLibrary)
         }
+
 
         val settingsButtonClickListener: View.OnClickListener = View.OnClickListener {
             val displaySettings = Intent(this@MainActivity, SettingsActivity::class.java)

@@ -30,5 +30,8 @@
     <dimen name="player_view_margin_vertical">24dp</dimen>
     <dimen name="player_guide_vertical_margin">16dp</dimen>
 
-    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="back_button_size">48dp</dimen>
+    <dimen name="back_button_margin">4dp</dimen>
+    <dimen name="header_size">48dp</dimen>
+    <dimen name="header_margin">4dp</dimen>
 </resources>

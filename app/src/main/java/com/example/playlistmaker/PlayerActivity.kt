@@ -1,5 +1,7 @@
-package com.example.playlistmaker.presentation.player
+package com.example.playlistmaker
 
+import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,11 +17,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.Creator
-import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.search.models.Track
-import com.example.playlistmaker.presentation.App
-import com.google.android.material.appbar.MaterialToolbar
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -27,7 +24,7 @@ import java.util.Locale
 class PlayerActivity : AppCompatActivity() {
 
 	private lateinit var playButton: ImageButton
-	private var mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+	private var mediaPlayer = MediaPlayer()
 	private var playerState = STATE_DEFAULT
 	private val mainHandler = Handler(Looper.getMainLooper())
 	private lateinit var timeTextView: TextView
@@ -41,7 +38,7 @@ class PlayerActivity : AppCompatActivity() {
 
 	override fun onDestroy() {
 		super.onDestroy()
-		mediaPlayerInteractor.releasePlayer()
+		mediaPlayer.release()
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,9 +52,10 @@ class PlayerActivity : AppCompatActivity() {
 			insets
 		}
 
-		val backButtonToolbar = findViewById<MaterialToolbar>(R.id.playerToolbar)
-		backButtonToolbar.setNavigationOnClickListener {
-			finish()
+		val backButton = findViewById<ImageButton>(R.id.playerBackButton)
+		backButton.setOnClickListener{
+			val displaySearch = Intent(this, SearchActivity::class.java)
+			startActivity(displaySearch)
 		}
 
 		val titleTextView = findViewById<TextView>(R.id.titleTextView)
@@ -78,17 +76,17 @@ class PlayerActivity : AppCompatActivity() {
 		val coverImageView = findViewById<ImageView>(R.id.coverImageView)
 
 		val trackItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			intent.getSerializableExtra("trackItem", Track::class.java)
+			intent.getParcelableExtra("trackItem", Track::class.java)
 		} else {
-			intent.getSerializableExtra("trackItem") as Track
+			intent.getParcelableExtra<Track>("trackItem")
 		}
 
 		titleTextView.text = trackItem?.trackName
 		artistTextView.text = trackItem?.artistName
-		durationTextView.text = trackItem?.trackTimeFormat
+		durationTextView.text = trackItem?.getFormatTrackTime("mm:ss")
 
 		albumTextView.text = trackItem?.collectionName
-		yearTextView.text = trackItem?.releaseYear
+		yearTextView.text = trackItem?.getReleaseYear()
 		genreTextView.text = trackItem?.primaryGenreName
 		countryTextView.text = trackItem?.country
 
@@ -122,32 +120,32 @@ class PlayerActivity : AppCompatActivity() {
 	}
 
 	private fun preparePlayer(trackItem: Track?) {
-		val previewUrl = if (trackItem == null || trackItem.previewUrl.isNullOrEmpty())
-			R.string.player_default_preview_url.toString() else trackItem.previewUrl
-
-		mediaPlayerInteractor.preparePlayer(previewUrl,
-			{
-				playButton.isEnabled = true
-				playerState = STATE_PREPARED
-			},
-			{
-				playButton.setBackgroundResource(R.drawable.ic_play_button)
-				playerState = STATE_PREPARED
-				mainHandler.removeCallbacks(playTime)
-				timeTextView.text = getString(R.string.player_time_default)
-			})
+		val previewUrl = if (trackItem?.previewUrl.isNullOrEmpty())
+			R.string.player_default_preview_url.toString() else trackItem?.previewUrl
+		mediaPlayer.setDataSource(previewUrl)
+		mediaPlayer.prepareAsync()
+		mediaPlayer.setOnPreparedListener {
+			playButton.isEnabled = true
+			playerState = STATE_PREPARED
+		}
+		mediaPlayer.setOnCompletionListener {
+			playButton.setBackgroundResource(R.drawable.ic_play_button)
+			playerState = STATE_PREPARED
+			mainHandler.removeCallbacks(playTime)
+			timeTextView.text = getString(R.string.player_time_default)
+		}
 	}
 
 	private fun startPlayer() {
+		mediaPlayer.start()
 		playButton.setBackgroundResource(R.drawable.ic_pause_button)
-		mediaPlayerInteractor.startPlayer()
 		playerState = STATE_PLAYING
 		mainHandler.post(playTime)
 	}
 
 	private fun pausePlayer() {
+		mediaPlayer.pause()
 		playButton.setBackgroundResource(R.drawable.ic_play_button)
-		mediaPlayerInteractor.pausePlayer()
 		mainHandler.removeCallbacks(playTime)
 		playerState = STATE_PAUSED
 	}
@@ -166,7 +164,7 @@ class PlayerActivity : AppCompatActivity() {
 	private fun updatePlayTime(): Runnable {
 		return object : Runnable {
 			override fun run() {
-				timeTextView.text = dateFormat.format(mediaPlayerInteractor.getPlayTime())
+				timeTextView.text = dateFormat.format(mediaPlayer.currentPosition)
 				mainHandler.postDelayed(this, PLAY_TIME_DELAY)
 			}
 		}
