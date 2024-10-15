@@ -1,26 +1,25 @@
 package com.example.playlistmaker.presentation.settings
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.playlistmaker.Creator
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.settings.api.ThemeInteractor
-import com.example.playlistmaker.presentation.App
+import com.example.playlistmaker.presentation.settings.view_model.SettingsViewModel
 import com.google.android.material.appbar.MaterialToolbar
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var themeInteractor : ThemeInteractor
+    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var themeSwitcher: SwitchCompat
 
     override fun onStop() {
-        themeInteractor.saveTheme((applicationContext as App).nightTheme)
+    //    settingsViewModel.saveTheme((applicationContext as App).nightTheme)
         super.onStop()
     }
 
@@ -29,9 +28,17 @@ class SettingsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
 
-        themeInteractor = Creator.provideThemeInteractor(applicationContext)
-        val themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
-        themeSwitcher.setChecked((applicationContext as App).nightTheme)
+        settingsViewModel = ViewModelProvider(this,
+            SettingsViewModel.getViewModelFactory(applicationContext))[SettingsViewModel::class.java]
+
+        themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
+
+        settingsViewModel.nightThemeLiveData.observe(this) { nightTheme ->
+            Log.d("NIGHTTHEME", nightTheme.toString())
+            themeSwitcher.setChecked(nightTheme)
+        }
+
+        //themeSwitcher.setChecked((applicationContext as App).nightTheme)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -46,31 +53,23 @@ class SettingsActivity : AppCompatActivity() {
 
         val shareButton = findViewById<FrameLayout>(R.id.shareFrame)
         shareButton.setOnClickListener{
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.practicum_android_link))
-            shareIntent.type = "text/plain"
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_prompt)))
+            settingsViewModel.shareApp(getString(R.string.practicum_android_link))
         }
 
         val supportButton = findViewById<FrameLayout>(R.id.supportFrame)
         supportButton.setOnClickListener{
-            val supportIntent = Intent(Intent.ACTION_SENDTO)
-            supportIntent.data = Uri.parse("mailto:")
-            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_student)))
-            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject))
-            supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_message))
-            startActivity(supportIntent)
+            settingsViewModel.openSupport(getString(R.string.email_student),
+                                        getString(R.string.email_subject),
+                                        getString(R.string.email_message))
         }
 
         val agreementButton = findViewById<FrameLayout>(R.id.usrAgrFrame)
         agreementButton.setOnClickListener{
-            val agreementIntent = Intent(Intent.ACTION_VIEW)
-            agreementIntent.data = Uri.parse(getString(R.string.practicum_offer_link))
-            startActivity(agreementIntent)
+            settingsViewModel.openTerms(getString(R.string.practicum_offer_link))
         }
 
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            if(switcher.isPressed) (applicationContext as App).switchTheme(checked)
+            if(switcher.isPressed) settingsViewModel.setTheme(checked)
         }
 
     }

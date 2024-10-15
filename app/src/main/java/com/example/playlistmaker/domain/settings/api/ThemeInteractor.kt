@@ -7,4 +7,5 @@ interface ThemeInteractor {
 
 	fun getTheme(): Boolean
 
+	fun setTheme(nightTheme : Boolean)
 }

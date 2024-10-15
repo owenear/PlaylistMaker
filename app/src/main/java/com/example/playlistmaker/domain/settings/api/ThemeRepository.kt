@@ -7,4 +7,5 @@ interface ThemeRepository {
 
 	fun getTheme() : Boolean
 
+	fun setTheme(nightTheme : Boolean)
 }

@@ -2,7 +2,6 @@ package com.example.playlistmaker.presentation
 
 import android.app.Application
 import android.content.res.Resources.getSystem
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.domain.settings.api.ThemeInteractor
 
@@ -16,9 +15,10 @@ class App: Application() {
 		super.onCreate()
 		themeInteractor = Creator.provideThemeInteractor(this)
 		nightTheme = themeInteractor.getTheme()
-		switchTheme(nightTheme)
+		themeInteractor.setTheme(nightTheme)
 	}
 
+	/*
 	fun switchTheme(newTheme : Boolean) {
 		nightTheme = newTheme
 		AppCompatDelegate.setDefaultNightMode(
@@ -26,9 +26,9 @@ class App: Application() {
 			else AppCompatDelegate.MODE_NIGHT_NO
 		)
 	}
+	*/
 
 	companion object {
 		val DISPLAY_DENSITY = getSystem().displayMetrics.density
 	}
-
 }

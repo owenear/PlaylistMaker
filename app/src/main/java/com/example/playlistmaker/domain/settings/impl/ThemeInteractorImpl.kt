@@ -13,4 +13,8 @@ class ThemeInteractorImpl(private val themeRepository: ThemeRepository) : ThemeI
 		return themeRepository.getTheme()
 	}
 
+	override fun setTheme(nightTheme: Boolean) {
+		themeRepository.setTheme(nightTheme)
+	}
+
 }

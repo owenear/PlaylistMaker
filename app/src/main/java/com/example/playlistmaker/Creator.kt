@@ -11,6 +11,7 @@ import com.example.playlistmaker.data.search.TrackRepositoryImpl
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.settings.storage.ThemeSharedStorage
 import com.example.playlistmaker.data.search.storage.TrackHistorySharedStorage
+import com.example.playlistmaker.data.sharing.SharingRepositoryImpl
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.api.MediaPlayerRepository
 import com.example.playlistmaker.domain.search.api.TrackInteractor
@@ -23,6 +24,9 @@ import com.example.playlistmaker.domain.player.impl.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.settings.impl.ThemeInteractorImpl
 import com.example.playlistmaker.domain.search.impl.TrackHistoryInteractorImpl
 import com.example.playlistmaker.domain.search.impl.TrackInteractorImpl
+import com.example.playlistmaker.domain.sharing.api.SharingInteractor
+import com.example.playlistmaker.domain.sharing.api.SharingRepository
+import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
 
 object Creator {
 
@@ -64,6 +68,10 @@ object Creator {
 		return MediaPlayerRepositoryImpl(getMediaPlayer())
 	}
 
+	private fun getSharingRepository(context: Context): SharingRepository {
+		return SharingRepositoryImpl(context)
+	}
+
 	fun provideTracksInteractor(): TrackInteractor {
 		return TrackInteractorImpl(getTrackRepository())
 	}
@@ -78,6 +86,10 @@ object Creator {
 
 	fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
 		return MediaPlayerInteractorImpl(getMediaPlayerRepository())
+	}
+
+	fun provideSharingInteractor(context: Context): SharingInteractor {
+		return SharingInteractorImpl(getSharingRepository(context))
 	}
 
 }
