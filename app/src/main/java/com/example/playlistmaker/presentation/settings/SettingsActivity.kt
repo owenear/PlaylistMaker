@@ -18,18 +18,13 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var themeSwitcher: SwitchCompat
 
-    override fun onStop() {
-    //    settingsViewModel.saveTheme((applicationContext as App).nightTheme)
-        super.onStop()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
 
         settingsViewModel = ViewModelProvider(this,
-            SettingsViewModel.getViewModelFactory(applicationContext))[SettingsViewModel::class.java]
+            SettingsViewModel.getViewModelFactory(this))[SettingsViewModel::class.java]
 
         themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
 
@@ -37,8 +32,6 @@ class SettingsActivity : AppCompatActivity() {
             Log.d("NIGHTTHEME", nightTheme.toString())
             themeSwitcher.setChecked(nightTheme)
         }
-
-        //themeSwitcher.setChecked((applicationContext as App).nightTheme)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

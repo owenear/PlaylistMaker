@@ -9,24 +9,12 @@ import com.example.playlistmaker.domain.settings.api.ThemeInteractor
 class App: Application() {
 
 	private lateinit var themeInteractor : ThemeInteractor
-	var nightTheme = false
 
 	override fun onCreate() {
 		super.onCreate()
 		themeInteractor = Creator.provideThemeInteractor(this)
-		nightTheme = themeInteractor.getTheme()
-		themeInteractor.setTheme(nightTheme)
+		themeInteractor.setTheme(themeInteractor.getTheme())
 	}
-
-	/*
-	fun switchTheme(newTheme : Boolean) {
-		nightTheme = newTheme
-		AppCompatDelegate.setDefaultNightMode(
-			if (nightTheme) AppCompatDelegate.MODE_NIGHT_YES
-			else AppCompatDelegate.MODE_NIGHT_NO
-		)
-	}
-	*/
 
 	companion object {
 		val DISPLAY_DENSITY = getSystem().displayMetrics.density

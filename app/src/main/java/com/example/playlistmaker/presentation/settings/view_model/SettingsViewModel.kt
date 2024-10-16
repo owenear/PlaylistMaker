@@ -1,7 +1,7 @@
 package com.example.playlistmaker.presentation.settings.view_model
 
 import android.content.Context
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -17,24 +17,12 @@ class SettingsViewModel(private val themeInteractor: ThemeInteractor,
                         private val sharingInteractor: SharingInteractor,
                         ): ViewModel() {
 
-    private var nightTheme = themeInteractor.getTheme()
-    val nightThemeLiveData = MutableLiveData<Boolean>(nightTheme)
+    private val nightThemeMutableLiveData = MutableLiveData<Boolean>(themeInteractor.getTheme())
+    val nightThemeLiveData : LiveData<Boolean> = nightThemeMutableLiveData
 
     fun setTheme(nightTheme: Boolean) {
-        this.nightTheme = nightTheme
-        nightThemeLiveData.value = nightTheme
+        nightThemeMutableLiveData.postValue(nightTheme)
         themeInteractor.setTheme(nightTheme)
-        saveTheme()
-        Log.d("NIGHTTHEME_SET_THEME", nightTheme.toString())
-    }
-
-    private fun saveTheme() {
-        themeInteractor.saveTheme(nightTheme)
-        Log.d("NIGHTTHEME_SAVE_THEME", nightTheme.toString())
-    }
-
-    private fun getTheme() {
-        nightTheme = themeInteractor.getTheme()
     }
 
     fun shareApp(link: String) {
@@ -52,7 +40,6 @@ class SettingsViewModel(private val themeInteractor: ThemeInteractor,
     companion object {
         fun getViewModelFactory(context: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                //val nightTheme = (this[APPLICATION_KEY] as App).nightTheme
                 SettingsViewModel(Creator.provideThemeInteractor(context),
                     Creator.provideSharingInteractor(context))
             }
