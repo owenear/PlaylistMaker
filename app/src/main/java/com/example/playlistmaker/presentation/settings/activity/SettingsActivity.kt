@@ -1,7 +1,6 @@
-package com.example.playlistmaker.presentation.settings
+package com.example.playlistmaker.presentation.settings.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +28,6 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
 
         settingsViewModel.nightThemeLiveData.observe(this) { nightTheme ->
-            Log.d("NIGHTTHEME", nightTheme.toString())
             themeSwitcher.setChecked(nightTheme)
         }
 

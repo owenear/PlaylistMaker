@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.util
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -40,8 +40,8 @@ object Creator {
 		return MediaPlayer()
 	}
 
-	private fun getRetrofitNetworkClient(): RetrofitNetworkClient {
-		return RetrofitNetworkClient()
+	private fun getRetrofitNetworkClient(context: Context): RetrofitNetworkClient {
+		return RetrofitNetworkClient(context)
 	}
 
 	private fun getHistorySharedStorage(context: Context): TrackHistorySharedStorage {
@@ -52,8 +52,8 @@ object Creator {
 		return ThemeSharedStorage(getSharedPreferences(context))
 	}
 
-	private fun getTrackRepository(): TrackRepository {
-		return TrackRepositoryImpl(getRetrofitNetworkClient())
+	private fun getTrackRepository(context: Context): TrackRepository {
+		return TrackRepositoryImpl(getRetrofitNetworkClient(context))
 	}
 
 	private fun getHistoryRepository(context: Context): TrackHistoryRepository {
@@ -72,8 +72,8 @@ object Creator {
 		return SharingRepositoryImpl(context)
 	}
 
-	fun provideTracksInteractor(): TrackInteractor {
-		return TrackInteractorImpl(getTrackRepository())
+	fun provideTrackInteractor(context: Context): TrackInteractor {
+		return TrackInteractorImpl(getTrackRepository(context))
 	}
 
 	fun provideTrackHistoryInteractor(context: Context): TrackHistoryInteractor {

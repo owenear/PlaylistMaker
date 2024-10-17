@@ -2,7 +2,7 @@ package com.example.playlistmaker.presentation
 
 import android.app.Application
 import android.content.res.Resources.getSystem
-import com.example.playlistmaker.Creator
+import com.example.playlistmaker.util.Creator
 import com.example.playlistmaker.domain.settings.api.ThemeInteractor
 
 
