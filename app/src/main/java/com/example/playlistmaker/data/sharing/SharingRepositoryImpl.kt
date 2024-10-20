@@ -12,8 +12,7 @@ class SharingRepositoryImpl(private val context: Context): SharingRepository {
 	override fun openEmail(emailData: EmailData) {
 		val emailIntent = Intent(Intent.ACTION_SENDTO)
 		emailIntent.data = Uri.parse("mailto:")
-		emailIntent.putExtra(Intent.EXTRA_EMAIL, emailData.emailTo)
-		//supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_student)))
+		emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailData.emailTo))
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailData.subject)
 		emailIntent.putExtra(Intent.EXTRA_TEXT, emailData.message)
 		context.startActivity(emailIntent)

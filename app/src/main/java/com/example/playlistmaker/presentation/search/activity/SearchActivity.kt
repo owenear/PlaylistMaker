@@ -18,14 +18,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.util.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.search.api.TrackHistoryInteractor
-import com.example.playlistmaker.domain.search.api.TrackInteractor
 import com.example.playlistmaker.domain.search.models.Track
-import com.example.playlistmaker.domain.search.models.TrackHistory
-import com.example.playlistmaker.presentation.player.PlayerActivity
-import com.example.playlistmaker.presentation.search.SearchAdapter
+import com.example.playlistmaker.presentation.player.activity.PlayerActivity
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -35,21 +30,31 @@ import com.google.android.material.textfield.TextInputEditText
 class SearchActivity : AppCompatActivity() {
 
 	private var searchString: String = SEARCH_STRING_DEF
+
 	private var searchList = mutableListOf<Track>()
+	private var historyList = mutableListOf<Track>()
 
-	private lateinit var searchAdapter: SearchAdapter
-	private lateinit var historyAdapter: SearchAdapter
-	private lateinit var trackHistory: TrackHistory
+	private val searchAdapter by lazy {
+		SearchAdapter(searchList) { trackItem -> trackListClickListener(trackItem) }
+	}
+	private val historyAdapter by lazy {
+		SearchAdapter(historyList) { trackItem -> trackListClickListener(trackItem) }
+	}
 
-	private lateinit var trackHistoryInteractor: TrackHistoryInteractor
+	private val searchViewModel by lazy {
+		ViewModelProvider(
+			this,
+			SearchViewModel.getViewModelFactory(applicationContext)
+		)[SearchViewModel::class.java]
+	}
 
 	private lateinit var placeholderMessage: TextView
 	private lateinit var placeholderImage: ImageView
 	private lateinit var updateButton: Button
 	private lateinit var searchHistoryGroup: Group
 	private lateinit var searchRecyclerView: RecyclerView
-
 	private lateinit var progressBar: ProgressBar
+	private lateinit var inputEditText: TextInputEditText
 
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
@@ -61,14 +66,10 @@ class SearchActivity : AppCompatActivity() {
 		searchString = savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
 	}
 
-	override fun onPause() {
-		trackHistoryInteractor.saveHistory(trackHistory)
-		super.onPause()
-	}
-
 	override fun onResume() {
 		super.onResume()
-		historyAdapter.notifyDataSetChanged()
+		if (searchString.isEmpty() && inputEditText.hasFocus())
+			searchViewModel.historyContent()
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,31 +83,21 @@ class SearchActivity : AppCompatActivity() {
 			insets
 		}
 
-		trackHistoryInteractor = Creator.provideTrackHistoryInteractor(applicationContext)
-
-		val searchViewModel = ViewModelProvider(this,
-			SearchViewModel.getViewModelFactory(applicationContext))[SearchViewModel::class.java]
-
-
-		searchAdapter = SearchAdapter(searchList) { trackItem -> trackListClickListener(trackItem) }
-		trackHistory = trackHistoryInteractor.getHistory()
-		historyAdapter = SearchAdapter(trackHistory.trackList) { trackItem -> trackListClickListener(trackItem) }
-
 		placeholderMessage = findViewById<TextView>(R.id.placeholderTextView)
 		placeholderImage = findViewById<ImageView>(R.id.placeholderImageView)
 		updateButton = findViewById<Button>(R.id.updateButton)
 		progressBar = findViewById<ProgressBar>(R.id.progressBar)
+		searchHistoryGroup = findViewById<Group>(R.id.searchHistoryGroup)
 
 		val clearSearchButton = findViewById<ImageView>(R.id.searchClearIcon)
 		val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
 		val backButtonToolbar = findViewById<MaterialToolbar>(R.id.searchToolbar)
-		val inputEditText = findViewById<TextInputEditText>(R.id.searchInputEditText)
+		inputEditText = findViewById<TextInputEditText>(R.id.searchInputEditText)
 
 		searchRecyclerView = findViewById<RecyclerView>(R.id.searchRecyclerView)
-		val searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryRecyclerView)
-		searchHistoryGroup = findViewById<Group>(R.id.searchHistoryGroup)
-
 		searchRecyclerView.adapter = searchAdapter
+
+		val searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryRecyclerView)
 		searchHistoryRecyclerView.adapter = historyAdapter
 
 		if (savedInstanceState != null) inputEditText.setText(searchString)
@@ -117,14 +108,14 @@ class SearchActivity : AppCompatActivity() {
 
 		clearSearchButton.setOnClickListener {
 			inputEditText.setText(SEARCH_STRING_DEF)
-			render(SearchScreenState.HistoryContent)
+			searchViewModel.historyContent()
 			val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
 		}
 
 		inputEditText.setOnFocusChangeListener { view, hasFocus ->
 			if (hasFocus) {
-				render(SearchScreenState.HistoryContent)
+				searchViewModel.historyContent()
 			} else {
 				render(SearchScreenState.Initial)
 			}
@@ -134,7 +125,7 @@ class SearchActivity : AppCompatActivity() {
 			onTextChanged = { charSequence, _, _, _ ->
 				clearSearchButton.visibility = if (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
 				if (inputEditText.hasFocus() && charSequence.isNullOrEmpty()) {
-					render(SearchScreenState.HistoryContent)
+					searchViewModel.historyContent()
 				} else {
 					render(SearchScreenState.Initial)
 				}
@@ -160,8 +151,7 @@ class SearchActivity : AppCompatActivity() {
 		}
 
 		clearHistoryButton.setOnClickListener {
-			trackHistory.clear()
-			showInitial()
+			searchViewModel.historyClear()
 		}
 
 		searchViewModel.stateLiveData.observe(this) { state ->
@@ -171,8 +161,7 @@ class SearchActivity : AppCompatActivity() {
 	}
 
 	private fun trackListClickListener(trackItem: Track) {
-		trackHistory.addTrack(trackItem)
-		trackHistoryInteractor.saveHistory(trackHistory)
+		searchViewModel.historyAddTrack(trackItem)
 		val playerIntent = Intent(this, PlayerActivity::class.java)
 		playerIntent.putExtra("trackItem",trackItem)
 		this.startActivity(playerIntent)
@@ -183,11 +172,12 @@ class SearchActivity : AppCompatActivity() {
 			is SearchScreenState.Initial -> showInitial()
 			is SearchScreenState.Loading -> showLoading()
 			is SearchScreenState.SearchContent -> showSearchContent(state.trackList)
-			is SearchScreenState.HistoryContent -> showHistoryContent()
+			is SearchScreenState.HistoryContent -> showHistoryContent(state.trackList)
 			is SearchScreenState.Error -> showError()
 			is SearchScreenState.Empty -> showEmpty()
 		}
 	}
+
 
 	private fun showInitial(){
 		placeholderMessage.visibility = View.GONE
@@ -241,14 +231,16 @@ class SearchActivity : AppCompatActivity() {
 		searchRecyclerView.visibility = View.VISIBLE
 	}
 
-	private fun showHistoryContent(){
+	private fun showHistoryContent(trackList: List<Track>){
+		historyList.clear()
+		historyList.addAll(trackList)
 		historyAdapter.notifyDataSetChanged()
 		placeholderMessage.visibility = View.GONE
 		placeholderImage.visibility = View.GONE
 		updateButton.visibility = View.GONE
 		progressBar.visibility = View.GONE
 		searchRecyclerView.visibility = View.GONE
-		searchHistoryGroup.visibility = if (trackHistory.isEmpty()) View.GONE else View.VISIBLE
+		searchHistoryGroup.visibility = if (trackList.isEmpty()) View.GONE else View.VISIBLE
 	}
 
 	companion object {

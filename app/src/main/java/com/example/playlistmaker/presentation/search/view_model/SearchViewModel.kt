@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,12 +18,33 @@ import com.example.playlistmaker.util.Creator
 import com.example.playlistmaker.util.Resource
 
 class SearchViewModel(private val trackInteractor: TrackInteractor,
-                      private val trackHistoryInteractor: TrackHistoryInteractor) : ViewModel() {
+	private val trackHistoryInteractor: TrackHistoryInteractor) : ViewModel() {
 
 	private val handler = Handler(Looper.getMainLooper())
 
 	private val stateMutableLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.Initial)
 	val stateLiveData : LiveData<SearchScreenState> = stateMutableLiveData
+
+	private val trackHistory = trackHistoryInteractor.getHistory()
+
+	private fun historySave() {
+		trackHistoryInteractor.saveHistory(trackHistory)
+	}
+
+	fun historyAddTrack(track: Track){
+		trackHistory.addTrack(track)
+		historySave()
+	}
+
+	fun historyClear(){
+		trackHistory.clear()
+		historySave()
+		historyContent()
+	}
+
+	fun historyContent(){
+		renderState(SearchScreenState.HistoryContent(trackHistory.trackList))
+	}
 
 	fun search(query: String) {
 		handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
@@ -56,7 +76,6 @@ class SearchViewModel(private val trackInteractor: TrackInteractor,
 		handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 		handler.postAtTime(searchRunnable,SEARCH_REQUEST_TOKEN,
 			SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY)
-
 	}
 
 	fun renderState(state: SearchScreenState) {
@@ -64,6 +83,7 @@ class SearchViewModel(private val trackInteractor: TrackInteractor,
 	}
 
 	override fun onCleared() {
+		historySave()
 		handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 		super.onCleared()
 	}

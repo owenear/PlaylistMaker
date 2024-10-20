@@ -16,6 +16,8 @@ sealed interface SearchScreenState {
 		val trackList: List<Track>
 	) : SearchScreenState
 
-	data object HistoryContent :SearchScreenState
+	data class HistoryContent(
+		val trackList: List<Track>
+	) :SearchScreenState
 
 }
