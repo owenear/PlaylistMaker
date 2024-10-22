@@ -13,7 +13,8 @@ import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import com.example.playlistmaker.util.Creator
 
-class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel() {
+class PlayerViewModel(private val previewUrl: String,
+	private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel() {
 
 	private val stateMutableLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Default)
 	val stateLiveData : LiveData<PlayerScreenState> = stateMutableLiveData
@@ -23,7 +24,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor):
 
 	private val handler = Handler(Looper.getMainLooper())
 
-	fun preparePlayer(previewUrl: String) {
+	init {
 		mediaPlayerInteractor.preparePlayer(previewUrl,
 			{ onPreparedListener() }, { onCompletionListener() })
 		renderState(PlayerScreenState.Prepared)
@@ -48,9 +49,11 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor):
 	}
 
 	fun pausePlayer() {
-		mediaPlayerInteractor.pausePlayer()
-		handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
-		renderState(PlayerScreenState.Paused)
+		if (stateMutableLiveData.value == PlayerScreenState.Playing) {
+			mediaPlayerInteractor.pausePlayer()
+			handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
+			renderState(PlayerScreenState.Paused)
+		}
 	}
 
 	fun playbackControl() {
@@ -82,9 +85,9 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor):
 	}
 
 	companion object {
-		fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+		fun getViewModelFactory(previewUrl: String): ViewModelProvider.Factory = viewModelFactory {
 			initializer {
-				PlayerViewModel(Creator.provideMediaPlayerInteractor())
+				PlayerViewModel(previewUrl, Creator.provideMediaPlayerInteractor())
 			}
 		}
 		private const val PLAY_TIME_DELAY = 500L

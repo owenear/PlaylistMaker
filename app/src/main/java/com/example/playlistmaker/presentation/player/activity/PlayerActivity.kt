@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -33,9 +34,10 @@ class PlayerActivity : AppCompatActivity() {
 
 	private lateinit var playButton: ImageButton
 	private lateinit var timeTextView: TextView
+	private lateinit var previewUrl: String
 	private val playerViewModel by lazy {
 		ViewModelProvider(this,
-		PlayerViewModel.getViewModelFactory())[PlayerViewModel::class.java]
+		PlayerViewModel.getViewModelFactory(previewUrl))[PlayerViewModel::class.java]
 	}
 	private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -47,7 +49,6 @@ class PlayerActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
-
 		setContentView(R.layout.activity_player)
 		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
 			val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -106,7 +107,7 @@ class PlayerActivity : AppCompatActivity() {
 		val artworkUrl100 = trackItem?.artworkUrl100
 		val coverURL = if (artworkUrl100.isNullOrEmpty()) R.drawable.baseline_gesture_24 else
 			artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
-		val previewUrl = if (trackItem == null || trackItem.previewUrl.isNullOrEmpty())
+		previewUrl = if (trackItem == null || trackItem.previewUrl.isNullOrEmpty())
 			R.string.player_default_preview_url.toString() else trackItem.previewUrl
 
 		Glide.with(this)
@@ -117,7 +118,6 @@ class PlayerActivity : AppCompatActivity() {
 			.into(coverImageView)
 
 		playButton = findViewById<ImageButton>(R.id.playerPlayButton)
-		playerViewModel.preparePlayer(previewUrl)
 		playButton.setOnClickListener {
 			playerViewModel.playbackControl()
 		}
