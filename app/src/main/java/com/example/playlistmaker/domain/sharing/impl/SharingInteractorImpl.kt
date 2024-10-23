@@ -18,17 +18,4 @@ class SharingInteractorImpl(private val sharingRepository: SharingRepository) : 
 		sharingRepository.openEmail(emailData)
 	}
 
-	/*
-	private fun getShareAppLink(): String {
-		// Нужно реализовать
-	}
-
-	private fun getSupportEmailData(): EmailData {
-		// Нужно реализовать
-	}
-
-	private fun getTermsLink(): String {
-		// Нужно реализовать
-	}
-*/
 }
