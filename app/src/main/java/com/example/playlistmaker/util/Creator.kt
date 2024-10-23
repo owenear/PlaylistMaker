@@ -8,6 +8,8 @@ import com.example.playlistmaker.data.player.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.settings.ThemeRepositoryImpl
 import com.example.playlistmaker.data.search.TrackHistoryRepositoryImpl
 import com.example.playlistmaker.data.search.TrackRepositoryImpl
+import com.example.playlistmaker.data.search.dto.TrackHistoryMapper
+import com.example.playlistmaker.data.search.dto.TrackMapper
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.settings.storage.ThemeSharedStorage
 import com.example.playlistmaker.data.search.storage.TrackHistorySharedStorage
@@ -32,6 +34,14 @@ object Creator {
 
 	private const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
 
+	private fun getTrackMapper(): TrackMapper{
+		return TrackMapper()
+	}
+
+	private fun getTrackHistoryMapper(): TrackHistoryMapper {
+		return TrackHistoryMapper()
+	}
+
 	private fun getSharedPreferences(context: Context): SharedPreferences {
 		return context.getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
 	}
@@ -53,11 +63,11 @@ object Creator {
 	}
 
 	private fun getTrackRepository(context: Context): TrackRepository {
-		return TrackRepositoryImpl(getRetrofitNetworkClient(context))
+		return TrackRepositoryImpl(getRetrofitNetworkClient(context), getTrackMapper())
 	}
 
 	private fun getHistoryRepository(context: Context): TrackHistoryRepository {
-		return TrackHistoryRepositoryImpl(getHistorySharedStorage(context))
+		return TrackHistoryRepositoryImpl(getHistorySharedStorage(context), getTrackHistoryMapper())
 	}
 
 	private fun getThemeRepository(context: Context): ThemeRepository {
