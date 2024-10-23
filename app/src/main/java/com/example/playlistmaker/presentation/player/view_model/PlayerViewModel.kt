@@ -27,7 +27,6 @@ class PlayerViewModel(private val previewUrl: String,
 	init {
 		mediaPlayerInteractor.preparePlayer(previewUrl,
 			{ onPreparedListener() }, { onCompletionListener() })
-		renderState(PlayerScreenState.Prepared)
 	}
 
 	private fun onPreparedListener(){

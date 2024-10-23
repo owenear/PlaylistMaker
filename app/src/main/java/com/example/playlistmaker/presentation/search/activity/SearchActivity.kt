@@ -56,20 +56,12 @@ class SearchActivity : AppCompatActivity() {
 	private lateinit var progressBar: ProgressBar
 	private lateinit var inputEditText: TextInputEditText
 
-	override fun onSaveInstanceState(outState: Bundle) {
-		super.onSaveInstanceState(outState)
-		outState.putString(SEARCH_STRING_KEY, searchString)
-	}
-
-	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-		super.onRestoreInstanceState(savedInstanceState)
-		searchString = savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
-	}
 
 	override fun onResume() {
 		super.onResume()
-		if (searchString.isEmpty() && inputEditText.hasFocus())
-			searchViewModel.historyContent()
+		inputEditText.setText(searchString)
+		inputEditText.setSelection(searchString.length)
+		searchViewModel.processTheQuery(inputEditText.text.toString())
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +92,9 @@ class SearchActivity : AppCompatActivity() {
 		val searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryRecyclerView)
 		searchHistoryRecyclerView.adapter = historyAdapter
 
-		if (savedInstanceState != null) inputEditText.setText(searchString)
+		searchViewModel.queryLiveData.observe(this) { query ->
+			searchString = query
+		}
 
 		backButtonToolbar.setNavigationOnClickListener {
 			finish()
@@ -108,50 +102,36 @@ class SearchActivity : AppCompatActivity() {
 
 		clearSearchButton.setOnClickListener {
 			inputEditText.setText(SEARCH_STRING_DEF)
-			searchViewModel.historyContent()
+			searchViewModel.processTheQuery(SEARCH_STRING_DEF)
 			val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
 		}
 
 		inputEditText.setOnFocusChangeListener { view, hasFocus ->
-			if (hasFocus) {
-				searchViewModel.historyContent()
-			} else {
-				render(SearchScreenState.Initial)
-			}
+			if (hasFocus && inputEditText.text.isNullOrEmpty())
+				searchViewModel.processTheQuery(inputEditText.text.toString())
 		}
 
 		inputEditText.addTextChangedListener(
 			onTextChanged = { charSequence, _, _, _ ->
 				clearSearchButton.visibility = if (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
-				if (inputEditText.hasFocus() && charSequence.isNullOrEmpty()) {
-					searchViewModel.historyContent()
-				} else {
-					render(SearchScreenState.Initial)
-				}
-			},
-			afterTextChanged = { editable ->
-				if (!editable.isNullOrEmpty()) {
-					searchString = editable.toString()
-					searchViewModel.searchDebounce(searchString)
-				}
+				searchViewModel.processTheQuery(charSequence.toString())
 			}
 		)
 
 		inputEditText.setOnEditorActionListener { _, actionId, _ ->
 			if (actionId == EditorInfo.IME_ACTION_DONE && !inputEditText.text.isNullOrEmpty()) {
-				searchString = inputEditText.text.toString()
-				searchViewModel.search(searchString)
+				searchViewModel.search(inputEditText.text.toString())
 			}
 			false
 		}
 
 		updateButton.setOnClickListener {
-			searchViewModel.search(searchString)
+			searchViewModel.search(inputEditText.text.toString())
 		}
 
 		clearHistoryButton.setOnClickListener {
-			searchViewModel.historyClear()
+			searchViewModel.clearHistory()
 		}
 
 		searchViewModel.stateLiveData.observe(this) { state ->
@@ -161,7 +141,7 @@ class SearchActivity : AppCompatActivity() {
 	}
 
 	private fun trackListClickListener(trackItem: Track) {
-		searchViewModel.historyAddTrack(trackItem)
+		searchViewModel.addToHistory(trackItem)
 		val playerIntent = Intent(this, PlayerActivity::class.java)
 		playerIntent.putExtra("trackItem",trackItem)
 		this.startActivity(playerIntent)
@@ -177,7 +157,6 @@ class SearchActivity : AppCompatActivity() {
 			is SearchScreenState.Empty -> showEmpty()
 		}
 	}
-
 
 	private fun showInitial(){
 		placeholderMessage.visibility = View.GONE
@@ -244,7 +223,6 @@ class SearchActivity : AppCompatActivity() {
 	}
 
 	companion object {
-		const val SEARCH_STRING_KEY = "SEARCH_STRING"
 		const val SEARCH_STRING_DEF = ""
 	}
 }
