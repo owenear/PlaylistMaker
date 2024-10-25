@@ -31,14 +31,11 @@ class SearchActivity : AppCompatActivity() {
 
 	private var searchString: String = SEARCH_STRING_DEF
 
-	private var searchList = mutableListOf<Track>()
-	private var historyList = mutableListOf<Track>()
-
 	private val searchAdapter by lazy {
-		SearchAdapter(searchList) { trackItem -> trackListClickListener(trackItem) }
+		SearchAdapter() { trackItem -> trackListClickListener(trackItem) }
 	}
 	private val historyAdapter by lazy {
-		SearchAdapter(historyList) { trackItem -> trackListClickListener(trackItem) }
+		SearchAdapter() { trackItem -> trackListClickListener(trackItem) }
 	}
 
 	private val searchViewModel by lazy {
@@ -56,12 +53,11 @@ class SearchActivity : AppCompatActivity() {
 	private lateinit var progressBar: ProgressBar
 	private lateinit var inputEditText: TextInputEditText
 
-
 	override fun onResume() {
 		super.onResume()
 		inputEditText.setText(searchString)
 		inputEditText.setSelection(searchString.length)
-		searchViewModel.processTheQuery(inputEditText.text.toString())
+		searchViewModel.processQuery(inputEditText.text.toString())
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,20 +98,20 @@ class SearchActivity : AppCompatActivity() {
 
 		clearSearchButton.setOnClickListener {
 			inputEditText.setText(SEARCH_STRING_DEF)
-			searchViewModel.processTheQuery(SEARCH_STRING_DEF)
+			searchViewModel.processQuery(SEARCH_STRING_DEF)
 			val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
 		}
 
 		inputEditText.setOnFocusChangeListener { view, hasFocus ->
 			if (hasFocus && inputEditText.text.isNullOrEmpty())
-				searchViewModel.processTheQuery(inputEditText.text.toString())
+				searchViewModel.processQuery(inputEditText.text.toString())
 		}
 
 		inputEditText.addTextChangedListener(
 			onTextChanged = { charSequence, _, _, _ ->
 				clearSearchButton.visibility = if (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
-				searchViewModel.processTheQuery(charSequence.toString())
+				searchViewModel.processQuery(charSequence.toString())
 			}
 		)
 
@@ -199,9 +195,7 @@ class SearchActivity : AppCompatActivity() {
 	}
 
 	private fun showSearchContent(trackList: List<Track>){
-		searchList.clear()
-		searchList.addAll(trackList)
-		searchAdapter.notifyDataSetChanged()
+		searchAdapter.items = trackList
 		placeholderMessage.visibility = View.GONE
 		placeholderImage.visibility = View.GONE
 		updateButton.visibility = View.GONE
@@ -211,9 +205,7 @@ class SearchActivity : AppCompatActivity() {
 	}
 
 	private fun showHistoryContent(trackList: List<Track>){
-		historyList.clear()
-		historyList.addAll(trackList)
-		historyAdapter.notifyDataSetChanged()
+		historyAdapter.items = trackList
 		placeholderMessage.visibility = View.GONE
 		placeholderImage.visibility = View.GONE
 		updateButton.visibility = View.GONE

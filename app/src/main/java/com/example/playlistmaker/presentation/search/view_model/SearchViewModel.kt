@@ -31,8 +31,7 @@ class SearchViewModel(
 
 	private val trackHistory = trackHistoryInteractor.getHistory()
 
-
-	fun processTheQuery(query: String){
+	fun processQuery(query: String){
 		when {
 			query.isEmpty() -> {
 				handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
@@ -57,37 +56,37 @@ class SearchViewModel(
 		renderState(SearchScreenState.HistoryContent(trackHistory.trackList))
 	}
 
-	fun search(query: String) {
-		queryMutableLiveData.postValue(query)
-		handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-		if (query.isNotEmpty()) {
-			renderState(SearchScreenState.Loading)
-			trackInteractor.searchTracks(query,
-				object : TrackInteractor.TrackConsumer {
-					override fun consume(found: Resource<List<Track>>) {
-						when (found) {
-							is Resource.Error -> {
-								if (found.code == 404)
-									renderState(SearchScreenState.Empty)
-								else
-									renderState(SearchScreenState.Error)
-							}
-							is Resource.Success -> {
-								renderState(SearchScreenState.SearchContent(
-									found.data ?: listOf()))
-							}
-						}
-					}
-				}
-			)
-		}
-	}
-
 	private fun searchDebounce(query: String) {
 		val searchRunnable = Runnable { search(query) }
 		handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 		handler.postAtTime(searchRunnable,SEARCH_REQUEST_TOKEN,
 			SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY)
+	}
+
+	fun search(query: String) {
+		queryMutableLiveData.postValue(query)
+		handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+		if (query.isNotEmpty()) {
+			renderState(SearchScreenState.Loading)
+			trackInteractor.searchTracks(query,trackConsumer())
+		}
+	}
+
+	private fun trackConsumer() = object : TrackInteractor.TrackConsumer {
+		override fun consume(found: Resource<List<Track>>) {
+			when (found) {
+				is Resource.Error -> {
+					if (found.code == 404)
+						renderState(SearchScreenState.Empty)
+					else
+						renderState(SearchScreenState.Error)
+				}
+				is Resource.Success -> {
+					renderState(SearchScreenState.SearchContent(
+						found.data ?: listOf()))
+				}
+			}
+		}
 	}
 
 	fun renderState(state: SearchScreenState) {
