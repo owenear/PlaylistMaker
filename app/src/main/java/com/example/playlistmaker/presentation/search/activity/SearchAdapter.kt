@@ -1,20 +1,32 @@
-package com.example.playlistmaker.presentation.search
+package com.example.playlistmaker.presentation.search.activity
 
+import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.databinding.RecyclerItemSearchBinding
 import com.example.playlistmaker.domain.search.models.Track
 
 
-class SearchAdapter (private val items: List<Track>, private val clickListener: (Track) -> Unit)
+class SearchAdapter (private val clickListener: (Track) -> Unit)
 	: RecyclerView.Adapter<SearchViewHolder> (){
+
+	var items: List<Track> = emptyList()
+		@SuppressLint("NotifyDataSetChanged")
+        set(newValue) {
+			field = newValue
+			notifyDataSetChanged()
+		}
 
 	private val mainHandler = Handler(Looper.getMainLooper())
 	private var isClickAllowed = true
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-		return SearchViewHolder(parent)
+		val layoutInflater = LayoutInflater.from(parent.context)
+		val binding = RecyclerItemSearchBinding.inflate(layoutInflater, parent, false)
+		return SearchViewHolder(binding)
 	}
 
 	override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {

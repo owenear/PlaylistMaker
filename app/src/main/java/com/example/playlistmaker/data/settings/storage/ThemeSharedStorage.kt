@@ -1,12 +1,9 @@
 package com.example.playlistmaker.data.settings.storage
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import com.example.playlistmaker.data.SharedStorage
 
-class ThemeSharedStorage (context: Context) : SharedStorage {
-
-	private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE)
+class ThemeSharedStorage (private val sharedPreferences: SharedPreferences) : SharedStorage {
 
 	override fun getData(): Any {
 		return sharedPreferences.getBoolean(NIGHT_THEME_KEY, NIGHT_THEME_DEF)
@@ -19,7 +16,6 @@ class ThemeSharedStorage (context: Context) : SharedStorage {
 	}
 
 	companion object {
-		const val SHARED_PREFERENCES_FILE = "playlist_maker_preferences"
 		const val NIGHT_THEME_KEY = "NIGHT_THEME"
 		const val NIGHT_THEME_DEF = false
 	}
