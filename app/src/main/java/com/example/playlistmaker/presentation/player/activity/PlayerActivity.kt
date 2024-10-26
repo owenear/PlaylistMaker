@@ -2,29 +2,20 @@ package com.example.playlistmaker.presentation.player.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.util.Creator
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
-import com.example.playlistmaker.presentation.search.models.SearchScreenState
-import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -32,14 +23,14 @@ import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-	private lateinit var playButton: ImageButton
-	private lateinit var timeTextView: TextView
 	private lateinit var previewUrl: String
 	private val playerViewModel by lazy {
 		ViewModelProvider(this,
 		PlayerViewModel.getViewModelFactory(previewUrl))[PlayerViewModel::class.java]
 	}
 	private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
+	private lateinit var binding: ActivityPlayerBinding
 
 	override fun onPause() {
 		super.onPause()
@@ -49,7 +40,9 @@ class PlayerActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
-		setContentView(R.layout.activity_player)
+		binding = ActivityPlayerBinding.inflate(layoutInflater)
+		setContentView(binding.root)
+
 		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
 			val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -61,43 +54,26 @@ class PlayerActivity : AppCompatActivity() {
 			finish()
 		}
 
-		val titleTextView = findViewById<TextView>(R.id.titleTextView)
-		val artistTextView = findViewById<TextView>(R.id.artistTextView)
-		timeTextView = findViewById<TextView>(R.id.timeTextView)
-
-		val durationTextView = findViewById<TextView>(R.id.durationTextViewValue)
-		val albumTextView = findViewById<TextView>(R.id.albumTextViewValue)
-		val yearTextView = findViewById<TextView>(R.id.yearTextViewValue)
-		val genreTextView = findViewById<TextView>(R.id.genreTextViewValue)
-		val countryTextView = findViewById<TextView>(R.id.countryTextViewValue)
-
-		val albumGroup = findViewById<Group>(R.id.albumTextViewGroup)
-		val yearGroup = findViewById<Group>(R.id.yearTextViewGroup)
-		val genreGroup = findViewById<Group>(R.id.genreTextViewGroup)
-		val countryGroup = findViewById<Group>(R.id.countryTextViewGroup)
-
-		val coverImageView = findViewById<ImageView>(R.id.coverImageView)
-
 		val trackItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 			intent.getSerializableExtra("trackItem", Track::class.java)
 		} else {
 			intent.getSerializableExtra("trackItem") as Track
 		}
 
-		titleTextView.text = trackItem?.trackName
-		artistTextView.text = trackItem?.artistName
-		durationTextView.text = trackItem?.trackTimeFormat
+		binding.titleTextView.text = trackItem?.trackName
+		binding.artistTextView.text = trackItem?.artistName
 
-		albumTextView.text = trackItem?.collectionName
-		yearTextView.text = trackItem?.releaseYear
-		genreTextView.text = trackItem?.primaryGenreName
-		countryTextView.text = trackItem?.country
+		binding.durationTextViewValue.text = trackItem?.trackTimeFormat
+		binding.albumTextViewValue.text = trackItem?.collectionName
+		binding.yearTextViewValue.text = trackItem?.releaseYear
+		binding.genreTextViewValue.text = trackItem?.primaryGenreName
+		binding.countryTextViewValue.text = trackItem?.country
 
 		val trackInfoMap = mapOf(
-			albumTextView to albumGroup,
-			yearTextView to yearGroup,
-			genreTextView to genreGroup,
-			countryTextView to countryGroup
+			binding.albumTextViewValue to binding.albumTextViewGroup,
+			binding.yearTextViewValue to binding.yearTextViewGroup,
+			binding.genreTextViewValue to binding.genreTextViewGroup,
+			binding.countryTextViewValue to binding.countryTextViewGroup
 		)
 
 		for ((textView, viewGroup) in trackInfoMap) {
@@ -115,10 +91,9 @@ class PlayerActivity : AppCompatActivity() {
 			.placeholder(R.drawable.baseline_gesture_24)
 			.centerCrop()
 			.transform(RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
-			.into(coverImageView)
+			.into(binding.coverImageView)
 
-		playButton = findViewById<ImageButton>(R.id.playerPlayButton)
-		playButton.setOnClickListener {
+		binding.playerPlayButton.setOnClickListener {
 			playerViewModel.playbackControl()
 		}
 
@@ -127,7 +102,7 @@ class PlayerActivity : AppCompatActivity() {
 		}
 
 		playerViewModel.playTimeLiveData.observe(this) { playTime ->
-			timeTextView.text = dateFormat.format(playTime)
+			binding.timeTextView.text = dateFormat.format(playTime)
 		}
 
 	}
@@ -142,22 +117,22 @@ class PlayerActivity : AppCompatActivity() {
 	}
 
 	private fun showDefault() {
-		playButton.isEnabled = false
-		playButton.setBackgroundResource(R.drawable.ic_play_button)
+		binding.playerPlayButton.isEnabled = false
+		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
 	}
 
 	private fun showPrepared() {
-		playButton.isEnabled = true
-		playButton.setBackgroundResource(R.drawable.ic_play_button)
-		timeTextView.text = getString(R.string.player_time_default)
+		binding.playerPlayButton.isEnabled = true
+		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
+		binding.timeTextView.text = getString(R.string.player_time_default)
 	}
 
 	private fun showPlaying() {
-		playButton.setBackgroundResource(R.drawable.ic_pause_button)
+		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_pause_button)
 	}
 
 	private fun showPaused() {
-		playButton.setBackgroundResource(R.drawable.ic_play_button)
+		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
 	}
 
 }

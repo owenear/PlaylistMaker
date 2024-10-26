@@ -6,25 +6,18 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.activity.PlayerActivity
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.textfield.TextInputEditText
 
 
 class SearchActivity : AppCompatActivity() {
@@ -45,25 +38,20 @@ class SearchActivity : AppCompatActivity() {
 		)[SearchViewModel::class.java]
 	}
 
-	private lateinit var placeholderMessage: TextView
-	private lateinit var placeholderImage: ImageView
-	private lateinit var updateButton: Button
-	private lateinit var searchHistoryGroup: Group
-	private lateinit var searchRecyclerView: RecyclerView
-	private lateinit var progressBar: ProgressBar
-	private lateinit var inputEditText: TextInputEditText
+	private lateinit var binding: ActivitySearchBinding
 
 	override fun onResume() {
 		super.onResume()
-		inputEditText.setText(searchString)
-		inputEditText.setSelection(searchString.length)
-		searchViewModel.processQuery(inputEditText.text.toString())
+		binding.searchInputEditText.setText(searchString)
+		binding.searchInputEditText.setSelection(searchString.length)
+		searchViewModel.processQuery(binding.searchInputEditText.text.toString())
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
-		setContentView(R.layout.activity_search)
+		binding = ActivitySearchBinding.inflate(layoutInflater)
+		setContentView(binding.root)
 
 		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
 			val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -71,62 +59,48 @@ class SearchActivity : AppCompatActivity() {
 			insets
 		}
 
-		placeholderMessage = findViewById<TextView>(R.id.placeholderTextView)
-		placeholderImage = findViewById<ImageView>(R.id.placeholderImageView)
-		updateButton = findViewById<Button>(R.id.updateButton)
-		progressBar = findViewById<ProgressBar>(R.id.progressBar)
-		searchHistoryGroup = findViewById<Group>(R.id.searchHistoryGroup)
-
-		val clearSearchButton = findViewById<ImageView>(R.id.searchClearIcon)
-		val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
-		val backButtonToolbar = findViewById<MaterialToolbar>(R.id.searchToolbar)
-		inputEditText = findViewById<TextInputEditText>(R.id.searchInputEditText)
-
-		searchRecyclerView = findViewById<RecyclerView>(R.id.searchRecyclerView)
-		searchRecyclerView.adapter = searchAdapter
-
-		val searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryRecyclerView)
-		searchHistoryRecyclerView.adapter = historyAdapter
+		binding.searchRecyclerView.adapter = searchAdapter
+		binding.searchHistoryRecyclerView.adapter = historyAdapter
 
 		searchViewModel.queryLiveData.observe(this) { query ->
 			searchString = query
 		}
 
-		backButtonToolbar.setNavigationOnClickListener {
+		binding.searchToolbar.setNavigationOnClickListener {
 			finish()
 		}
 
-		clearSearchButton.setOnClickListener {
-			inputEditText.setText(SEARCH_STRING_DEF)
+		binding.searchClearIcon.setOnClickListener {
+			binding.searchInputEditText.setText(SEARCH_STRING_DEF)
 			searchViewModel.processQuery(SEARCH_STRING_DEF)
 			val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-			inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
+			inputMethodManager?.hideSoftInputFromWindow(binding.searchInputEditText.windowToken, 0)
 		}
 
-		inputEditText.setOnFocusChangeListener { view, hasFocus ->
-			if (hasFocus && inputEditText.text.isNullOrEmpty())
-				searchViewModel.processQuery(inputEditText.text.toString())
+		binding.searchInputEditText.setOnFocusChangeListener { view, hasFocus ->
+			if (hasFocus && binding.searchInputEditText.text.isNullOrEmpty())
+				searchViewModel.processQuery(binding.searchInputEditText.text.toString())
 		}
 
-		inputEditText.addTextChangedListener(
+		binding.searchInputEditText.addTextChangedListener(
 			onTextChanged = { charSequence, _, _, _ ->
-				clearSearchButton.visibility = if (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
+				binding.searchClearIcon.visibility = if (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
 				searchViewModel.processQuery(charSequence.toString())
 			}
 		)
 
-		inputEditText.setOnEditorActionListener { _, actionId, _ ->
-			if (actionId == EditorInfo.IME_ACTION_DONE && !inputEditText.text.isNullOrEmpty()) {
-				searchViewModel.search(inputEditText.text.toString())
+		binding.searchInputEditText.setOnEditorActionListener { _, actionId, _ ->
+			if (actionId == EditorInfo.IME_ACTION_DONE && !binding.searchInputEditText.text.isNullOrEmpty()) {
+				searchViewModel.search(binding.searchInputEditText.text.toString())
 			}
 			false
 		}
 
-		updateButton.setOnClickListener {
-			searchViewModel.search(inputEditText.text.toString())
+		binding.updateButton.setOnClickListener {
+			searchViewModel.search(binding.searchInputEditText.text.toString())
 		}
 
-		clearHistoryButton.setOnClickListener {
+		binding.clearHistoryButton.setOnClickListener {
 			searchViewModel.clearHistory()
 		}
 
@@ -155,63 +129,63 @@ class SearchActivity : AppCompatActivity() {
 	}
 
 	private fun showInitial(){
-		placeholderMessage.visibility = View.GONE
-		placeholderImage.visibility = View.GONE
-		updateButton.visibility = View.GONE
-		progressBar.visibility = View.GONE
-		searchHistoryGroup.visibility = View.GONE
-		searchRecyclerView.visibility = View.GONE
+		binding.placeholderTextView.visibility = View.GONE
+		binding.placeholderImageView.visibility = View.GONE
+		binding.updateButton.visibility = View.GONE
+		binding.progressBar.visibility = View.GONE
+		binding.searchHistoryGroup.visibility = View.GONE
+		binding.searchRecyclerView.visibility = View.GONE
 	}
 
 	private fun showLoading() {
-		searchHistoryGroup.visibility = View.GONE
-		searchRecyclerView.visibility = View.GONE
-		placeholderMessage.visibility = View.GONE
-		placeholderImage.visibility = View.GONE
-		updateButton.visibility = View.GONE
-		progressBar.visibility = View.VISIBLE
+		binding.searchHistoryGroup.visibility = View.GONE
+		binding.searchRecyclerView.visibility = View.GONE
+		binding.placeholderTextView.visibility = View.GONE
+		binding.placeholderImageView.visibility = View.GONE
+		binding.updateButton.visibility = View.GONE
+		binding.progressBar.visibility = View.VISIBLE
 	}
 
 	private fun showError() {
-		searchHistoryGroup.visibility = View.GONE
-		searchRecyclerView.visibility = View.GONE
-		progressBar.visibility = View.GONE
-		placeholderMessage.visibility = View.VISIBLE
-		placeholderImage.visibility = View.VISIBLE
-		updateButton.visibility = View.VISIBLE
-		placeholderMessage.text = getString(R.string.search_net_error)
-		placeholderImage.setImageResource(R.drawable.ic_net_error)
+		binding.searchHistoryGroup.visibility = View.GONE
+		binding.searchRecyclerView.visibility = View.GONE
+		binding.progressBar.visibility = View.GONE
+		binding.placeholderTextView.visibility = View.VISIBLE
+		binding.placeholderImageView.visibility = View.VISIBLE
+		binding.updateButton.visibility = View.VISIBLE
+		binding.placeholderTextView.text = getString(R.string.search_net_error)
+		binding.placeholderImageView.setImageResource(R.drawable.ic_net_error)
 	}
 
 	private fun showEmpty() {
-		searchHistoryGroup.visibility = View.GONE
-		searchRecyclerView.visibility = View.GONE
-		progressBar.visibility = View.GONE
-		placeholderMessage.visibility = View.VISIBLE
-		placeholderImage.visibility = View.VISIBLE
-		updateButton.visibility = View.GONE
-		placeholderMessage.text = getString(R.string.search_nothing_found)
-		placeholderImage.setImageResource(R.drawable.ic_nothing_found)
+		binding.searchHistoryGroup.visibility = View.GONE
+		binding.searchRecyclerView.visibility = View.GONE
+		binding.progressBar.visibility = View.GONE
+		binding.placeholderTextView.visibility = View.VISIBLE
+		binding.placeholderImageView.visibility = View.VISIBLE
+		binding.updateButton.visibility = View.GONE
+		binding.placeholderTextView.text = getString(R.string.search_nothing_found)
+		binding.placeholderImageView.setImageResource(R.drawable.ic_nothing_found)
 	}
 
 	private fun showSearchContent(trackList: List<Track>){
 		searchAdapter.items = trackList
-		placeholderMessage.visibility = View.GONE
-		placeholderImage.visibility = View.GONE
-		updateButton.visibility = View.GONE
-		progressBar.visibility = View.GONE
-		searchHistoryGroup.visibility = View.GONE
-		searchRecyclerView.visibility = View.VISIBLE
+		binding.placeholderTextView.visibility = View.GONE
+		binding.placeholderImageView.visibility = View.GONE
+		binding.updateButton.visibility = View.GONE
+		binding.progressBar.visibility = View.GONE
+		binding.searchHistoryGroup.visibility = View.GONE
+		binding.searchRecyclerView.visibility = View.VISIBLE
 	}
 
 	private fun showHistoryContent(trackList: List<Track>){
 		historyAdapter.items = trackList
-		placeholderMessage.visibility = View.GONE
-		placeholderImage.visibility = View.GONE
-		updateButton.visibility = View.GONE
-		progressBar.visibility = View.GONE
-		searchRecyclerView.visibility = View.GONE
-		searchHistoryGroup.visibility = if (trackList.isEmpty()) View.GONE else View.VISIBLE
+		binding.placeholderTextView.visibility = View.GONE
+		binding.placeholderImageView.visibility = View.GONE
+		binding.updateButton.visibility = View.GONE
+		binding.progressBar.visibility = View.GONE
+		binding.searchRecyclerView.visibility = View.GONE
+		binding.searchHistoryGroup.visibility = if (trackList.isEmpty()) View.GONE else View.VISIBLE
 	}
 
 	companion object {

@@ -1,24 +1,16 @@
 package com.example.playlistmaker.presentation.search.activity
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ViewSearchBinding
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.App
 
-class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-	LayoutInflater.from(parent.context).inflate(R.layout.view_search, parent, false)
-)
+class SearchViewHolder(private val binding: ViewSearchBinding) :
+	RecyclerView.ViewHolder(binding.root)
 {
-	private val trackNameTV: TextView = itemView.findViewById(R.id.trackTextView)
-	private val artistNameTV: TextView = itemView.findViewById(R.id.artistTextView)
-	private val trackTimeTV: TextView = itemView.findViewById(R.id.timeTextView)
-	private val coverIV: ImageView = itemView.findViewById(R.id.coverImageView)
 
 	fun bind(item: Track) {
 
@@ -30,11 +22,11 @@ class SearchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 			.placeholder(R.drawable.baseline_gesture_24)
 			.fitCenter()
 			.transform(RoundedCorners((2 * App.DISPLAY_DENSITY).toInt()))
-			.into(coverIV)
+			.into(binding.coverImageView)
 
-		trackNameTV.text = item.trackName
-		artistNameTV.text = item.artistName
-		trackTimeTV.text = item.trackTimeFormat
+		binding.trackTextView.text = item.trackName
+		binding.artistTextView.text = item.artistName
+		binding.timeTextView.text = item.trackTimeFormat
 
 	}
 

@@ -4,31 +4,30 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.presentation.settings.view_model.SettingsViewModel
 import com.google.android.material.appbar.MaterialToolbar
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var themeSwitcher: SwitchCompat
+    private val settingsViewModel by lazy {
+        ViewModelProvider(this,
+            SettingsViewModel.getViewModelFactory(this))[SettingsViewModel::class.java]
+    }
+    private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_settings)
-
-        settingsViewModel = ViewModelProvider(this,
-            SettingsViewModel.getViewModelFactory(this))[SettingsViewModel::class.java]
-
-        themeSwitcher = findViewById<SwitchCompat>(R.id.nightThemeSwitch)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         settingsViewModel.nightThemeLiveData.observe(this) { nightTheme ->
-            themeSwitcher.setChecked(nightTheme)
+            binding.nightThemeSwitch.setChecked(nightTheme)
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
@@ -59,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
             settingsViewModel.openTerms(getString(R.string.practicum_offer_link))
         }
 
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        binding.nightThemeSwitch.setOnCheckedChangeListener { switcher, checked ->
             if(switcher.isPressed) settingsViewModel.setTheme(checked)
         }
 

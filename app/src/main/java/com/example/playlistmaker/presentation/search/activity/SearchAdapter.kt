@@ -3,8 +3,10 @@ package com.example.playlistmaker.presentation.search.activity
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.databinding.ViewSearchBinding
 import com.example.playlistmaker.domain.search.models.Track
 
 
@@ -22,7 +24,9 @@ class SearchAdapter (private val clickListener: (Track) -> Unit)
 	private var isClickAllowed = true
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-		return SearchViewHolder(parent)
+		val layoutInflater = LayoutInflater.from(parent.context)
+		val binding = ViewSearchBinding.inflate(layoutInflater, parent, false)
+		return SearchViewHolder(binding)
 	}
 
 	override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {

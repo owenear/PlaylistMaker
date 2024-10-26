@@ -3,37 +3,39 @@ package com.example.playlistmaker.presentation.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.presentation.library.LibraryActivity
 import com.example.playlistmaker.presentation.search.activity.SearchActivity
 import com.example.playlistmaker.presentation.settings.activity.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val searchButton = findViewById<Button>(R.id.searchButton)
-        val libraryButton = findViewById<Button>(R.id.libraryButton)
-        val settingsButton = findViewById<Button>(R.id.settingsButton)
-
-        searchButton.setOnClickListener{
+        binding.searchButton.setOnClickListener{
             val displaySearch = Intent(this, SearchActivity::class.java)
             startActivity(displaySearch)
         }
 
-        libraryButton.setOnClickListener{
+        binding.libraryButton.setOnClickListener{
             val displayLibrary = Intent(this, LibraryActivity::class.java)
             startActivity(displayLibrary)
         }
@@ -42,6 +44,6 @@ class MainActivity : AppCompatActivity() {
             val displaySettings = Intent(this@MainActivity, SettingsActivity::class.java)
             startActivity(displaySettings)
         }
-        settingsButton.setOnClickListener(settingsButtonClickListener)
+        binding.settingsButton.setOnClickListener(settingsButtonClickListener)
     }
 }
