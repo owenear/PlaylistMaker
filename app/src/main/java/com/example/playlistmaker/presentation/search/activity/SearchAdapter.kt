@@ -6,7 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.databinding.ViewSearchBinding
+import com.example.playlistmaker.databinding.RecyclerItemSearchBinding
 import com.example.playlistmaker.domain.search.models.Track
 
 
@@ -25,7 +25,7 @@ class SearchAdapter (private val clickListener: (Track) -> Unit)
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
 		val layoutInflater = LayoutInflater.from(parent.context)
-		val binding = ViewSearchBinding.inflate(layoutInflater, parent, false)
+		val binding = RecyclerItemSearchBinding.inflate(layoutInflater, parent, false)
 		return SearchViewHolder(binding)
 	}
 

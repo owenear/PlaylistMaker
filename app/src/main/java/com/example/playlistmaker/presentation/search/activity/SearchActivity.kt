@@ -44,7 +44,8 @@ class SearchActivity : AppCompatActivity() {
 		super.onResume()
 		binding.searchInputEditText.setText(searchString)
 		binding.searchInputEditText.setSelection(searchString.length)
-		searchViewModel.processQuery(binding.searchInputEditText.text.toString())
+		if (binding.searchInputEditText.hasFocus())
+			searchViewModel.processQuery(binding.searchInputEditText.text.toString())
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +86,8 @@ class SearchActivity : AppCompatActivity() {
 		binding.searchInputEditText.addTextChangedListener(
 			onTextChanged = { charSequence, _, _, _ ->
 				binding.searchClearIcon.visibility = if (charSequence.isNullOrEmpty()) View.GONE else View.VISIBLE
-				searchViewModel.processQuery(charSequence.toString())
+				if (binding.searchInputEditText.hasFocus())
+					searchViewModel.processQuery(charSequence.toString())
 			}
 		)
 
@@ -133,8 +135,8 @@ class SearchActivity : AppCompatActivity() {
 		binding.placeholderImageView.visibility = View.GONE
 		binding.updateButton.visibility = View.GONE
 		binding.progressBar.visibility = View.GONE
-		binding.searchHistoryGroup.visibility = View.GONE
 		binding.searchRecyclerView.visibility = View.GONE
+		binding.searchHistoryGroup.visibility = View.GONE
 	}
 
 	private fun showLoading() {
