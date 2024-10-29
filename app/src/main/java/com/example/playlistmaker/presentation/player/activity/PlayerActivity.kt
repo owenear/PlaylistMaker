@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -17,6 +16,8 @@ import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -24,10 +25,11 @@ import java.util.Locale
 class PlayerActivity : AppCompatActivity() {
 
 	private lateinit var previewUrl: String
-	private val playerViewModel by lazy {
-		ViewModelProvider(this,
-		PlayerViewModel.getViewModelFactory(previewUrl))[PlayerViewModel::class.java]
+
+	private val playerViewModel: PlayerViewModel by viewModel {
+		parametersOf(previewUrl)
 	}
+
 	private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
 	private lateinit var binding: ActivityPlayerBinding

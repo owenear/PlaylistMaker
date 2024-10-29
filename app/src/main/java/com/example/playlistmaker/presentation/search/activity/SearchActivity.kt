@@ -11,13 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.activity.PlayerActivity
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
@@ -31,12 +31,7 @@ class SearchActivity : AppCompatActivity() {
 		SearchAdapter() { trackItem -> trackListClickListener(trackItem) }
 	}
 
-	private val searchViewModel by lazy {
-		ViewModelProvider(
-			this,
-			SearchViewModel.getViewModelFactory(applicationContext)
-		)[SearchViewModel::class.java]
-	}
+	private val searchViewModel by viewModel<SearchViewModel>()
 
 	private lateinit var binding: ActivitySearchBinding
 

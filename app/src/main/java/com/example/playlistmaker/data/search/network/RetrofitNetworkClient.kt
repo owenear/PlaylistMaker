@@ -6,17 +6,9 @@ import android.net.NetworkCapabilities
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.search.dto.Response
 import com.example.playlistmaker.data.search.dto.SearchRequest
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient(private val context: Context) : NetworkClient {
-
-	private val retrofit = Retrofit.Builder()
-		.baseUrl(API_URL)
-		.addConverterFactory(GsonConverterFactory.create())
-		.build()
-
-	private val itunesApiService = retrofit.create(ItunesApi::class.java)
+class RetrofitNetworkClient(private val context: Context,
+							private val itunesApiService: ItunesApi) : NetworkClient {
 
 	override fun doRequest(dto: Any): Response {
 		if (!isConnected()) return Response().apply { resultCode = -1 }
@@ -41,10 +33,6 @@ class RetrofitNetworkClient(private val context: Context) : NetworkClient {
 			}
 		}
 		return false
-	}
-
-	companion object {
-		const val API_URL = "https://itunes.apple.com"
 	}
 
 }

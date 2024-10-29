@@ -1,5 +1,7 @@
-package com.example.playlistmaker.data.search.dto
+package com.example.playlistmaker.util.mappers
 
+import com.example.playlistmaker.data.search.dto.TrackDto
+import com.example.playlistmaker.data.search.dto.TrackHistoryDto
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.domain.search.models.TrackHistory
 
