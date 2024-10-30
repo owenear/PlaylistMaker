@@ -9,10 +9,8 @@ import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.settings.api.ThemeInteractor
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
-import org.koin.core.logger.PrintLogger
-
 
 class App: Application() {
 
@@ -23,7 +21,8 @@ class App: Application() {
 		startKoin {
 			androidContext(this@App)
 			modules(dataModule, repositoryModule, interactorModule, viewModelModule)
-			logger(PrintLogger(Level.INFO))
+			androidLogger()
+			//logger(PrintLogger(Level.INFO))
 		}
 		themeInteractor.setTheme(themeInteractor.getTheme())
 	}

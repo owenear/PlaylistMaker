@@ -15,11 +15,13 @@ class SharingRepositoryImpl(private val context: Context): SharingRepository {
 		emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailData.emailTo))
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailData.subject)
 		emailIntent.putExtra(Intent.EXTRA_TEXT, emailData.message)
+		emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 		context.startActivity(emailIntent)
 	}
 
 	override fun openLink(link: String) {
 		val opentIntent = Intent(Intent.ACTION_VIEW)
+		opentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 		opentIntent.data = Uri.parse(link)
 		context.startActivity(opentIntent)
 	}
@@ -28,7 +30,9 @@ class SharingRepositoryImpl(private val context: Context): SharingRepository {
 		val shareIntent = Intent(Intent.ACTION_SEND)
 		shareIntent.putExtra(Intent.EXTRA_TEXT, link)
 		shareIntent.type = "text/plain"
-		context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_prompt)))
+		val chooserIntent = Intent.createChooser(shareIntent, context.getString(R.string.share_prompt))
+		chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+		context.startActivity(chooserIntent)
 	}
 
 }

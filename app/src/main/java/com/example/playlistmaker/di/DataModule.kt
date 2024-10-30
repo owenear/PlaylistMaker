@@ -43,7 +43,11 @@ val dataModule = module {
     }
 
     single<SharedStorage>(named("track_history")) {
-        TrackHistorySharedStorage(get())
+        TrackHistorySharedStorage(get(), get())
+    }
+
+    factory {
+        Gson()
     }
 
     single{
@@ -54,7 +58,7 @@ val dataModule = module {
         TrackHistoryMapper()
     }
 
-    single {
+    factory {
         MediaPlayer()
     }
 
