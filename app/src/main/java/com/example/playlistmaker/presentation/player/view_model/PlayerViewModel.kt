@@ -6,12 +6,8 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
-import com.example.playlistmaker.util.Creator
 
 class PlayerViewModel(private val previewUrl: String,
 	private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel() {
@@ -84,11 +80,6 @@ class PlayerViewModel(private val previewUrl: String,
 	}
 
 	companion object {
-		fun getViewModelFactory(previewUrl: String): ViewModelProvider.Factory = viewModelFactory {
-			initializer {
-				PlayerViewModel(previewUrl, Creator.provideMediaPlayerInteractor())
-			}
-		}
 		private const val PLAY_TIME_DELAY = 500L
 		private val PLAYER_REQUEST_TOKEN = Any()
 	}
