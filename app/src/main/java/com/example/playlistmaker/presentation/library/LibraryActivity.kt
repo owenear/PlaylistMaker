@@ -7,11 +7,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityLibraryBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
 
 class LibraryActivity : AppCompatActivity() {
 
 	private lateinit var binding: ActivityLibraryBinding
+
+	private lateinit var tabMediator: TabLayoutMediator
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -29,12 +32,29 @@ class LibraryActivity : AppCompatActivity() {
 			finish()
 		}
 
+		binding.libraryViewPager.adapter = LibraryPagerAdapter(supportFragmentManager, lifecycle)
+
+		tabMediator = TabLayoutMediator(binding.libraryTabLayout, binding.libraryViewPager) { tab, position ->
+			when(position) {
+				0 -> tab.text = getString(R.string.library_tab1_name)
+				1 -> tab.text = getString(R.string.library_tab2_name)
+			}
+		}
+		tabMediator.attach()
+
+		/*
 		if (savedInstanceState == null) {
 			supportFragmentManager.beginTransaction()
-				.add(R.id.fragment_container_view, FavouritesFragment())
+				.add(binding.fragmentContainerView.id, LibraryFragment())
 				.commit()
 		}
+		*/
 
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		tabMediator.detach()
 	}
 
 }
