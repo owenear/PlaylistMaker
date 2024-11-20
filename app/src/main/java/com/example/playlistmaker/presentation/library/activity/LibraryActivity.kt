@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library
+package com.example.playlistmaker.presentation.library.activity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -41,14 +41,6 @@ class LibraryActivity : AppCompatActivity() {
 			}
 		}
 		tabMediator.attach()
-
-		/*
-		if (savedInstanceState == null) {
-			supportFragmentManager.beginTransaction()
-				.add(binding.fragmentContainerView.id, LibraryFragment())
-				.commit()
-		}
-		*/
 
 	}
 

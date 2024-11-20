@@ -2,9 +2,23 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/library"
+    android:background="?attr/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftBorder"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/search_guide_vertical_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightBorder"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/search_guide_vertical_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/libraryToolbar"
@@ -22,15 +36,17 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/libraryTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:tabTextColor="?attr/colorOnPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:tabIndicatorColor="?attr/colorOnPrimary"
+        app:tabTextColor="?attr/colorOnPrimary"
+        app:tabBackground="?attr/colorPrimary"
+        android:background="?attr/colorPrimary"
         app:tabMode="fixed"
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorHeight="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintTop_toBottomOf="@+id/libraryToolbar"
         />
 
@@ -38,10 +54,12 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/libraryViewPager"
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="?attr/colorPrimary"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintTop_toBottomOf="@id/libraryTabLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         />

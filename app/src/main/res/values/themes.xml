@@ -32,8 +32,9 @@
         <item name="android:textColor">@color/black</item>
         <item name="colorSecondary">@color/light_grey_2</item>
     </style>
-    <style name="Theme.Library.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
-        <item name="android:background">@color/white</item>
+    <style name="Theme.Library.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <item name="android:textColor">@color/black</item>
     </style>
 </resources>

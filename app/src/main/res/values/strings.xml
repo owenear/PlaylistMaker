@@ -31,5 +31,5 @@
     <string name="library_playlists_default">Вы не создали\nни одного плейлиста</string>
     <string name="library_tab1_name">Избранные треки</string>
     <string name="library_tab2_name">Плейлисты</string>
-
+    <string name="library_newpls_button">Новый плейлист</string>
 </resources>

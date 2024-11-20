@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library
+package com.example.playlistmaker.presentation.library.activity
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -11,7 +11,8 @@ class LibraryPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0) FavouritesFragment() else PlaylistsFragment()
+        return if (position == 0) FavouritesFragment.newInstance()
+               else PlaylistsFragment.newInstance()
     }
 
 }
