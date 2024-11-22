@@ -22,8 +22,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-	private var searchString: String = SEARCH_STRING_DEF
-
 	private val searchAdapter by lazy {
 		SearchAdapter() { trackItem -> trackListClickListener(trackItem) }
 	}
@@ -37,8 +35,6 @@ class SearchActivity : AppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
-		binding.searchInputEditText.setText(searchString)
-		binding.searchInputEditText.setSelection(searchString.length)
 		if (binding.searchInputEditText.hasFocus())
 			searchViewModel.processQuery(binding.searchInputEditText.text.toString())
 	}
@@ -57,10 +53,6 @@ class SearchActivity : AppCompatActivity() {
 
 		binding.searchRecyclerView.adapter = searchAdapter
 		binding.searchHistoryRecyclerView.adapter = historyAdapter
-
-		searchViewModel.queryLiveData.observe(this) { query ->
-			searchString = query
-		}
 
 		binding.searchToolbar.setNavigationOnClickListener {
 			finish()

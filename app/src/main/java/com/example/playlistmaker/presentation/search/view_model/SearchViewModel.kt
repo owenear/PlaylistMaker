@@ -21,19 +21,17 @@ class SearchViewModel(
 	private val stateMutableLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.Initial)
 	val stateLiveData : LiveData<SearchScreenState> = stateMutableLiveData
 
-	private val queryMutableLiveData = MutableLiveData<String>()
-	val queryLiveData : LiveData<String> = queryMutableLiveData
-
+	private lateinit var query: String
 	private val trackHistory = trackHistoryInteractor.getHistory()
 
 	fun processQuery(query: String){
 		when {
 			query.isEmpty() -> {
 				handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-				queryMutableLiveData.postValue(query)
+				this.query = query
 				renderState(SearchScreenState.HistoryContent(trackHistory.trackList))
 			}
-			query != queryMutableLiveData.value.toString() -> {
+			query != this.query  -> {
 				renderState(SearchScreenState.Initial)
 				searchDebounce(query)
 			}
@@ -59,7 +57,7 @@ class SearchViewModel(
 	}
 
 	fun search(query: String) {
-		queryMutableLiveData.postValue(query)
+		this.query = query
 		handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 		if (query.isNotEmpty()) {
 			renderState(SearchScreenState.Loading)
