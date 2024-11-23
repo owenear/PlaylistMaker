@@ -13,20 +13,6 @@
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:letterSpacing">@dimen/letter_spacing</item>
     </style>
-
-    <style name="settingsFrameStyle">
-        <item name="android:paddingStart">@dimen/settings_frame_padding_start</item>
-        <item name="android:paddingEnd">@dimen/settings_frame_padding_end</item>
-        <item name="android:clickable">true</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
-    </style>
-    <style name="settingsTextStyle">
-        <item name="android:layout_gravity">start|center_vertical</item>
-        <item name="android:textSize">@dimen/settings_text_size</item>
-        <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:letterSpacing">@dimen/letter_spacing</item>
-    </style>
-
     <style name="searchViewTextSmallStyle">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
@@ -45,6 +31,14 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:letterSpacing">@dimen/letter_spacing</item>
+    </style>
+    <style name="settingsItemTextStyle">
+        <item name="android:paddingVertical">@dimen/settings_text_padding_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/settings_text_padding_horizontal</item>
+        <item name="android:textSize">@dimen/settings_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:text">@string/settings_share</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
     <style name="placeholderTextStyle">
         <item name="android:textAlignment">center</item>

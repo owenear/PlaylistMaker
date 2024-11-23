@@ -21,106 +21,46 @@
         app:titleMargins="0dp"
         />
 
-    <FrameLayout
-        style="@style/settingsFrameStyle"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/nightThemeSwitch"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_frame_height"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_marginTop="24dp"
-        android:paddingEnd="15dp"
-        >
-
-        <TextView
-            android:id="@+id/nightThemeTextView"
-            style="@style/settingsTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_night"
-            />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/nightThemeSwitch"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end|center_vertical"
-            app:thumbTint="?attr/colorOnSecondary"
-            app:trackTint="?attr/colorSecondary"
+        android:paddingStart="@dimen/settings_text_padding_horizontal"
+        android:paddingEnd="@dimen/settings_switch_padding_end"
+        android:paddingVertical="@dimen/settings_text_padding_vertical"
+        android:text="@string/settings_night"
+        android:fontFamily="@font/ys_display_regular"
+        android:textSize="@dimen/settings_text_size"
+        app:thumbTint="?attr/colorOnSecondary"
+        app:trackTint="?attr/colorSecondary"
+        app:switchMinWidth="36dp"
         />
 
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/shareFrame"
-        style="@style/settingsFrameStyle"
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/settingsItemTextStyle"
+        android:id="@+id/shareTextView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_frame_height"
-        >
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/share"
+        android:text="@string/settings_share"
+        />
 
-        <TextView
-            android:id="@+id/shareTextView"
-            style="@style/settingsTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_share"
-            />
-
-        <ImageView
-            android:id="@+id/shareImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            app:srcCompat="@drawable/share"
-            />
-
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/supportFrame"
-        style="@style/settingsFrameStyle"
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/settingsItemTextStyle"
+        android:id="@+id/supportTextView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_frame_height"
-        >
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/support"
+        android:text="@string/settings_support" />
 
-        <TextView
-            android:id="@+id/supportTextView"
-            style="@style/settingsTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_support"
-            />
-
-        <ImageView
-            android:id="@+id/supportImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            app:srcCompat="@drawable/support"
-            />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/usrAgrFrame"
-        style="@style/settingsFrameStyle"
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/settingsItemTextStyle"
+        android:id="@+id/agreementTextView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_frame_height"
-        >
-
-        <TextView
-            android:id="@+id/userAgrTextView"
-            style="@style/settingsTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_agreement"
-            />
-
-        <ImageView
-            android:id="@+id/userAgrImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            app:srcCompat="@drawable/arrow_forward"
-            />
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/arrow_forward"
+        android:text="@string/settings_agreement" />
 
 </LinearLayout>
