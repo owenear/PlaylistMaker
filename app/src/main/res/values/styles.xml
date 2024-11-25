@@ -63,5 +63,4 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textFontWeight">500</item>
     </style>
-
 </resources>

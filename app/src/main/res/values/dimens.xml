@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="button_margin_vertical">4dp</dimen>
     <dimen name="button_margin_horizontal">16dp</dimen>
     <dimen name="button_margin_top_bottom">24dp</dimen>
@@ -35,4 +35,6 @@
     <dimen name="library_margin_vertical">24dp</dimen>
     <dimen name="library_margin_imageview">108dp</dimen>
 
+    <dimen name="bottom_nav_height">56dp</dimen>
+    <dimen name="bottom_nav_padding">8dp</dimen>
 </resources>
