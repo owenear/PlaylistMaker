@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings"
-    tools:context=".presentation.settings.activity.SettingsActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
+    android:theme="@style/Theme.Settings.PlaylistMaker"
+    tools:context="com.example.playlistmaker.presentation.settings.activity.SettingsFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settingsToolbar"
@@ -16,8 +16,6 @@
         android:background="?attr/colorPrimary"
         app:titleTextAppearance="@style/toolbarStyle"
         app:title="@string/settings_button"
-        app:navigationIcon="@drawable/arrow_back"
-        app:navigationIconTint="?attr/colorOnPrimary"
         app:titleMargins="0dp"
         />
 
