@@ -10,9 +10,6 @@
         android:name="com.example.playlistmaker.presentation.search.activity.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_searchFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
     </fragment>
     <fragment
         android:id="@+id/libraryFragment"
