@@ -15,9 +15,6 @@ class PlayerViewModel(private val previewUrl: String,
 	private val stateMutableLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Default)
 	val stateLiveData : LiveData<PlayerScreenState> = stateMutableLiveData
 
-	private val playTimeMutableLiveData = MutableLiveData<Int>()
-	val playTimeLiveData : LiveData<Int> = playTimeMutableLiveData
-
 	private val handler = Handler(Looper.getMainLooper())
 
 	init {
@@ -31,24 +28,19 @@ class PlayerViewModel(private val previewUrl: String,
 
 	private fun onCompletionListener(){
 		handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
-		playTimeMutableLiveData.postValue(0)
 		renderState(PlayerScreenState.Prepared)
 	}
 
-	fun startPlayer() {
+	private fun startPlayer() {
 		mediaPlayerInteractor.startPlayer()
-		handler.postAtTime(updatePlayTime(),PLAYER_REQUEST_TOKEN,
-			SystemClock.uptimeMillis() + PLAY_TIME_DELAY
-		)
-		renderState(PlayerScreenState.Playing)
+		updatePlayTime()
 	}
 
 	fun pausePlayer() {
-		if (stateMutableLiveData.value == PlayerScreenState.Playing) {
-			mediaPlayerInteractor.pausePlayer()
-			handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
-			renderState(PlayerScreenState.Paused)
-		}
+		mediaPlayerInteractor.pausePlayer()
+		handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
+		if (stateMutableLiveData.value is PlayerScreenState.Playing)
+			renderState(PlayerScreenState.Paused(mediaPlayerInteractor.getPlayTime()))
 	}
 
 	fun playbackControl() {
@@ -72,11 +64,11 @@ class PlayerViewModel(private val previewUrl: String,
 		super.onCleared()
 	}
 
-	private fun updatePlayTime() : Runnable = Runnable {
-		handler.postAtTime(updatePlayTime(),PLAYER_REQUEST_TOKEN,
+	private fun updatePlayTime() {
+		handler.postAtTime( { updatePlayTime() },PLAYER_REQUEST_TOKEN,
 			SystemClock.uptimeMillis() + PLAY_TIME_DELAY
 		)
-		playTimeMutableLiveData.postValue(mediaPlayerInteractor.getPlayTime())
+		renderState(PlayerScreenState.Playing(mediaPlayerInteractor.getPlayTime()))
 	}
 
 	companion object {

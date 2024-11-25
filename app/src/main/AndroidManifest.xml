@@ -24,8 +24,9 @@
             android:exported="false"
             android:theme="@style/Theme.Search.PlaylistMaker" />
         <activity
-            android:name=".presentation.library.LibraryActivity"
-            android:exported="false" />
+            android:name=".presentation.library.activity.LibraryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Library.PlaylistMaker" />
         <activity
             android:name=".presentation.settings.activity.SettingsActivity"
             android:exported="false"

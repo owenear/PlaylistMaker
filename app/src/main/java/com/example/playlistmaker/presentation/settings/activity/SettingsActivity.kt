@@ -1,7 +1,6 @@
 package com.example.playlistmaker.presentation.settings.activity
 
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -9,7 +8,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.presentation.settings.view_model.SettingsViewModel
-import com.google.android.material.appbar.MaterialToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
@@ -34,25 +32,21 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val backButtonToolbar = findViewById<MaterialToolbar>(R.id.settingsToolbar)
-        backButtonToolbar.setOnClickListener{
+        binding.settingsToolbar.setOnClickListener{
             finish()
         }
 
-        val shareButton = findViewById<FrameLayout>(R.id.shareFrame)
-        shareButton.setOnClickListener{
+        binding.shareTextView.setOnClickListener{
             settingsViewModel.shareApp(getString(R.string.practicum_android_link))
         }
 
-        val supportButton = findViewById<FrameLayout>(R.id.supportFrame)
-        supportButton.setOnClickListener{
+        binding.supportTextView.setOnClickListener{
             settingsViewModel.openSupport(getString(R.string.email_student),
                                         getString(R.string.email_subject),
                                         getString(R.string.email_message))
         }
 
-        val agreementButton = findViewById<FrameLayout>(R.id.usrAgrFrame)
-        agreementButton.setOnClickListener{
+        binding.agreementTextView.setOnClickListener{
             settingsViewModel.openTerms(getString(R.string.practicum_offer_link))
         }
 

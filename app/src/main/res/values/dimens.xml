@@ -7,9 +7,9 @@
     <dimen name="text_size">22sp</dimen>
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
-    <dimen name="settings_frame_padding_start">16dp</dimen>
-    <dimen name="settings_frame_padding_end">24dp</dimen>
-    <dimen name="settings_frame_height">64dp</dimen>
+    <dimen name="settings_text_padding_vertical">20dp</dimen>
+    <dimen name="settings_text_padding_horizontal">16dp</dimen>
+    <dimen name="settings_switch_padding_end">8dp</dimen>
     <dimen name="letter_spacing">0</dimen>
 
     <dimen name="search_corner_radius">8dp</dimen>
@@ -31,4 +31,8 @@
     <dimen name="player_guide_vertical_margin">16dp</dimen>
 
     <dimen name="toolbar_height">56dp</dimen>
+
+    <dimen name="library_margin_vertical">24dp</dimen>
+    <dimen name="library_margin_imageview">108dp</dimen>
+
 </resources>

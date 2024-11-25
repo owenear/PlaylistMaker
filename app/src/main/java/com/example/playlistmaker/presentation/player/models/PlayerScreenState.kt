@@ -4,7 +4,6 @@ interface PlayerScreenState {
 
 	data object Default : PlayerScreenState
 	data object Prepared : PlayerScreenState
-	data object Playing : PlayerScreenState
-	data object Paused : PlayerScreenState
-
+	data class Playing(val playTime: Int) : PlayerScreenState
+	data class Paused(val pauseTime: Int) : PlayerScreenState
 }

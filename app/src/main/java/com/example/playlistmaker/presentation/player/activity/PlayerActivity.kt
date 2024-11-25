@@ -103,18 +103,14 @@ class PlayerActivity : AppCompatActivity() {
 			render(state)
 		}
 
-		playerViewModel.playTimeLiveData.observe(this) { playTime ->
-			binding.timeTextView.text = dateFormat.format(playTime)
-		}
-
 	}
 
 	private fun render(state: PlayerScreenState) {
 		when (state) {
 			is PlayerScreenState.Default -> showDefault()
 			is PlayerScreenState.Prepared -> showPrepared()
-			is PlayerScreenState.Playing -> showPlaying()
-			is PlayerScreenState.Paused -> showPaused()
+			is PlayerScreenState.Playing -> showPlaying(state.playTime)
+			is PlayerScreenState.Paused -> showPaused(state.pauseTime)
 		}
 	}
 
@@ -129,12 +125,14 @@ class PlayerActivity : AppCompatActivity() {
 		binding.timeTextView.text = getString(R.string.player_time_default)
 	}
 
-	private fun showPlaying() {
+	private fun showPlaying(playTime: Int) {
 		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_pause_button)
+		binding.timeTextView.text = dateFormat.format(playTime)
 	}
 
-	private fun showPaused() {
+	private fun showPaused(pauseTime: Int) {
 		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
+		binding.timeTextView.text = dateFormat.format(pauseTime)
 	}
 
 }
