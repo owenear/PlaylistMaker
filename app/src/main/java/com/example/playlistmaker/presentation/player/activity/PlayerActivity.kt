@@ -36,7 +36,7 @@ class PlayerActivity : AppCompatActivity() {
 
 	override fun onPause() {
 		super.onPause()
-		playerViewModel.pausePlayer()
+		playerViewModel.playbackControl(true)
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,6 @@ class PlayerActivity : AppCompatActivity() {
 		enableEdgeToEdge()
 		binding = ActivityPlayerBinding.inflate(layoutInflater)
 		setContentView(binding.root)
-
 		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
 			val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -57,9 +56,9 @@ class PlayerActivity : AppCompatActivity() {
 		}
 
 		val trackItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			intent.getSerializableExtra("trackItem", Track::class.java)
+			intent.getSerializableExtra(App.PLAYER_INTENT_EXTRA_KEY, Track::class.java)
 		} else {
-			intent.getSerializableExtra("trackItem") as Track
+			intent.getSerializableExtra(App.PLAYER_INTENT_EXTRA_KEY) as Track
 		}
 
 		binding.titleTextView.text = trackItem?.trackName

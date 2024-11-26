@@ -34,4 +34,5 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navHostFragment.navController)
 
     }
+
 }

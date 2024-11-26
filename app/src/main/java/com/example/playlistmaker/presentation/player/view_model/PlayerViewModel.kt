@@ -36,21 +36,16 @@ class PlayerViewModel(private val previewUrl: String,
 		updatePlayTime()
 	}
 
-	fun pausePlayer() {
+	private fun pausePlayer() {
 		mediaPlayerInteractor.pausePlayer()
 		handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
-		if (stateMutableLiveData.value is PlayerScreenState.Playing)
-			renderState(PlayerScreenState.Paused(mediaPlayerInteractor.getPlayTime()))
+		renderState(PlayerScreenState.Paused(mediaPlayerInteractor.getPlayTime()))
 	}
 
-	fun playbackControl() {
+	fun playbackControl(onActivityPause: Boolean = false) {
 		when(stateMutableLiveData.value) {
-			is PlayerScreenState.Playing -> {
-				pausePlayer()
-			}
-			else -> {
-				startPlayer()
-			}
+			is PlayerScreenState.Playing -> pausePlayer()
+			else -> if (!onActivityPause) startPlayer()
 		}
 	}
 

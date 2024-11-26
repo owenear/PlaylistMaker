@@ -12,15 +12,22 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouritesFragment : Fragment() {
 
-    private lateinit var binding: FragmentFavouritesBinding
+    private var _binding: FragmentFavouritesBinding? = null
+    private val binding get() = _binding!!
+
     private val favouritesViewModel by viewModel<FavouritesViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        binding = FragmentFavouritesBinding.inflate(inflater, container, false)
+        _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         binding.placeholderTextView.text = getString(R.string.library_favourites_default)
         binding.placeholderImageView.setImageResource(R.drawable.ic_nothing_found)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
