@@ -1,17 +1,15 @@
 package com.example.playlistmaker.presentation.main
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.presentation.library.activity.LibraryActivity
-import com.example.playlistmaker.presentation.search.activity.SearchActivity
-import com.example.playlistmaker.presentation.settings.activity.SettingsActivity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,24 +24,15 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
 
-        binding.searchButton.setOnClickListener{
-            val displaySearch = Intent(this, SearchActivity::class.java)
-            startActivity(displaySearch)
-        }
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.mainFragmentContainerView) as NavHostFragment
 
-        binding.libraryButton.setOnClickListener{
-            val displayLibrary = Intent(this, LibraryActivity::class.java)
-            startActivity(displayLibrary)
-        }
+        binding.bottomNavigationView.setupWithNavController(navHostFragment.navController)
 
-        val settingsButtonClickListener: View.OnClickListener = View.OnClickListener {
-            val displaySettings = Intent(this@MainActivity, SettingsActivity::class.java)
-            startActivity(displaySettings)
-        }
-        binding.settingsButton.setOnClickListener(settingsButtonClickListener)
     }
+
 }

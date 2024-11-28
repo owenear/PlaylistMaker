@@ -38,6 +38,10 @@ class SearchViewModel(
 		}
 	}
 
+	fun processInitial() {
+		renderState(SearchScreenState.Initial)
+	}
+
 	fun addToHistory(track: Track){
 		trackHistory.addTrack(track)
 		trackHistoryInteractor.saveHistory(trackHistory)
