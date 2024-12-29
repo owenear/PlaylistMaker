@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.models.Track
@@ -17,6 +18,7 @@ import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.activity.PlayerActivity
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
+import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment()  {
@@ -26,15 +28,22 @@ class SearchFragment : Fragment()  {
 
     private val searchViewModel by viewModel<SearchViewModel>()
 
+    private val clickListenerDebounce by lazy {
+        debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
+            trackItem -> trackListClickListener(trackItem)
+        }
+    }
+
     private val searchAdapter by lazy {
-        SearchAdapter() { trackItem -> trackListClickListener(trackItem) }
+        SearchAdapter() { trackItem -> clickListenerDebounce(trackItem) }
     }
     private val historyAdapter by lazy {
-        SearchAdapter() { trackItem -> trackListClickListener(trackItem) }
+        SearchAdapter() { trackItem -> clickListenerDebounce(trackItem) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -188,6 +197,7 @@ class SearchFragment : Fragment()  {
 
     companion object {
         const val SEARCH_STRING_DEF = ""
+        private const val CLICK_DEBOUNCE_DELAY = 2000L
     }
 
 }
