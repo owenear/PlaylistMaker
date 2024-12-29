@@ -1,7 +1,5 @@
 package com.example.playlistmaker.presentation.search.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -69,28 +67,30 @@ class SearchViewModel(
 		searchJob?.cancel()
 		if (query.isNotEmpty()) {
 			renderState(SearchScreenState.Loading)
-			trackInteractor.searchTracks(query,trackConsumer())
-		}
-	}
-
-	private fun trackConsumer() = object : TrackInteractor.TrackConsumer {
-		override fun consume(found: Resource<List<Track>>) {
-			when (found) {
-				is Resource.Error -> {
-					if (found.code == 404)
-						renderState(SearchScreenState.Empty)
-					else
-						renderState(SearchScreenState.Error)
-				}
-				is Resource.Success -> {
-					renderState(SearchScreenState.SearchContent(
-						found.data ?: listOf()))
-				}
+			viewModelScope.launch {
+				trackInteractor
+					.searchTracks(query)
+					.collect { found -> processResult(found) }
 			}
 		}
 	}
 
-	fun renderState(state: SearchScreenState) {
+	private fun processResult(found: Resource<List<Track>>) {
+		when (found) {
+			is Resource.Error -> {
+				if (found.code == 404)
+					renderState(SearchScreenState.Empty)
+				else
+					renderState(SearchScreenState.Error)
+			}
+			is Resource.Success -> {
+				renderState(SearchScreenState.SearchContent(
+					found.data ?: listOf()))
+			}
+		}
+	}
+
+	private fun renderState(state: SearchScreenState) {
 		stateMutableLiveData.postValue(state)
 	}
 
