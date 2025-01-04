@@ -1,21 +1,21 @@
 package com.example.playlistmaker.presentation.player.view_model
 
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(private val previewUrl: String,
 	private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel() {
 
 	private val stateMutableLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Default)
 	val stateLiveData : LiveData<PlayerScreenState> = stateMutableLiveData
-
-	private val handler = Handler(Looper.getMainLooper())
+	private var playTimeJob: Job? = null
 
 	init {
 		mediaPlayerInteractor.preparePlayer(previewUrl,
@@ -27,7 +27,7 @@ class PlayerViewModel(private val previewUrl: String,
 	}
 
 	private fun onCompletionListener(){
-		handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
+		playTimeJob?.cancel()
 		renderState(PlayerScreenState.Prepared)
 	}
 
@@ -37,8 +37,8 @@ class PlayerViewModel(private val previewUrl: String,
 	}
 
 	private fun pausePlayer() {
+		playTimeJob?.cancel()
 		mediaPlayerInteractor.pausePlayer()
-		handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
 		renderState(PlayerScreenState.Paused(mediaPlayerInteractor.getPlayTime()))
 	}
 
@@ -54,21 +54,21 @@ class PlayerViewModel(private val previewUrl: String,
 	}
 
 	override fun onCleared() {
-		handler.removeCallbacksAndMessages(PLAYER_REQUEST_TOKEN)
 		mediaPlayerInteractor.releasePlayer()
 		super.onCleared()
 	}
 
 	private fun updatePlayTime() {
-		handler.postAtTime( { updatePlayTime() },PLAYER_REQUEST_TOKEN,
-			SystemClock.uptimeMillis() + PLAY_TIME_DELAY
-		)
-		renderState(PlayerScreenState.Playing(mediaPlayerInteractor.getPlayTime()))
+		playTimeJob = viewModelScope.launch {
+			while (true) {
+				renderState(PlayerScreenState.Playing(mediaPlayerInteractor.getPlayTime()))
+				delay(PLAY_TIME_DELAY)
+			}
+		}
 	}
 
 	companion object {
 		private const val PLAY_TIME_DELAY = 500L
-		private val PLAYER_REQUEST_TOKEN = Any()
 	}
 
 }

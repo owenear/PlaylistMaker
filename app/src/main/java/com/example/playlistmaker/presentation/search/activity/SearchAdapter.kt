@@ -1,8 +1,6 @@
 package com.example.playlistmaker.presentation.search.activity
 
 import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -20,9 +18,6 @@ class SearchAdapter (private val clickListener: (Track) -> Unit)
 			notifyDataSetChanged()
 		}
 
-	private val mainHandler = Handler(Looper.getMainLooper())
-	private var isClickAllowed = true
-
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
 		val layoutInflater = LayoutInflater.from(parent.context)
 		val binding = RecyclerItemSearchBinding.inflate(layoutInflater, parent, false)
@@ -31,25 +26,11 @@ class SearchAdapter (private val clickListener: (Track) -> Unit)
 
 	override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
 		holder.bind(items[position])
-		holder.itemView.setOnClickListener {
-			if (clickDebounce()) clickListener.invoke(items[position])
-		}
+		holder.itemView.setOnClickListener { clickListener.invoke(items[position]) }
 	}
 
 	override fun getItemCount(): Int {
 		return items.size
 	}
 
-	private fun clickDebounce() : Boolean {
-		val current = isClickAllowed
-		if (isClickAllowed) {
-			isClickAllowed = false
-			mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-		}
-		return current
-	}
-
-	companion object {
-		private const val CLICK_DEBOUNCE_DELAY = 1000L
-	}
 }

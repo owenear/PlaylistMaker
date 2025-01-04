@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.mainFragmentContainerView) as NavHostFragment
 
         binding.bottomNavigationView.setupWithNavController(navHostFragment.navController)
-
     }
 
 }
