@@ -197,7 +197,7 @@ class SearchFragment : Fragment()  {
 
     companion object {
         const val SEARCH_STRING_DEF = ""
-        private const val CLICK_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 
 }

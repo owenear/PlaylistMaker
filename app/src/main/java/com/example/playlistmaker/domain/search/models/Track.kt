@@ -9,11 +9,12 @@ data class Track (
 	val artistName: String?,
 	val trackTimeFormat: String,
 	val artworkUrl100: String?,
-	val previewUrl: String?,
+	var previewUrl: String,
 	val collectionName: String?,
 	val releaseYear: String?,
 	val primaryGenreName: String?,
-	val country: String?
+	val country: String?,
+	var isFavorite: Boolean = false
 ): Serializable {
 
 	override fun hashCode(): Int {
