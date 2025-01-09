@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.library.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,7 +28,6 @@ class FavoritesViewModel(private val favoriteInteractor: FavoriteInteractor) :  
     }
 
     private fun processResult(favorites: List<Track>) {
-        Log.d("VM STATE", favorites.toString())
         if (favorites.isEmpty()) {
             renderState(FavoritesScreenState.Empty)
         } else {
@@ -38,7 +36,6 @@ class FavoritesViewModel(private val favoriteInteractor: FavoriteInteractor) :  
     }
 
     private fun renderState(state: FavoritesScreenState) {
-        Log.d("VM STATE", state.toString())
         stateMutableLiveData.postValue(state)
     }
 }

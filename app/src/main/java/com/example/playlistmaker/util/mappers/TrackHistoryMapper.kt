@@ -15,7 +15,7 @@ class TrackHistoryMapper {
                 it.artistName,
                 it.trackTimeFormat,
                 it.artworkUrl100,
-                it.previewUrl,
+                it.previewUrl ?: "",
                 it.collectionName,
                 it.releaseYear,
                 it.primaryGenreName,

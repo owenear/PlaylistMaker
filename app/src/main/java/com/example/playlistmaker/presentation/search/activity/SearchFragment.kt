@@ -28,11 +28,7 @@ class SearchFragment : Fragment()  {
 
     private val searchViewModel by viewModel<SearchViewModel>()
 
-    private val clickListenerDebounce by lazy {
-        debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
-            trackItem -> trackListClickListener(trackItem)
-        }
-    }
+    private lateinit var clickListenerDebounce: (Track) -> Unit
 
     private val searchAdapter by lazy {
         SearchAdapter() { trackItem -> clickListenerDebounce(trackItem) }
@@ -62,6 +58,11 @@ class SearchFragment : Fragment()  {
         super.onViewCreated(view, savedInstanceState)
         binding.searchRecyclerView.adapter = searchAdapter
         binding.searchHistoryRecyclerView.adapter = historyAdapter
+
+        clickListenerDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope, false) {
+                trackItem -> trackListClickListener(trackItem)
+        }
 
         binding.searchClearIcon.setOnClickListener {
             binding.searchInputEditText.setText(SEARCH_STRING_DEF)
@@ -105,6 +106,7 @@ class SearchFragment : Fragment()  {
     }
 
     private fun trackListClickListener(trackItem: Track) {
+        trackItem.previewUrl = trackItem.previewUrl.ifEmpty { getString(R.string.player_default_preview_url) }
         searchViewModel.addToHistory(trackItem)
         val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
         playerIntent.putExtra(App.PLAYER_INTENT_EXTRA_KEY,trackItem)

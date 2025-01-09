@@ -12,11 +12,11 @@ class TrackMapper {
             trackDto.artistName,
             trackDto.getFormatTrackTime("mm:ss"),
             trackDto.artworkUrl100,
-            trackDto.previewUrl,
+            trackDto.previewUrl ?: "",
             trackDto.collectionName,
             trackDto.getYearRelease(),
             trackDto.primaryGenreName,
-            trackDto.country
+            trackDto.country,
         )
     }
 
@@ -32,7 +32,7 @@ class TrackMapper {
             track.collectionName,
             track.releaseYear,
             track.primaryGenreName,
-            track.country
+            track.country,
         )
     }
 
@@ -47,7 +47,8 @@ class TrackMapper {
             trackEntity.collectionName,
             trackEntity.releaseYear,
             trackEntity.primaryGenreName,
-            trackEntity.country
+            trackEntity.country,
+            true
         )
     }
 

@@ -24,14 +24,10 @@ class FavoritesFragment : Fragment() {
 
     private val favoritesViewModel: FavoritesViewModel by viewModel()
 
-    private val clickListenerDebounce by lazy {
-        debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
-                trackItem -> trackListClickListener(trackItem)
-        }
-    }
+    private lateinit var clickListenerDebounce: (Track) -> Unit
 
     private val favoritesAdapter by lazy {
-        SearchAdapter() { trackItem -> trackListClickListener(trackItem) }
+        SearchAdapter { trackItem -> clickListenerDebounce(trackItem) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +44,11 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.favoritesRecyclerView.adapter = favoritesAdapter
+
+        clickListenerDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope, false) {
+                trackItem -> trackListClickListener(trackItem)
+        }
 
         favoritesViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             render(state)

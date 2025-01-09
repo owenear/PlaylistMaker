@@ -1,11 +1,9 @@
 package com.example.playlistmaker.presentation.player.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.search.models.Track
@@ -29,9 +27,7 @@ class PlayerViewModel(private val track: Track,
 			renderState(PlayerScreenState.Favorite(track.isFavorite))
 		}
 
-		val previewUrl = track.previewUrl.ifEmpty { R.string.player_default_preview_url.toString() }
-
-		mediaPlayerInteractor.preparePlayer(previewUrl,
+		mediaPlayerInteractor.preparePlayer(track.previewUrl,
 			{ onPreparedListener() }, { onCompletionListener() })
 	}
 
@@ -88,8 +84,8 @@ class PlayerViewModel(private val track: Track,
 			track.isFavorite = false
 		}
 		else {
-			track.isFavorite = true
 			viewModelScope.launch {
+				track.isFavorite = true
 				favoriteInteractor.addToFavorites(track)
 			}
 		}

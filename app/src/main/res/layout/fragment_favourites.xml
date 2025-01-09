@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         app:layout_constrainedHeight="true"
         android:layout_marginTop="@dimen/search_view_margin_vertical"
-        android:layout_marginBottom="96dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
