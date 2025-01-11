@@ -7,8 +7,8 @@ import com.example.playlistmaker.domain.settings.api.ThemeRepository
 
 class ThemeRepositoryImpl(private val sharedStorage: SharedStorage) : ThemeRepository {
 
-	override fun getTheme(): Boolean {
-		return sharedStorage.getData() as Boolean
+	override fun getTheme(defaultTheme: Boolean): Boolean {
+		return sharedStorage.getData(defaultTheme) as Boolean
 	}
 
 	override fun setTheme(nightTheme: Boolean) {
@@ -18,6 +18,7 @@ class ThemeRepositoryImpl(private val sharedStorage: SharedStorage) : ThemeRepos
 		)
 		saveTheme(nightTheme)
 	}
+
 
 	private fun saveTheme(nightTheme: Boolean) {
 		sharedStorage.putData(nightTheme)
