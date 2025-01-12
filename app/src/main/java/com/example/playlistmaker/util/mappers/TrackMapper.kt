@@ -1,5 +1,5 @@
 package com.example.playlistmaker.util.mappers
-import com.example.playlistmaker.data.favorites.db.FavoriteEntity
+import com.example.playlistmaker.data.favorites.dto.FavoriteEntity
 import com.example.playlistmaker.data.search.dto.TrackDto
 import com.example.playlistmaker.domain.search.models.Track
 

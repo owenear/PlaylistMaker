@@ -16,7 +16,7 @@ class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository)
         favoriteRepository.removeFromFavorites(track)
     }
 
-    override fun getFavorites(): Flow<List<Track>> {
+    override suspend fun getFavorites(): Flow<List<Track>> {
         return favoriteRepository.getFavorites()
     }
 

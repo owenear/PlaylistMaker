@@ -1,6 +1,6 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.data.favorites.db.FavoriteRepositoryImpl
+import com.example.playlistmaker.data.favorites.FavoriteRepositoryImpl
 import com.example.playlistmaker.data.player.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.search.TrackHistoryRepositoryImpl
 import com.example.playlistmaker.data.search.TrackRepositoryImpl
