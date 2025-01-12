@@ -12,7 +12,7 @@ class SettingsViewModel(private val themeInteractor: ThemeInteractor,
                         private val sharingInteractor: SharingInteractor,
                         ): ViewModel() {
 
-    private val nightThemeMutableLiveData = MutableLiveData<Boolean>(themeInteractor.getTheme())
+    private val nightThemeMutableLiveData = MutableLiveData<Boolean>(themeInteractor.getTheme(false))
     val nightThemeLiveData : LiveData<Boolean> = nightThemeMutableLiveData
 
     fun setTheme(nightTheme: Boolean) {

@@ -2,8 +2,10 @@ package com.example.playlistmaker.di
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.SharedStorage
+import com.example.playlistmaker.data.favorites.db.AppDatabase
 import com.example.playlistmaker.util.mappers.TrackHistoryMapper
 import com.example.playlistmaker.util.mappers.TrackMapper
 import com.example.playlistmaker.data.search.network.ItunesApi
@@ -28,6 +30,11 @@ val dataModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ItunesApi::class.java)
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
     single<NetworkClient> {

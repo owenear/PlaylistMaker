@@ -5,8 +5,8 @@ import com.example.playlistmaker.data.SharedStorage
 
 class ThemeSharedStorage (private val sharedPreferences: SharedPreferences) : SharedStorage {
 
-	override fun getData(): Any {
-		return sharedPreferences.getBoolean(NIGHT_THEME_KEY, NIGHT_THEME_DEF)
+	override fun getData(defaultData: Any?): Any {
+		return sharedPreferences.getBoolean(NIGHT_THEME_KEY, defaultData as Boolean)
 	}
 
 	override fun putData(data: Any) {
@@ -17,7 +17,7 @@ class ThemeSharedStorage (private val sharedPreferences: SharedPreferences) : Sh
 
 	companion object {
 		const val NIGHT_THEME_KEY = "NIGHT_THEME"
-		const val NIGHT_THEME_DEF = false
+		const val NIGHT_THEME_DEF = true
 	}
 
 }

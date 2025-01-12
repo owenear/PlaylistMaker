@@ -4,21 +4,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
+import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val previewUrl: String,
-	private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel() {
+class PlayerViewModel(private val track: Track,
+	private val mediaPlayerInteractor: MediaPlayerInteractor,
+	private val favoriteInteractor: FavoriteInteractor): ViewModel() {
 
 	private val stateMutableLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Default)
 	val stateLiveData : LiveData<PlayerScreenState> = stateMutableLiveData
 	private var playTimeJob: Job? = null
 
 	init {
-		mediaPlayerInteractor.preparePlayer(previewUrl,
+
+		viewModelScope.launch {
+			track.isFavorite = favoriteInteractor.isFavorite(track)
+			renderState(PlayerScreenState.Favorite(track.isFavorite))
+		}
+
+		mediaPlayerInteractor.preparePlayer(track.previewUrl,
 			{ onPreparedListener() }, { onCompletionListener() })
 	}
 
@@ -65,6 +74,22 @@ class PlayerViewModel(private val previewUrl: String,
 				delay(PLAY_TIME_DELAY)
 			}
 		}
+	}
+
+	fun onFavoriteClicked() {
+		if (track.isFavorite) {
+			viewModelScope.launch {
+				favoriteInteractor.removeFromFavorites(track)
+			}
+			track.isFavorite = false
+		}
+		else {
+			viewModelScope.launch {
+				track.isFavorite = true
+				favoriteInteractor.addToFavorites(track)
+			}
+		}
+		renderState(PlayerScreenState.Favorite(track.isFavorite))
 	}
 
 	companion object {

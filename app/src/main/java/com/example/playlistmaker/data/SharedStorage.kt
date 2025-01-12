@@ -4,6 +4,6 @@ interface SharedStorage {
 
 	fun putData(data: Any)
 
-	fun getData():Any
+	fun getData(defaultData: Any? = null): Any
 
 }

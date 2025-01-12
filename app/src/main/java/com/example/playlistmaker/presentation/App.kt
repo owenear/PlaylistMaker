@@ -1,7 +1,9 @@
 package com.example.playlistmaker.presentation
 
 import android.app.Application
+import android.content.res.Configuration
 import android.content.res.Resources.getSystem
+import android.util.Log
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
 import com.example.playlistmaker.di.repositoryModule
@@ -21,7 +23,8 @@ class App: Application() {
 			androidContext(this@App)
 			modules(dataModule, repositoryModule, interactorModule, viewModelModule)
 		}
-		themeInteractor.setTheme(themeInteractor.getTheme())
+		val systemTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+		themeInteractor.setTheme(themeInteractor.getTheme(systemTheme == Configuration.UI_MODE_NIGHT_YES))
 	}
 
 	companion object {

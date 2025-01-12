@@ -24,10 +24,16 @@ import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-	private lateinit var previewUrl: String
+	private val trackItem by lazy {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			intent.getSerializableExtra(App.PLAYER_INTENT_EXTRA_KEY, Track::class.java)
+		} else {
+			intent.getSerializableExtra(App.PLAYER_INTENT_EXTRA_KEY) as Track
+		}
+	}
 
 	private val playerViewModel: PlayerViewModel by viewModel {
-		parametersOf(previewUrl)
+		parametersOf(trackItem)
 	}
 
 	private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
@@ -55,12 +61,6 @@ class PlayerActivity : AppCompatActivity() {
 			finish()
 		}
 
-		val trackItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			intent.getSerializableExtra(App.PLAYER_INTENT_EXTRA_KEY, Track::class.java)
-		} else {
-			intent.getSerializableExtra(App.PLAYER_INTENT_EXTRA_KEY) as Track
-		}
-
 		binding.titleTextView.text = trackItem?.trackName
 		binding.artistTextView.text = trackItem?.artistName
 
@@ -84,8 +84,6 @@ class PlayerActivity : AppCompatActivity() {
 		val artworkUrl100 = trackItem?.artworkUrl100
 		val coverURL = if (artworkUrl100.isNullOrEmpty()) R.drawable.baseline_gesture_24 else
 			artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
-		previewUrl = if (trackItem == null || trackItem.previewUrl.isNullOrEmpty())
-			R.string.player_default_preview_url.toString() else trackItem.previewUrl
 
 		Glide.with(this)
 			.load(coverURL)
@@ -96,6 +94,10 @@ class PlayerActivity : AppCompatActivity() {
 
 		binding.playerPlayButton.setOnClickListener {
 			playerViewModel.playbackControl()
+		}
+
+		binding.playerFavoriteButton.setOnClickListener {
+			playerViewModel.onFavoriteClicked()
 		}
 
 		playerViewModel.stateLiveData.observe(this) { state ->
@@ -110,28 +112,36 @@ class PlayerActivity : AppCompatActivity() {
 			is PlayerScreenState.Prepared -> showPrepared()
 			is PlayerScreenState.Playing -> showPlaying(state.playTime)
 			is PlayerScreenState.Paused -> showPaused(state.pauseTime)
+			is PlayerScreenState.Favorite -> showFavorite(state.isFavorite)
 		}
 	}
 
-	private fun showDefault() {
-		binding.playerPlayButton.isEnabled = false
-		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
+	private fun showDefault() = with(binding) {
+		playerPlayButton.isEnabled = false
+		playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
 	}
 
-	private fun showPrepared() {
-		binding.playerPlayButton.isEnabled = true
-		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
-		binding.timeTextView.text = getString(R.string.player_time_default)
+	private fun showPrepared() = with(binding) {
+		playerPlayButton.isEnabled = true
+		playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
+		timeTextView.text = getString(R.string.player_time_default)
 	}
 
-	private fun showPlaying(playTime: Int) {
-		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_pause_button)
-		binding.timeTextView.text = dateFormat.format(playTime)
+	private fun showPlaying(playTime: Int) = with(binding) {
+		playerPlayButton.setBackgroundResource(R.drawable.ic_pause_button)
+		timeTextView.text = dateFormat.format(playTime)
 	}
 
-	private fun showPaused(pauseTime: Int) {
-		binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
-		binding.timeTextView.text = dateFormat.format(pauseTime)
+	private fun showPaused(pauseTime: Int) = with(binding) {
+		playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
+		timeTextView.text = dateFormat.format(pauseTime)
+	}
+
+	private fun showFavorite(isFavorite: Boolean) {
+		if (isFavorite)
+			binding.playerFavoriteButton.setImageResource(R.drawable.ic_favorite_button_true)
+		else
+			binding.playerFavoriteButton.setImageResource(R.drawable.ic_favorite_button_false)
 	}
 
 }

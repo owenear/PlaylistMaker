@@ -8,7 +8,7 @@ import com.google.gson.Gson
 class TrackHistorySharedStorage(private val sharedPreferences: SharedPreferences,
 								private val gson: Gson) : SharedStorage {
 
-	override fun getData(): Any {
+	override fun getData(defaultData: Any?): Any {
 		return gson.fromJson(
 				sharedPreferences.getString(SEARCH_HISTORY_KEY, SEARCH_HISTORY_DEF),
 				TrackHistoryDto::class.java)
