@@ -37,4 +37,6 @@
 
     <dimen name="bottom_nav_height">56dp</dimen>
     <dimen name="bottom_nav_padding">8dp</dimen>
+
+    <dimen name="create_playlist_button_text_size">16sp</dimen>
 </resources>

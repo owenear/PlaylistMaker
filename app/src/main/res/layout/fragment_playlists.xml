@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_marginTop="@dimen/library_margin_vertical"
-        android:text="@string/library_newpls_button"
+        android:text="@string/library_new_playlist"
         android:textFontWeight="500"
         android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
