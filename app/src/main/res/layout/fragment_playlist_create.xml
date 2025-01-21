@@ -155,7 +155,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         style="Widget.MaterialComponents.Button.UnelevatedButton"
-        android:id="@+id/newPlaylistButton"
+        android:id="@+id/createPlaylistButton"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:text="@string/library_create_playlist"
