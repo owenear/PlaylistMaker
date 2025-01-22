@@ -56,8 +56,7 @@ class PlayerActivity : AppCompatActivity() {
 			insets
 		}
 
-		val backButtonToolbar = findViewById<MaterialToolbar>(R.id.playerToolbar)
-		backButtonToolbar.setNavigationOnClickListener {
+		binding.playerToolbar.setNavigationOnClickListener {
 			finish()
 		}
 

@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"/>
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/playerToolbar"
+        android:id="@+id/playlistToolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         app:titleTextAppearance="@style/toolbarStyle"
@@ -63,7 +63,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/playerToolbar"
+        app:layout_constraintTop_toBottomOf="@id/playlistToolbar"
         android:clickable="true"
         />
 

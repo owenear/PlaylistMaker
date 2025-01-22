@@ -10,15 +10,14 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistCreateBinding
 import com.example.playlistmaker.presentation.App
-import com.example.playlistmaker.presentation.library.models.FavoritesScreenState
 import com.example.playlistmaker.presentation.library.models.PlaylistCreateScreenState
-import com.example.playlistmaker.presentation.library.view_model.FavoritesViewModel
 import com.example.playlistmaker.presentation.library.view_model.PlaylistCreateViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -38,6 +37,10 @@ class PlaylistCreateFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.playlistToolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             uri -> if (uri != null) {
