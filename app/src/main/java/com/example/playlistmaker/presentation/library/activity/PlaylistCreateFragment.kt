@@ -72,8 +72,7 @@ class PlaylistCreateFragment: Fragment() {
 
         binding.createPlaylistButton.setOnClickListener {
             playlistCreateViewModel.createPlaylist(binding.nameInputEditText.text.toString(),
-                binding.descriptionInputEditText.text.toString(),
-                coverUri.toString())
+                binding.descriptionInputEditText.text.toString(), coverUri)
         }
 
     }

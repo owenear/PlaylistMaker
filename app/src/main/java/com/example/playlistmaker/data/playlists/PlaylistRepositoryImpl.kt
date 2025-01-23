@@ -14,7 +14,7 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
 
     override suspend fun createPlaylist(playlist: Playlist) {
         playlist.id = appDatabase.playlistDao().getLastPlaylistId() + 1
-        playlist.coverUri = fileStorage.saveData(playlistMapper.map(playlist)).toString()
+        playlist.coverUri = fileStorage.saveData(playlistMapper.map(playlist))
         appDatabase.playlistDao().insertPlaylist(playlistMapper.map(playlist))
     }
 

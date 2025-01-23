@@ -1,5 +1,6 @@
 package com.example.playlistmaker.util.mappers
 
+import androidx.core.net.toUri
 import com.example.playlistmaker.data.playlists.dto.PlaylistEntity
 import com.example.playlistmaker.domain.playlist.models.Playlist
 
@@ -10,7 +11,7 @@ class PlaylistMapper {
             playlist.id,
             playlist.name,
             playlist.description,
-            playlist.coverUri
+            playlist.coverUri?.toString()
         )
     }
 
@@ -19,9 +20,7 @@ class PlaylistMapper {
             playlistEntity.playlistId,
             playlistEntity.name,
             playlistEntity.description,
-            playlistEntity.coverUri
+            playlistEntity.coverUri?.toUri()
         )
     }
-
-
 }
