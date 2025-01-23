@@ -5,13 +5,14 @@ import android.media.MediaPlayer
 import androidx.room.Room
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.SharedStorage
-import com.example.playlistmaker.data.favorites.db.AppDatabase
+import com.example.playlistmaker.data.AppDatabase
 import com.example.playlistmaker.util.mappers.TrackHistoryMapper
 import com.example.playlistmaker.util.mappers.TrackMapper
 import com.example.playlistmaker.data.search.network.ItunesApi
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.search.storage.TrackHistorySharedStorage
 import com.example.playlistmaker.data.settings.storage.ThemeSharedStorage
+import com.example.playlistmaker.util.mappers.PlaylistMapper
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -63,6 +64,10 @@ val dataModule = module {
 
     single{
         TrackHistoryMapper()
+    }
+
+    single{
+        PlaylistMapper()
     }
 
     factory {

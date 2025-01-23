@@ -1,5 +1,6 @@
 package com.example.playlistmaker.presentation.library.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,7 +28,7 @@ class PlaylistCreateFragment: Fragment() {
     private val binding get() = _binding!!
 
     private val playlistCreateViewModel: PlaylistCreateViewModel by viewModel()
-
+    private var coverUri: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -44,6 +45,7 @@ class PlaylistCreateFragment: Fragment() {
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             uri -> if (uri != null) {
+                    coverUri = uri
                     Glide.with(this)
                         .load(uri)
                         .placeholder(R.drawable.baseline_gesture_24)
@@ -70,7 +72,8 @@ class PlaylistCreateFragment: Fragment() {
 
         binding.createPlaylistButton.setOnClickListener {
             playlistCreateViewModel.createPlaylist(binding.nameInputEditText.text.toString(),
-                binding.descriptionInputEditText.text.toString())
+                binding.descriptionInputEditText.text.toString(),
+                coverUri.toString())
         }
 
     }
