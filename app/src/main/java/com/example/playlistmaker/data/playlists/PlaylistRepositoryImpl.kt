@@ -1,6 +1,7 @@
 package com.example.playlistmaker.data.playlists
 
 import com.example.playlistmaker.data.AppDatabase
+import com.example.playlistmaker.data.FileStorage
 import com.example.playlistmaker.domain.playlist.api.PlaylistRepository
 import com.example.playlistmaker.domain.playlist.models.Playlist
 import com.example.playlistmaker.util.mappers.PlaylistMapper
@@ -8,9 +9,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
-                             private val playlistMapper: PlaylistMapper) : PlaylistRepository{
+                             private val playlistMapper: PlaylistMapper,
+                             private val fileStorage: FileStorage) : PlaylistRepository{
 
     override suspend fun createPlaylist(playlist: Playlist) {
+        playlist.id = appDatabase.playlistDao().getLastPlaylistId() + 1
+        playlist.coverUri = fileStorage.saveData(playlistMapper.map(playlist)).toString()
         appDatabase.playlistDao().insertPlaylist(playlistMapper.map(playlist))
     }
 

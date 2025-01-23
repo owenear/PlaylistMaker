@@ -6,6 +6,8 @@ import androidx.room.Room
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.SharedStorage
 import com.example.playlistmaker.data.AppDatabase
+import com.example.playlistmaker.data.FileStorage
+import com.example.playlistmaker.data.playlists.storage.PlaylistFileStorage
 import com.example.playlistmaker.util.mappers.TrackHistoryMapper
 import com.example.playlistmaker.util.mappers.TrackMapper
 import com.example.playlistmaker.data.search.network.ItunesApi
@@ -52,6 +54,10 @@ val dataModule = module {
 
     single<SharedStorage>(named("track_history")) {
         TrackHistorySharedStorage(get(), get())
+    }
+
+    single<FileStorage> {
+        PlaylistFileStorage(androidContext())
     }
 
     factory {

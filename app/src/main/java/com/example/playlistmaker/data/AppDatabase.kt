@@ -10,12 +10,14 @@ import com.example.playlistmaker.data.playlists.dto.PlaylistTrackCrossRefEntity
 import com.example.playlistmaker.data.playlists.dto.TrackEntity
 
 @Database(version = 1, entities = [FavoriteEntity::class, PlaylistEntity::class,
-    TrackEntity::class, PlaylistTrackCrossRefEntity::class])
+    TrackEntity::class, PlaylistTrackCrossRefEntity::class]
+    )
 
 abstract class AppDatabase : RoomDatabase(){
 
     abstract fun favoriteDao(): FavoriteDao
 
     abstract fun playlistDao(): PlaylistDao
+
 
 }
