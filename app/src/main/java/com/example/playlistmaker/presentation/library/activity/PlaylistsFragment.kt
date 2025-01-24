@@ -9,6 +9,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.presentation.library.models.PlaylistsScreenState
 import com.example.playlistmaker.presentation.library.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,6 +37,30 @@ class PlaylistsFragment: Fragment()  {
         }
         binding.playlistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.playlistRecyclerView.adapter = playlistAdapter
+
+        playlistViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
+            render(state)
+        }
+    }
+
+    private fun render(state: PlaylistsScreenState) {
+        when (state) {
+            is PlaylistsScreenState.Empty -> showEmpty()
+            is PlaylistsScreenState.Content -> showContent(state.playlists)
+        }
+    }
+
+    private fun showContent(playlists: List<Playlist>) {
+        playlistAdapter.items = playlists
+        with(binding) {
+            placeholderTextView.visibility = View.GONE
+            placeholderImageView.visibility = View.GONE
+        }
+    }
+
+    private fun showEmpty() = with(binding){
+        placeholderTextView.visibility = View.VISIBLE
+        placeholderImageView.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

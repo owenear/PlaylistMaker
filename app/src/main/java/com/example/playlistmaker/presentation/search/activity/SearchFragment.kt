@@ -33,6 +33,7 @@ class SearchFragment : Fragment()  {
     private val searchAdapter by lazy {
         SearchAdapter() { trackItem -> clickListenerDebounce(trackItem) }
     }
+
     private val historyAdapter by lazy {
         SearchAdapter() { trackItem -> clickListenerDebounce(trackItem) }
     }
@@ -188,7 +189,6 @@ class SearchFragment : Fragment()  {
                 if (trackList.isEmpty()) View.GONE else View.VISIBLE
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
