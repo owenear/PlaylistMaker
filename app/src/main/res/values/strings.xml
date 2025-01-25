@@ -36,4 +36,12 @@
     <string name="playlist_name_hint">Название*</string>
     <string name="playlist_description_hint">Описание</string>
     <string name="playlist_create_success_toast">Плейлист %s создан успешно</string>
+
+    <plurals name="track_plurals">
+        <item quantity="one">трек</item>
+        <item quantity="few">трека</item>
+        <item quantity="many">треков</item>
+        <item quantity="other">треков</item>
+    </plurals>
+
 </resources>

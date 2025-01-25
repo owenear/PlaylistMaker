@@ -30,6 +30,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_nothing_found"
         />
 
     <TextView
@@ -41,6 +42,7 @@
         android:textFontWeight="400"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/library_margin_vertical"
+        android:text="@string/library_playlists_default"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/placeholderImageView" />
@@ -49,10 +51,11 @@
         android:id="@+id/playlistRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
+        android:layout_marginTop="@dimen/library_margin_vertical"
         app:layout_constraintTop_toBottomOf="@id/newPlaylistButton"
-        />
-
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,8 +25,6 @@ class PlaylistsFragment: Fragment()  {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
-        binding.placeholderTextView.text = getString(R.string.library_playlists_default)
-        binding.placeholderImageView.setImageResource(R.drawable.ic_nothing_found)
         return binding.root
     }
 
@@ -71,4 +69,5 @@ class PlaylistsFragment: Fragment()  {
     companion object {
         fun newInstance() = PlaylistsFragment()
     }
+
 }
