@@ -11,11 +11,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.domain.playlist.models.Playlist
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
-import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -36,6 +37,8 @@ class PlayerActivity : AppCompatActivity() {
 		parametersOf(trackItem)
 	}
 
+	private val playerPlaylistAdapter by lazy { PlayerPlaylistAdapter() }
+
 	private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
 	private lateinit var binding: ActivityPlayerBinding
@@ -50,7 +53,7 @@ class PlayerActivity : AppCompatActivity() {
 		enableEdgeToEdge()
 		binding = ActivityPlayerBinding.inflate(layoutInflater)
 		setContentView(binding.root)
-		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.player)) { v, insets ->
 			val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
 			insets
@@ -103,6 +106,32 @@ class PlayerActivity : AppCompatActivity() {
 			render(state)
 		}
 
+		binding.playlistRecyclerView.adapter = playerPlaylistAdapter
+
+		val bottomSheetBehavior = BottomSheetBehavior.from(binding.playerBottomSheet).apply {
+			state = BottomSheetBehavior.STATE_HIDDEN
+		}
+
+		binding.playerAddButton.setOnClickListener{
+			bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+		}
+
+		bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+			override fun onStateChanged(bottomSheet: View, newState: Int) {
+				when (newState) {
+					BottomSheetBehavior.STATE_HIDDEN -> {
+						binding.overlay.visibility = View.GONE
+					}
+					else -> {
+						binding.overlay.visibility = View.VISIBLE
+					}
+				}
+			}
+			override fun onSlide(bottomSheet: View, slideOffset: Float) {
+				binding.overlay.alpha = (slideOffset + 1)/2
+			}
+		})
+
 	}
 
 	private fun render(state: PlayerScreenState) {
@@ -112,7 +141,12 @@ class PlayerActivity : AppCompatActivity() {
 			is PlayerScreenState.Playing -> showPlaying(state.playTime)
 			is PlayerScreenState.Paused -> showPaused(state.pauseTime)
 			is PlayerScreenState.Favorite -> showFavorite(state.isFavorite)
+			is PlayerScreenState.Playlists -> showPlaylists(state.playlists)
 		}
+	}
+
+	private fun showPlaylists(playlists: List<Playlist>) {
+		playerPlaylistAdapter.items = playlists
 	}
 
 	private fun showDefault() = with(binding) {

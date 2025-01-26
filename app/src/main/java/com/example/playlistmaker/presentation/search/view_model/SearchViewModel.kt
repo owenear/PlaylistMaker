@@ -1,5 +1,6 @@
 package com.example.playlistmaker.presentation.search.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -92,6 +93,7 @@ class SearchViewModel(
 	}
 
 	private fun renderState(state: SearchScreenState) {
+		Log.d("VM STATE", state.toString())
 		stateMutableLiveData.postValue(state)
 	}
 

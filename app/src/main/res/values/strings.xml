@@ -26,6 +26,7 @@
     <string name="player_album">Альбом</string>
     <string name="player_duration">Длительность</string>
     <string name="player_default_preview_url">https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/48/8f/a4/488fa4b5-b606-71ee-572e-691f840503c8/mzaf_17729039194440787513.plus.aac.ep.m4a</string>
+    <string name="player_add_to_playlist">Добавить в плейлист</string>
 
     <string name="library_favourites_default">Ваша медиатека пуста</string>
     <string name="library_playlists_default">Вы не создали\nни одного плейлиста</string>

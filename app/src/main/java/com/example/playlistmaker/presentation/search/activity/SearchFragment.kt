@@ -3,6 +3,7 @@ package com.example.playlistmaker.presentation.search.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -111,6 +112,7 @@ class SearchFragment : Fragment()  {
         searchViewModel.addToHistory(trackItem)
         val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
         playerIntent.putExtra(App.PLAYER_INTENT_EXTRA_KEY,trackItem)
+        Log.d("VM STATE", "startActivity " + trackItem.toString())
         this.startActivity(playerIntent)
     }
 

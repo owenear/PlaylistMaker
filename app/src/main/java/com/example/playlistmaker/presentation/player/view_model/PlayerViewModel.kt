@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
+import com.example.playlistmaker.domain.playlist.api.PlaylistInteractor
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import kotlinx.coroutines.Job
@@ -14,7 +15,9 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(private val track: Track,
 	private val mediaPlayerInteractor: MediaPlayerInteractor,
-	private val favoriteInteractor: FavoriteInteractor): ViewModel() {
+	private val favoriteInteractor: FavoriteInteractor,
+	private val playlistInteractor: PlaylistInteractor
+	): ViewModel() {
 
 	private val stateMutableLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Default)
 	val stateLiveData : LiveData<PlayerScreenState> = stateMutableLiveData
@@ -25,6 +28,9 @@ class PlayerViewModel(private val track: Track,
 		viewModelScope.launch {
 			track.isFavorite = favoriteInteractor.isFavorite(track)
 			renderState(PlayerScreenState.Favorite(track.isFavorite))
+			playlistInteractor.getPlaylists().collect { playlists ->
+				renderState(PlayerScreenState.Playlists(playlists))
+			}
 		}
 
 		mediaPlayerInteractor.preparePlayer(track.previewUrl,
