@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:background="?attr/colorPrimary"
     android:theme="@style/Theme.Player.PlaylistMaker"
-    tools:context=".presentation.player.activity.PlayerActivity">
+    tools:context=".presentation.player.activity.PlayerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

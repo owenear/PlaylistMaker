@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/new_playlist"
+    android:id="@+id/playlistCreate"
     android:background="?attr/colorPrimary"
     android:theme="@style/Theme.Library.PlaylistMaker"
     tools:context="com.example.playlistmaker.presentation.library.activity.PlaylistCreateFragment"

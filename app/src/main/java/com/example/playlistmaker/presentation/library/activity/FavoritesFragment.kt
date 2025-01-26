@@ -1,18 +1,18 @@
 package com.example.playlistmaker.presentation.library.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.domain.search.models.Track
-import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.library.models.FavoritesScreenState
 import com.example.playlistmaker.presentation.library.view_model.FavoritesViewModel
-import com.example.playlistmaker.presentation.player.activity.PlayerActivity
+import com.example.playlistmaker.presentation.player.activity.PlayerFragment
 import com.example.playlistmaker.presentation.search.activity.SearchAdapter
 import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -79,9 +79,9 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun trackListClickListener(trackItem: Track) {
-        val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-        playerIntent.putExtra(App.PLAYER_INTENT_EXTRA_KEY,trackItem)
-        this.startActivity(playerIntent)
+        findNavController().navigate(
+            R.id.action_libraryFragment_to_playerFragment,
+            PlayerFragment.createArgs(trackItem))
     }
 
     override fun onDestroyView() {

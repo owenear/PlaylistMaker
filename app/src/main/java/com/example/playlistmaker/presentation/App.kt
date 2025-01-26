@@ -28,6 +28,5 @@ class App: Application() {
 
 	companion object {
 		val DISPLAY_DENSITY = getSystem().displayMetrics.density
-		const val PLAYER_INTENT_EXTRA_KEY = "trackItem"
 	}
 }

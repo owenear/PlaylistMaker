@@ -1,11 +1,9 @@
 package com.example.playlistmaker.presentation.search.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.search.api.TrackHistoryInteractor
 import com.example.playlistmaker.domain.search.api.TrackInteractor
 import com.example.playlistmaker.domain.search.models.Track
@@ -93,7 +91,6 @@ class SearchViewModel(
 	}
 
 	private fun renderState(state: SearchScreenState) {
-		Log.d("VM STATE", state.toString())
 		stateMutableLiveData.postValue(state)
 	}
 

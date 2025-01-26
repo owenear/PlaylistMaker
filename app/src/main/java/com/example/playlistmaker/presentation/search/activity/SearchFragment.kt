@@ -1,9 +1,7 @@
 package com.example.playlistmaker.presentation.search.activity
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +10,11 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.models.Track
-import com.example.playlistmaker.presentation.App
-import com.example.playlistmaker.presentation.player.activity.PlayerActivity
+import com.example.playlistmaker.presentation.player.activity.PlayerFragment
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.util.debounce
@@ -110,10 +108,8 @@ class SearchFragment : Fragment()  {
     private fun trackListClickListener(trackItem: Track) {
         trackItem.previewUrl = trackItem.previewUrl.ifEmpty { getString(R.string.player_default_preview_url) }
         searchViewModel.addToHistory(trackItem)
-        val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-        playerIntent.putExtra(App.PLAYER_INTENT_EXTRA_KEY,trackItem)
-        Log.d("VM STATE", "startActivity " + trackItem.toString())
-        this.startActivity(playerIntent)
+        findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(trackItem))
     }
 
     private fun render(state: SearchScreenState) {
