@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library.view_model
+package com.example.playlistmaker.presentation.favorites.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.search.models.Track
-import com.example.playlistmaker.presentation.library.models.FavoritesScreenState
+import com.example.playlistmaker.presentation.favorites.models.FavoritesScreenState
 import kotlinx.coroutines.launch
 
 

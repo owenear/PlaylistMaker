@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.playlist.models
+package com.example.playlistmaker.domain.playlists.models
 
 import android.net.Uri
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library.models
+package com.example.playlistmaker.presentation.playlists.models
 
 interface PlaylistCreateScreenState {
 

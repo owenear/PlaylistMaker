@@ -9,7 +9,7 @@ import com.example.playlistmaker.data.settings.ThemeRepositoryImpl
 import com.example.playlistmaker.data.sharing.SharingRepositoryImpl
 import com.example.playlistmaker.domain.favorites.api.FavoriteRepository
 import com.example.playlistmaker.domain.player.api.MediaPlayerRepository
-import com.example.playlistmaker.domain.playlist.api.PlaylistRepository
+import com.example.playlistmaker.domain.playlists.api.PlaylistRepository
 import com.example.playlistmaker.domain.search.api.TrackHistoryRepository
 import com.example.playlistmaker.domain.search.api.TrackRepository
 import com.example.playlistmaker.domain.settings.api.ThemeRepository
@@ -45,7 +45,7 @@ val repositoryModule = module {
     }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get(), get())
+        PlaylistRepositoryImpl(get(), get(), get(), get())
     }
 
 }

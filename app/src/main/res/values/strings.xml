@@ -37,6 +37,8 @@
     <string name="playlist_name_hint">Название*</string>
     <string name="playlist_description_hint">Описание</string>
     <string name="playlist_create_success_toast">Плейлист %s создан успешно</string>
+    <string name="playlist_track_add_success_toast">Добавлено в плейлист %s</string>
+    <string name="playlist_track_add_fail_toast">Трек уже добавлен в плейлист %s</string>
 
     <plurals name="track_plurals">
         <item quantity="one">трек</item>

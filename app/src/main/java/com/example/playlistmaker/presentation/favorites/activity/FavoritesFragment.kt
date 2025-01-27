@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library.activity
+package com.example.playlistmaker.presentation.favorites.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.domain.search.models.Track
-import com.example.playlistmaker.presentation.library.models.FavoritesScreenState
-import com.example.playlistmaker.presentation.library.view_model.FavoritesViewModel
+import com.example.playlistmaker.presentation.favorites.models.FavoritesScreenState
+import com.example.playlistmaker.presentation.favorites.view_model.FavoritesViewModel
 import com.example.playlistmaker.presentation.player.activity.PlayerFragment
 import com.example.playlistmaker.presentation.search.activity.SearchAdapter
 import com.example.playlistmaker.util.debounce
@@ -45,7 +45,8 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.favoritesRecyclerView.adapter = favoritesAdapter
 
-        clickListenerDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY,
+        clickListenerDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope, false) {
                 trackItem -> trackListClickListener(trackItem)
         }

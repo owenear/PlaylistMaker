@@ -2,7 +2,7 @@ package com.example.playlistmaker.util.mappers
 
 import androidx.core.net.toUri
 import com.example.playlistmaker.data.playlists.dto.PlaylistEntity
-import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.domain.playlists.models.Playlist
 
 class PlaylistMapper {
 

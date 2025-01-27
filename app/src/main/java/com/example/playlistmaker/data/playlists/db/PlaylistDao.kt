@@ -10,7 +10,6 @@ import com.example.playlistmaker.data.playlists.dto.PlaylistEntity
 import com.example.playlistmaker.data.playlists.dto.PlaylistTrackCrossRefEntity
 import com.example.playlistmaker.data.playlists.dto.PlaylistWithTracks
 import com.example.playlistmaker.data.playlists.dto.TrackEntity
-import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -25,12 +24,13 @@ interface PlaylistDao {
     @Query("SELECT playlistId FROM playlists ORDER BY playlistId DESC LIMIT 1")
     suspend fun getLastPlaylistId(): Int
 
-    @Query("SELECT * FROM playlists ORDER BY playlistId DESC")
-    fun getPlaylists(): Flow<List<PlaylistEntity>>
+    @Transaction
+    @Query("SELECT * FROM playlists WHERE playlistId = :playlistId")
+    suspend fun getPlaylistWithTracks(playlistId: Int): PlaylistWithTracks
 
     @Transaction
     @Query("SELECT * FROM playlists")
-    fun getPlaylistsWithTracks(): List<PlaylistWithTracks>
+    suspend fun getPlaylistsWithTracks(): List<PlaylistWithTracks>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(trackEntity: TrackEntity)
@@ -42,10 +42,7 @@ interface PlaylistDao {
     suspend fun addTrackToPlaylist(trackEntity: TrackEntity, playlistEntity: PlaylistEntity) {
         insertTrack(trackEntity)
         insertPlaylistTrack(PlaylistTrackCrossRefEntity(playlistEntity.playlistId!!,
-            trackEntity.trackId!!))
+            trackEntity.trackId))
     }
-
-
-
 
 }

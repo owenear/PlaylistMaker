@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library.activity
+package com.example.playlistmaker.presentation.playlists.activity
 
 import android.net.Uri
 import android.os.Bundle
@@ -18,8 +18,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistCreateBinding
 import com.example.playlistmaker.presentation.App
-import com.example.playlistmaker.presentation.library.models.PlaylistCreateScreenState
-import com.example.playlistmaker.presentation.library.view_model.PlaylistCreateViewModel
+import com.example.playlistmaker.presentation.playlists.models.PlaylistCreateScreenState
+import com.example.playlistmaker.presentation.playlists.view_model.PlaylistCreateViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistCreateFragment: Fragment() {

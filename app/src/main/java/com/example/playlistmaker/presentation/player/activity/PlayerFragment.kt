@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
-import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
@@ -43,6 +45,8 @@ class PlayerFragment() : Fragment() {
     }
     private lateinit var clickListenerDebounce: (Playlist) -> Unit
 
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
     private val playerPlaylistAdapter by lazy {
         PlayerPlaylistAdapter() { playlist -> clickListenerDebounce(playlist) }
     }
@@ -60,6 +64,11 @@ class PlayerFragment() : Fragment() {
         playerViewModel.playbackControl(true)
     }
 
+    override fun onResume() {
+        super.onResume()
+        playerViewModel.updateData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -70,6 +79,10 @@ class PlayerFragment() : Fragment() {
         clickListenerDebounce = debounce<Playlist>(CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope, false) {
                 playlist -> playlistClickListener(playlist)
+        }
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.playerBottomSheet).apply {
+                state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         binding.titleTextView.text = trackItem?.trackName
@@ -117,19 +130,20 @@ class PlayerFragment() : Fragment() {
 
         binding.playlistRecyclerView.adapter = playerPlaylistAdapter
 
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.playerBottomSheet).apply {
-            state = BottomSheetBehavior.STATE_HIDDEN
-        }
-
         binding.playerAddButton.setOnClickListener{
+            playerViewModel.updateData()
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
+        var isNewPlaylistButtonClicked = false
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlay.visibility = View.GONE
+                        if (isNewPlaylistButtonClicked)
+                            findNavController().navigate(R.id.action_playerFragment_to_playlistCreateFragment)
                     }
                     else -> {
                         binding.overlay.visibility = View.VISIBLE
@@ -142,7 +156,8 @@ class PlayerFragment() : Fragment() {
         })
 
         binding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(R.id.action_playerFragment_to_playlistCreateFragment)
+            isNewPlaylistButtonClicked = true
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
     }
@@ -159,6 +174,18 @@ class PlayerFragment() : Fragment() {
             is PlayerScreenState.Paused -> showPaused(state.pauseTime)
             is PlayerScreenState.Favorite -> showFavorite(state.isFavorite)
             is PlayerScreenState.Playlists -> showPlaylists(state.playlists)
+            is PlayerScreenState.AddResult -> showAddResult(state.isTrackInPlaylist, state.playlist)
+        }
+    }
+
+    private fun showAddResult(isTrackInPlaylist: Boolean, playlist: Playlist) {
+        if (isTrackInPlaylist) {
+            Toast.makeText(context, getString(R.string.playlist_track_add_fail_toast, playlist.name),
+                Toast.LENGTH_LONG).show()
+        } else {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            Toast.makeText(context, getString(R.string.playlist_track_add_success_toast, playlist.name),
+                Toast.LENGTH_LONG).show()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library.activity
+package com.example.playlistmaker.presentation.playlists.activity
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.RecyclerItemPlaylistLibraryBinding
-import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.presentation.App
 
 class PlaylistViewHolder(private val binding: RecyclerItemPlaylistLibraryBinding):

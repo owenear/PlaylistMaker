@@ -7,7 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.RecyclerItemPlaylistBottomSheetBinding
-import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.presentation.App
 
 class PlayerPlaylistViewHolder(private val binding: RecyclerItemPlaylistBottomSheetBinding):

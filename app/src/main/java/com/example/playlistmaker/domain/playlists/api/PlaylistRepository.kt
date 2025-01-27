@@ -1,6 +1,6 @@
-package com.example.playlistmaker.domain.playlist.api
+package com.example.playlistmaker.domain.playlists.api
 
-import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.domain.search.models.Track
 import kotlinx.coroutines.flow.Flow
 
@@ -10,9 +10,9 @@ interface PlaylistRepository {
 
     suspend fun removePlaylist(playlist: Playlist)
 
-    suspend fun getPlaylists(): Flow<List<Playlist>>
+    fun getPlaylists(): Flow<List<Playlist>>
 
-    suspend fun isTrackInPlaylist(track: Track, playlist: Playlist): Boolean
+    fun getTracksInPlaylist(playlist: Playlist): Flow<List<Track>>
 
     suspend fun addTrackToPlaylist(track: Track, playlist: Playlist)
 

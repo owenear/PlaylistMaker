@@ -4,8 +4,8 @@ import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.favorites.impl.FavoriteInteractorImpl
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.impl.MediaPlayerInteractorImpl
-import com.example.playlistmaker.domain.playlist.api.PlaylistInteractor
-import com.example.playlistmaker.domain.playlist.impl.PlaylistInteractorImpl
+import com.example.playlistmaker.domain.playlists.api.PlaylistInteractor
+import com.example.playlistmaker.domain.playlists.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.domain.search.api.TrackHistoryInteractor
 import com.example.playlistmaker.domain.search.api.TrackInteractor
 import com.example.playlistmaker.domain.search.impl.TrackHistoryInteractorImpl

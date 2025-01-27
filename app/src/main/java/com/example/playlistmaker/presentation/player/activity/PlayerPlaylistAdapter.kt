@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.RecyclerItemPlaylistBottomSheetBinding
-import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.domain.playlists.models.Playlist
 
 class PlayerPlaylistAdapter(private val clickListener: (Playlist) -> Unit):
     RecyclerView.Adapter<PlayerPlaylistViewHolder>() {

@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
-import com.example.playlistmaker.domain.playlist.api.PlaylistInteractor
-import com.example.playlistmaker.domain.playlist.models.Playlist
+import com.example.playlistmaker.domain.playlists.api.PlaylistInteractor
+import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import kotlinx.coroutines.Job
@@ -25,17 +25,23 @@ class PlayerViewModel(private val track: Track,
 	private var playTimeJob: Job? = null
 
 	init {
+		updateData()
+		mediaPlayerInteractor.preparePlayer(track.previewUrl,
+			{ onPreparedListener() }, { onCompletionListener() })
+	}
 
+	fun updateData() {
 		viewModelScope.launch {
 			track.isFavorite = favoriteInteractor.isFavorite(track)
 			renderState(PlayerScreenState.Favorite(track.isFavorite))
-			playlistInteractor.getPlaylists().collect { playlists ->
-				renderState(PlayerScreenState.Playlists(playlists))
-			}
+			getPlaylists()
 		}
+	}
 
-		mediaPlayerInteractor.preparePlayer(track.previewUrl,
-			{ onPreparedListener() }, { onCompletionListener() })
+	private suspend fun getPlaylists() {
+		playlistInteractor.getPlaylists().collect { playlists ->
+			renderState(PlayerScreenState.Playlists(playlists))
+		}
 	}
 
 	private fun onPreparedListener(){
@@ -100,7 +106,16 @@ class PlayerViewModel(private val track: Track,
 	}
 
 	fun onPlaylistClicked(playlist: Playlist) {
-		TODO("Not yet implemented")
+		viewModelScope.launch {
+			playlistInteractor.getTracksInPlaylist(playlist).collect { tracks ->
+					if (track in tracks) {
+						renderState(PlayerScreenState.AddResult(true, playlist))
+					} else {
+						playlistInteractor.addTrackToPlaylist(track, playlist)
+						renderState(PlayerScreenState.AddResult(false, playlist))
+					}
+			}
+		}
 	}
 
 	companion object {

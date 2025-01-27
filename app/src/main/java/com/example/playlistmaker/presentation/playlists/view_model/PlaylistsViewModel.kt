@@ -1,12 +1,12 @@
-package com.example.playlistmaker.presentation.library.view_model
+package com.example.playlistmaker.presentation.playlists.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.playlist.api.PlaylistInteractor
-import com.example.playlistmaker.domain.playlist.models.Playlist
-import com.example.playlistmaker.presentation.library.models.PlaylistsScreenState
+import com.example.playlistmaker.domain.playlists.api.PlaylistInteractor
+import com.example.playlistmaker.domain.playlists.models.Playlist
+import com.example.playlistmaker.presentation.playlists.models.PlaylistsScreenState
 import kotlinx.coroutines.launch
 
 
@@ -16,6 +16,10 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor):  V
     val stateLiveData : LiveData<PlaylistsScreenState> = stateMutableLiveData
 
     init {
+        updateData()
+    }
+
+    fun updateData() {
         viewModelScope.launch {
             playlistInteractor.getPlaylists().collect {
                     playlists -> processResult(playlists)
@@ -34,5 +38,6 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor):  V
     private fun renderState(state: PlaylistsScreenState) {
         stateMutableLiveData.postValue(state)
     }
+
 
 }

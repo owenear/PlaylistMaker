@@ -1,12 +1,11 @@
-package com.example.playlistmaker.presentation.library.activity
+package com.example.playlistmaker.presentation.playlists.activity
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.RecyclerItemPlaylistLibraryBinding
-import com.example.playlistmaker.domain.playlist.models.Playlist
-
+import com.example.playlistmaker.domain.playlists.models.Playlist
 
 
 class PlaylistAdapter(): RecyclerView.Adapter<PlaylistViewHolder>() {

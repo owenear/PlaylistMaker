@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.library.activity
+package com.example.playlistmaker.presentation.playlists.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +9,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.example.playlistmaker.domain.playlist.models.Playlist
-import com.example.playlistmaker.presentation.library.models.PlaylistsScreenState
-import com.example.playlistmaker.presentation.library.view_model.PlaylistsViewModel
+import com.example.playlistmaker.domain.playlists.models.Playlist
+import com.example.playlistmaker.presentation.playlists.models.PlaylistsScreenState
+import com.example.playlistmaker.presentation.playlists.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment: Fragment()  {
@@ -26,6 +26,11 @@ class PlaylistsFragment: Fragment()  {
                               savedInstanceState: Bundle?): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onResume() {
+        playlistViewModel.updateData()
+        super.onResume()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,5 +74,6 @@ class PlaylistsFragment: Fragment()  {
     companion object {
         fun newInstance() = PlaylistsFragment()
     }
+
 
 }

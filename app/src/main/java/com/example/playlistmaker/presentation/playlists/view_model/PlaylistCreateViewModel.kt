@@ -1,14 +1,13 @@
-package com.example.playlistmaker.presentation.library.view_model
+package com.example.playlistmaker.presentation.playlists.view_model
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.playlist.api.PlaylistInteractor
-import com.example.playlistmaker.domain.playlist.models.Playlist
-import com.example.playlistmaker.presentation.library.models.PlaylistCreateScreenState
+import com.example.playlistmaker.domain.playlists.api.PlaylistInteractor
+import com.example.playlistmaker.domain.playlists.models.Playlist
+import com.example.playlistmaker.presentation.playlists.models.PlaylistCreateScreenState
 import kotlinx.coroutines.launch
 
 class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
@@ -16,14 +15,6 @@ class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor
     private val stateMutableLiveData = MutableLiveData<PlaylistCreateScreenState>(
         PlaylistCreateScreenState.Disabled)
     val stateLiveData : LiveData<PlaylistCreateScreenState> = stateMutableLiveData
-
-    init {
-        viewModelScope.launch {
-            playlistInteractor.getPlaylists().collect{
-                result -> Log.d("VM STATE",result.toString())
-            }
-        }
-    }
 
     fun createPlaylist(playlistName: String, playlistDescription: String?, playlistUri: Uri?) {
         viewModelScope.launch {
