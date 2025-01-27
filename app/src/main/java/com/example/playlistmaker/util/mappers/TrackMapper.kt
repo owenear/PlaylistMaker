@@ -1,5 +1,6 @@
 package com.example.playlistmaker.util.mappers
 import com.example.playlistmaker.data.favorites.dto.FavoriteEntity
+import com.example.playlistmaker.data.playlists.dto.TrackEntity
 import com.example.playlistmaker.data.search.dto.TrackDto
 import com.example.playlistmaker.domain.search.models.Track
 
@@ -36,7 +37,23 @@ class TrackMapper {
         )
     }
 
-    fun map(trackEntity: FavoriteEntity): Track {
+    fun map(favoriteEntity: FavoriteEntity): Track {
+        return Track(
+            favoriteEntity.trackId,
+            favoriteEntity.trackName,
+            favoriteEntity.artistName,
+            favoriteEntity.trackTimeFormat,
+            favoriteEntity.artworkUrl100,
+            favoriteEntity.previewUrl,
+            favoriteEntity.collectionName,
+            favoriteEntity.releaseYear,
+            favoriteEntity.primaryGenreName,
+            favoriteEntity.country,
+            true
+        )
+    }
+
+    fun mapEntity(trackEntity: TrackEntity): Track {
         return Track(
             trackEntity.trackId,
             trackEntity.trackName,
@@ -48,9 +65,24 @@ class TrackMapper {
             trackEntity.releaseYear,
             trackEntity.primaryGenreName,
             trackEntity.country,
-            true
+            trackEntity.isFavorite
         )
     }
 
+    fun mapEntity(track: Track): TrackEntity {
+        return TrackEntity(
+            track.trackId,
+            track.trackName,
+            track.artistName,
+            track.trackTimeFormat,
+            track.artworkUrl100,
+            track.previewUrl,
+            track.collectionName,
+            track.releaseYear,
+            track.primaryGenreName,
+            track.country,
+            track.isFavorite
+        )
+    }
 
 }

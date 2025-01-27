@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.playlist.api.PlaylistInteractor
+import com.example.playlistmaker.domain.playlist.models.Playlist
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import kotlinx.coroutines.Job
@@ -96,6 +97,10 @@ class PlayerViewModel(private val track: Track,
 			}
 		}
 		renderState(PlayerScreenState.Favorite(track.isFavorite))
+	}
+
+	fun onPlaylistClicked(playlist: Playlist) {
+		TODO("Not yet implemented")
 	}
 
 	companion object {
