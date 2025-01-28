@@ -21,7 +21,12 @@ class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor
             playlistInteractor.createPlaylist(Playlist(null, playlistName,
                 playlistDescription, playlistUri))
         }
-        renderState(PlaylistCreateScreenState.Result(playlistName))
+        renderState(PlaylistCreateScreenState.Created(playlistName))
+    }
+
+    fun onBackPressed() {
+        renderState(PlaylistCreateScreenState.BackPressed(
+            (stateLiveData.value is PlaylistCreateScreenState.Created)))
     }
 
     fun processInput(playlistName: String) {

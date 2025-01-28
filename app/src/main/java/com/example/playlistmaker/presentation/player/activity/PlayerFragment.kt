@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -159,6 +160,13 @@ class PlayerFragment() : Fragment() {
             isNewPlaylistButtonClicked = true
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigateUp()
+            }
+        })
 
     }
 

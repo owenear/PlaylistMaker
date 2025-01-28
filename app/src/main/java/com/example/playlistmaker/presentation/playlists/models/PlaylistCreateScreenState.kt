@@ -4,6 +4,7 @@ interface PlaylistCreateScreenState {
 
     data object Disabled : PlaylistCreateScreenState
     data object Enabled : PlaylistCreateScreenState
-    data class Result(val playlistName: String) : PlaylistCreateScreenState
+    data class Created(val playlistName: String) : PlaylistCreateScreenState
+    data class BackPressed(val isPlaylistCreated: Boolean) : PlaylistCreateScreenState
 
 }

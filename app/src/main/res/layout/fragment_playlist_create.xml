@@ -69,85 +69,49 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/playlistCreateInputStyle"
         android:id="@+id/nameInputTextLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColorHint="?attr/colorOnPrimary"
-        app:boxBackgroundColor="?attr/colorPrimary"
-        app:boxStrokeColor="@color/text_input_color"
-        app:cursorColor="@color/cursor"
-        android:gravity="center_vertical"
-        app:hintEnabled="true"
+        android:layout_marginTop="@dimen/create_playlist_input_margin"
         android:hint="@string/playlist_name_hint"
-        app:hintTextColor="@color/blue"
-        app:boxStrokeWidthFocused="1dp"
-        app:boxStrokeWidth="1dp"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintTop_toBottomOf="@id/coverImageView"
         >
 
         <com.google.android.material.textfield.TextInputEditText
+            style="@style/playlistCreateEditStyle"
             android:id="@+id/nameInputEditText"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:cursorVisible="true"
-            android:fontFamily="@font/ys_display_regular"
-            android:gravity="center_vertical"
+            android:layout_height="@dimen/create_playlist_input_height"
             android:paddingVertical="@dimen/search_padding_vertical"
             android:paddingHorizontal="@dimen/search_padding_horizontal"
-            android:textColor="?attr/colorOnPrimary"
-            android:textColorHint="?attr/colorOnSecondary"
-            android:textFontWeight="400"
-            android:textSize="@dimen/search_text_size"
             android:hint="@string/playlist_name_hint"
-            android:inputType="text"
-            android:lines="1"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/playlistCreateInputStyle"
         android:id="@+id/descriptionInputTextLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColorHint="?attr/colorOnPrimary"
-        app:boxStrokeWidth="1dp"
-        app:boxBackgroundColor="?attr/colorPrimary"
-        app:boxStrokeColor="@color/text_input_color"
-        app:cursorColor="@color/cursor"
-        android:gravity="center_vertical"
-        app:hintEnabled="true"
+        android:layout_marginTop="@dimen/create_playlist_input_margin"
         android:hint="@string/playlist_description_hint"
-        app:hintTextColor="@color/blue"
-        app:boxStrokeWidthFocused="1dp"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintTop_toBottomOf="@id/nameInputTextLayout"
         >
 
         <com.google.android.material.textfield.TextInputEditText
+            style="@style/playlistCreateEditStyle"
             android:id="@+id/descriptionInputEditText"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:cursorVisible="true"
-            android:fontFamily="@font/ys_display_regular"
-            android:gravity="center_vertical"
+            android:layout_height="@dimen/create_playlist_input_height"
             android:paddingVertical="@dimen/search_padding_vertical"
             android:paddingHorizontal="@dimen/search_padding_horizontal"
-            android:textColor="?attr/colorOnPrimary"
-            android:textColorHint="?attr/colorOnSecondary"
-            android:textFontWeight="400"
-            android:textSize="@dimen/search_text_size"
             android:hint="@string/playlist_description_hint"
-            android:inputType="text"
-            android:lines="1"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
             />
 
     </com.google.android.material.textfield.TextInputLayout>

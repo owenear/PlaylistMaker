@@ -2,11 +2,11 @@ package com.example.playlistmaker.presentation.playlists.activity
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
@@ -20,6 +20,7 @@ import com.example.playlistmaker.databinding.FragmentPlaylistCreateBinding
 import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.playlists.models.PlaylistCreateScreenState
 import com.example.playlistmaker.presentation.playlists.view_model.PlaylistCreateViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistCreateFragment: Fragment() {
@@ -29,6 +30,15 @@ class PlaylistCreateFragment: Fragment() {
 
     private val playlistCreateViewModel: PlaylistCreateViewModel by viewModel()
     private var coverUri: Uri? = null
+
+    private val createConfirmDialog by lazy {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.playlist_dialog_title))
+            .setNegativeButton(getString(R.string.playlist_dialog_cancel)) { dialog, which -> }
+            .setPositiveButton(getString(R.string.playlist_dialog_ok)) { dialog, which ->
+                findNavController().navigateUp()
+            }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -40,7 +50,7 @@ class PlaylistCreateFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.playlistToolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            playlistCreateViewModel.onBackPressed()
         }
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
@@ -51,8 +61,6 @@ class PlaylistCreateFragment: Fragment() {
                         .placeholder(R.drawable.baseline_gesture_24)
                         .transform(CenterCrop(),RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
                         .into(binding.coverImageView)
-                } else {
-                    Log.d("PhotoPicker", "No media selected")
                 }
             }
 
@@ -75,13 +83,21 @@ class PlaylistCreateFragment: Fragment() {
                 binding.descriptionInputEditText.text.toString(), coverUri)
         }
 
+
+        requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                playlistCreateViewModel.onBackPressed()
+            }
+        })
+
     }
 
     private fun render(state: PlaylistCreateScreenState) {
         when (state) {
             is PlaylistCreateScreenState.Disabled -> showDisabled()
             is PlaylistCreateScreenState.Enabled -> showEnabled()
-            is PlaylistCreateScreenState.Result -> showCreated(state.playlistName)
+            is PlaylistCreateScreenState.Created -> showCreated(state.playlistName)
+            is PlaylistCreateScreenState.BackPressed -> showBackPressed(state.isPlaylistCreated)
         }
     }
 
@@ -96,6 +112,15 @@ class PlaylistCreateFragment: Fragment() {
     private fun showCreated(playlistName: String) {
         Toast.makeText(context, getString(R.string.playlist_create_success_toast, playlistName),
             Toast.LENGTH_LONG).show()
+    }
+
+    private fun showBackPressed(isPlaylistCreated: Boolean) {
+        if (isPlaylistCreated or (binding.nameInputEditText.text.isNullOrEmpty() and
+            binding.descriptionInputEditText.text.isNullOrEmpty() and
+                    (binding.coverImageView.drawable == null)))
+            findNavController().navigateUp()
+        else
+            createConfirmDialog.show()
     }
 
     override fun onDestroyView() {
