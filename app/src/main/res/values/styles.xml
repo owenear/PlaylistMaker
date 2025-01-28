@@ -87,5 +87,8 @@
         <item name="android:imeOptions">actionDone</item>
         <item name="android:singleLine">true</item>
     </style>
+    <style name="dialogButton" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
 
 </resources>

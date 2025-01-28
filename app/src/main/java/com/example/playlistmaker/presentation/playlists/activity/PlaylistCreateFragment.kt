@@ -32,7 +32,7 @@ class PlaylistCreateFragment: Fragment() {
     private var coverUri: Uri? = null
 
     private val createConfirmDialog by lazy {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialogTheme)
             .setTitle(getString(R.string.playlist_dialog_title))
             .setNegativeButton(getString(R.string.playlist_dialog_cancel)) { dialog, which -> }
             .setPositiveButton(getString(R.string.playlist_dialog_ok)) { dialog, which ->
