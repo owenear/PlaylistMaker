@@ -111,7 +111,8 @@ class PlaylistCreateFragment: Fragment() {
 
     private fun showCreated(playlistName: String) {
         Toast.makeText(context, getString(R.string.playlist_create_success_toast, playlistName),
-            Toast.LENGTH_LONG).show()
+            Toast.LENGTH_SHORT).show()
+        findNavController().navigateUp()
     }
 
     private fun showBackPressed(isPlaylistCreated: Boolean) {

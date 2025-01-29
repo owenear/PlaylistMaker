@@ -33,7 +33,8 @@
 
     <dimen name="toolbar_height">56dp</dimen>
 
-    <dimen name="library_margin_vertical">24dp</dimen>
+    <dimen name="library_margin_vertical">16dp</dimen>
+    <dimen name="library_margin_vertical_half">8dp</dimen>
     <dimen name="library_margin_imageview">108dp</dimen>
 
     <dimen name="bottom_nav_height">56dp</dimen>

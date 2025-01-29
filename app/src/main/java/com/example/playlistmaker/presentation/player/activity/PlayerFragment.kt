@@ -189,11 +189,11 @@ class PlayerFragment() : Fragment() {
     private fun showAddResult(isTrackInPlaylist: Boolean, playlist: Playlist) {
         if (isTrackInPlaylist) {
             Toast.makeText(context, getString(R.string.playlist_track_add_fail_toast, playlist.name),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_SHORT).show()
         } else {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             Toast.makeText(context, getString(R.string.playlist_track_add_success_toast, playlist.name),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_SHORT).show()
         }
     }
 
