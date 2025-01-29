@@ -44,6 +44,7 @@
         app:tabTextColor="?attr/colorOnPrimary"
         app:tabBackground="?attr/colorPrimary"
         android:background="?attr/colorPrimary"
+        app:tabTextAppearance="@style/tabLayoutText"
         app:tabMode="fixed"
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorHeight="2dp"
