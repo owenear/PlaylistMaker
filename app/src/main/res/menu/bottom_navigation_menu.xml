@@ -9,7 +9,7 @@
     <item
         android:id="@+id/libraryFragment"
         android:icon="@drawable/library_tab_icon"
-        android:title="@string/library_button"
+        android:title="@string/library"
         />
 
     <item

@@ -30,10 +30,19 @@
         <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="colorSecondary">@color/light_grey_2</item>
+        <item name="colorOnSecondary">@color/light_grey</item>
     </style>
     <style name="Theme.Library.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="android:textColor">@color/black</item>
+        <item name="colorOnSecondary">@color/grey</item>
+    </style>
+    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSurfaceContainerHigh">@color/light_grey</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="buttonBarPositiveButtonStyle">@style/dialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/dialogButton</item>
     </style>
 </resources>

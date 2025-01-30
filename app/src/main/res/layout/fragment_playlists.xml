@@ -4,15 +4,16 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.playlistmaker.presentation.library.activity.PlaylistsFragment">
+    tools:context="com.example.playlistmaker.presentation.playlists.activity.PlaylistsFragment">
 
     <Button
         style="@style/searchButtonStyle"
         android:id="@+id/newPlaylistButton"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/create_playlist_button_width"
+        android:padding="@dimen/create_playlist_button_padding"
         android:layout_marginTop="@dimen/library_margin_vertical"
-        android:text="@string/library_newpls_button"
+        android:text="@string/library_new_playlist"
         android:textFontWeight="500"
         android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,6 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_nothing_found"
         />
 
     <TextView
@@ -41,8 +43,20 @@
         android:textFontWeight="400"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/library_margin_vertical"
+        android:text="@string/library_playlists_default"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/placeholderImageView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlistRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/library_margin_vertical_half"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/newPlaylistButton"
+        app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

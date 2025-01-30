@@ -3,7 +3,6 @@ package com.example.playlistmaker.presentation
 import android.app.Application
 import android.content.res.Configuration
 import android.content.res.Resources.getSystem
-import android.util.Log
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
 import com.example.playlistmaker.di.repositoryModule
@@ -29,6 +28,5 @@ class App: Application() {
 
 	companion object {
 		val DISPLAY_DENSITY = getSystem().displayMetrics.density
-		const val PLAYER_INTENT_EXTRA_KEY = "trackItem"
 	}
 }

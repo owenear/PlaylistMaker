@@ -28,13 +28,23 @@
     <dimen name="player_track_text_size">13sp</dimen>
     <dimen name="player_view_margin_horizontal">8dp</dimen>
     <dimen name="player_view_margin_vertical">24dp</dimen>
+    <dimen name="player_view_margin_vertical_half">12dp</dimen>
     <dimen name="player_guide_vertical_margin">16dp</dimen>
 
     <dimen name="toolbar_height">56dp</dimen>
 
-    <dimen name="library_margin_vertical">24dp</dimen>
+    <dimen name="library_margin_vertical">16dp</dimen>
+    <dimen name="library_margin_vertical_half">8dp</dimen>
     <dimen name="library_margin_imageview">108dp</dimen>
 
     <dimen name="bottom_nav_height">56dp</dimen>
     <dimen name="bottom_nav_padding">8dp</dimen>
+
+    <dimen name="create_playlist_button_text_size">16sp</dimen>
+    <dimen name="create_playlist_button_width">132dp</dimen>
+    <dimen name="create_playlist_button_padding">0dp</dimen>
+    <dimen name="create_playlist_input_margin">16dp</dimen>
+    <dimen name="create_playlist_input_height">56dp</dimen>
+    <dimen name="playlist_text_size">12sp</dimen>
+
 </resources>

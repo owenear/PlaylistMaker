@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
     <string name="search_button">Поиск</string>
-    <string name="library_button">Медиатека</string>
+    <string name="library">Медиатека</string>
     <string name="settings_button">Настройки</string>
     <string name="settings_night">Темная тема</string>
     <string name="settings_share">Поделиться приложением</string>
@@ -26,10 +26,28 @@
     <string name="player_album">Альбом</string>
     <string name="player_duration">Длительность</string>
     <string name="player_default_preview_url">https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/48/8f/a4/488fa4b5-b606-71ee-572e-691f840503c8/mzaf_17729039194440787513.plus.aac.ep.m4a</string>
+    <string name="player_add_to_playlist">Добавить в плейлист</string>
 
     <string name="library_favourites_default">Ваша медиатека пуста</string>
     <string name="library_playlists_default">Вы не создали\nни одного плейлиста</string>
     <string name="library_tab1_name">Избранные треки</string>
     <string name="library_tab2_name">Плейлисты</string>
-    <string name="library_newpls_button">Новый плейлист</string>
+    <string name="library_new_playlist">Новый плейлист</string>
+    <string name="library_create_playlist">Создать</string>
+    <string name="playlist_name_hint">Название*</string>
+    <string name="playlist_description_hint">Описание</string>
+    <string name="playlist_create_success_toast">Плейлист %s создан успешно</string>
+    <string name="playlist_track_add_success_toast">Добавлено в плейлист %s</string>
+    <string name="playlist_track_add_fail_toast">Трек уже добавлен в плейлист %s</string>
+    <string name="playlist_dialog_title">Завершить создание плейлиста?</string>
+    <string name="playlist_dialog_cancel">Отмена</string>
+    <string name="playlist_dialog_ok">Завершить</string>
+
+    <plurals name="track_plurals">
+        <item quantity="one">трек</item>
+        <item quantity="few">трека</item>
+        <item quantity="many">треков</item>
+        <item quantity="other">треков</item>
+    </plurals>
+
 </resources>

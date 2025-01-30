@@ -2,6 +2,8 @@ package com.example.playlistmaker.presentation.library.activity
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.playlistmaker.presentation.favorites.activity.FavoritesFragment
+import com.example.playlistmaker.presentation.playlists.activity.PlaylistsFragment
 
 class LibraryPagerAdapter(hostFragment: Fragment)
     : FragmentStateAdapter(hostFragment) {

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.data.favorites
 
-import com.example.playlistmaker.data.favorites.db.AppDatabase
+import com.example.playlistmaker.data.AppDatabase
 import com.example.playlistmaker.domain.favorites.api.FavoriteRepository
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.util.mappers.TrackMapper
