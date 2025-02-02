@@ -26,7 +26,6 @@ class PlaylistViewHolder(private val binding: RecyclerItemPlaylistLibraryBinding
         binding.playlistTrackCount.text = item.trackCount.toString() + " " +
                 itemView.resources.getQuantityString(R.plurals.track_plurals,
                     item.trackCount, item.trackCount)
-
     }
 
 }

@@ -8,7 +8,8 @@ import com.example.playlistmaker.databinding.RecyclerItemSearchBinding
 import com.example.playlistmaker.domain.search.models.Track
 
 
-class SearchAdapter (private val clickListener: (Track) -> Unit)
+class SearchAdapter (private val longClickListener: ((Track) -> Boolean)? = null,
+						private val clickListener: (Track) -> Unit)
 	: RecyclerView.Adapter<SearchViewHolder> (){
 
 	var items: List<Track> = emptyList()
@@ -27,6 +28,11 @@ class SearchAdapter (private val clickListener: (Track) -> Unit)
 	override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
 		holder.bind(items[position])
 		holder.itemView.setOnClickListener { clickListener.invoke(items[position]) }
+		if (longClickListener != null) {
+			holder.itemView.setOnLongClickListener {
+				longClickListener.invoke(items[position])
+			}
+		}
 	}
 
 	override fun getItemCount(): Int {

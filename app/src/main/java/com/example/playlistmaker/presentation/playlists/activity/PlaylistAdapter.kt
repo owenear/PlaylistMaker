@@ -8,7 +8,8 @@ import com.example.playlistmaker.databinding.RecyclerItemPlaylistLibraryBinding
 import com.example.playlistmaker.domain.playlists.models.Playlist
 
 
-class PlaylistAdapter(): RecyclerView.Adapter<PlaylistViewHolder>() {
+class PlaylistAdapter(private val clickListener: ((Playlist) -> Unit)? = null):
+    RecyclerView.Adapter<PlaylistViewHolder>() {
 
     var items: List<Playlist> = emptyList()
         @SuppressLint("NotifyDataSetChanged")
@@ -25,6 +26,8 @@ class PlaylistAdapter(): RecyclerView.Adapter<PlaylistViewHolder>() {
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         holder.bind(items[position])
+        if (clickListener != null)
+            holder.itemView.setOnClickListener { clickListener.invoke(items[position]) }
     }
 
     override fun getItemCount(): Int {

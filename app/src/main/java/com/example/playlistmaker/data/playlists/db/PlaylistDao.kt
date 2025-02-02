@@ -35,14 +35,27 @@ interface PlaylistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(trackEntity: TrackEntity)
 
+    @Delete
+    suspend fun deleteTrack(trackEntity: TrackEntity)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylistTrack(playlistTrackCrossRef: PlaylistTrackCrossRefEntity)
+
+    @Delete
+    suspend fun deletePlaylistTrack(playlistTrackCrossRef: PlaylistTrackCrossRefEntity)
 
     @Transaction
     suspend fun addTrackToPlaylist(trackEntity: TrackEntity, playlistEntity: PlaylistEntity) {
         insertTrack(trackEntity)
         insertPlaylistTrack(PlaylistTrackCrossRefEntity(playlistEntity.playlistId!!,
             trackEntity.trackId))
+    }
+
+    @Transaction
+    suspend fun deleteTrackFromPlaylist(trackEntity: TrackEntity, playlistEntity: PlaylistEntity) {
+        deletePlaylistTrack(PlaylistTrackCrossRefEntity(playlistEntity.playlistId!!,
+            trackEntity.trackId))
+        deleteTrack(trackEntity)
     }
 
 }

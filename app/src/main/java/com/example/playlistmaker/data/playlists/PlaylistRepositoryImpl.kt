@@ -9,6 +9,8 @@ import com.example.playlistmaker.util.mappers.PlaylistMapper
 import com.example.playlistmaker.util.mappers.TrackMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
                              private val playlistMapper: PlaylistMapper,
@@ -29,9 +31,20 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
         val playlists = appDatabase.playlistDao().getPlaylistsWithTracks().map {
             playlistsWithTracks -> playlistMapper.map(playlistsWithTracks.playlist).apply {
                 trackCount = playlistsWithTracks.tracks.count()
+                duration = playlistsWithTracks.tracks.sumOf { it.trackTime }
+                durationFormat = SimpleDateFormat("m", Locale.getDefault()).format(duration)
             }
         }
         emit(playlists)
+    }
+
+    override fun getPlaylist(playlist: Playlist): Flow<Playlist> = flow {
+        val playlistWithTracks = appDatabase.playlistDao().getPlaylistWithTracks(playlist.id!!)
+        emit(playlistMapper.map(playlistWithTracks.playlist).apply {
+            trackCount = playlistWithTracks.tracks.count()
+            duration = playlistWithTracks.tracks.sumOf { it.trackTime }
+            durationFormat = SimpleDateFormat("m", Locale.getDefault()).format(duration)
+        })
     }
 
     override fun getTracksInPlaylist(playlist: Playlist): Flow<List<Track>> = flow {
@@ -42,6 +55,12 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         appDatabase.playlistDao().addTrackToPlaylist(trackMapper.mapEntity(track),
             playlistMapper.map(playlist))
+    }
+
+    override suspend fun deleteTrackFromPlaylist(track: Track, playlist: Playlist) {
+        appDatabase.playlistDao().deleteTrackFromPlaylist(trackMapper.mapEntity(track),
+            playlistMapper.map(playlist))
+
     }
 
 }
