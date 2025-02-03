@@ -46,6 +46,17 @@ class PlaylistFragment: Fragment()  {
             }
     }
 
+    private val playlistDeleteConfirmDialog by lazy {
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialogTheme)
+            .setTitle(getString(R.string.playlist_delete))
+            .setMessage(getString(R.string.playlist_delete_dialog_message))
+            .setNegativeButton(getString(R.string.playlist_delete_dialog_cancel)) { _, _ -> }
+            .setPositiveButton(getString(R.string.playlist_delete_dialog_ok)) { _, _ ->
+                playlistViewModel.deletePlaylist()
+                findNavController().navigateUp()
+            }
+    }
+
     private lateinit var clickListenerDebounce: (Track) -> Unit
 
     private val playlist by lazy {
@@ -119,11 +130,14 @@ class PlaylistFragment: Fragment()  {
             bottomSheetPlaylistBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
+        var isPlaylistDeleteButtonClicked = false
         bottomSheetPlaylistBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlay.visibility = View.GONE
+                        if (isPlaylistDeleteButtonClicked)
+                            playlistDeleteConfirmDialog.show()
                     }
                     else -> {
                         binding.overlay.visibility = View.VISIBLE
@@ -144,7 +158,8 @@ class PlaylistFragment: Fragment()  {
         }
 
         binding.playlistDeleteTextView.setOnClickListener{
-            //TODO
+            isPlaylistDeleteButtonClicked = true
+            bottomSheetPlaylistBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         playlistViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
@@ -206,7 +221,7 @@ class PlaylistFragment: Fragment()  {
         playlistTracksAdapter.items = tracks
         playlistAdapter.items = listOf(playlist!!)
         bottomSheetTracksBehavior.peekHeight = binding.playlist.height -
-                binding.playlistMenuButton.bottom
+                binding.anchor.bottom
     }
 
     override fun onDestroyView() {

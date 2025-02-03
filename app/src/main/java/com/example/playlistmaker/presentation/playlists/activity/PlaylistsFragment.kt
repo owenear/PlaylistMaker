@@ -21,7 +21,7 @@ class PlaylistsFragment: Fragment()  {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
-    private val playlistViewModel by viewModel<PlaylistsViewModel>()
+    private val playlistsViewModel by viewModel<PlaylistsViewModel>()
 
     private lateinit var clickListenerDebounce: (Playlist) -> Unit
 
@@ -36,7 +36,7 @@ class PlaylistsFragment: Fragment()  {
     }
 
     override fun onResume() {
-        playlistViewModel.updateData()
+        playlistsViewModel.updateData()
         super.onResume()
     }
 
@@ -54,7 +54,7 @@ class PlaylistsFragment: Fragment()  {
                 trackItem -> playlistClickListener(trackItem)
         }
 
-        playlistViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
+        playlistsViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             render(state)
         }
     }
@@ -80,6 +80,7 @@ class PlaylistsFragment: Fragment()  {
     }
 
     private fun showEmpty() = with(binding){
+        playlistAdapter.items = listOf()
         placeholderTextView.visibility = View.VISIBLE
         placeholderImageView.visibility = View.VISIBLE
     }

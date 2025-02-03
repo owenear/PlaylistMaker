@@ -40,6 +40,12 @@ class PlaylistViewModel(private val playlist: Playlist,
         updateData()
     }
 
+    fun deletePlaylist(){
+        viewModelScope.launch {
+            playlistInteractor.removePlaylist(playlist)
+        }
+    }
+
     fun sharingPlaylist(sharingString: String) {
         sharingInteractor.shareApp(sharingString)
     }

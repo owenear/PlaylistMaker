@@ -54,6 +54,10 @@
     <string name="playlist_edit">Редактировать информацию</string>
     <string name="playlist_delete">Удалить плейлист</string>
 
+    <string name="playlist_delete_dialog_message">Хотите удалить плейлист?</string>
+    <string name="playlist_delete_dialog_cancel">Нет</string>
+    <string name="playlist_delete_dialog_ok">Да</string>
+
     <plurals name="track_plurals">
         <item quantity="one">трек</item>
         <item quantity="few">трека</item>

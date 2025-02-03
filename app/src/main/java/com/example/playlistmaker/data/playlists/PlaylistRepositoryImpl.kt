@@ -24,7 +24,7 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
     }
 
     override suspend fun removePlaylist(playlist: Playlist) {
-        appDatabase.playlistDao().deletePlaylist(playlistMapper.map(playlist))
+        appDatabase.playlistDao().removePlaylist(playlistMapper.map(playlist))
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> = flow {

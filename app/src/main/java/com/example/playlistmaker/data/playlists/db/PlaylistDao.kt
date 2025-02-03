@@ -38,11 +38,17 @@ interface PlaylistDao {
     @Delete
     suspend fun deleteTrack(trackEntity: TrackEntity)
 
+    @Query("DELETE FROM tracks where trackId not in (select trackId from playlists_tracks)")
+    suspend fun deleteTracksNoPlaylist()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylistTrack(playlistTrackCrossRef: PlaylistTrackCrossRefEntity)
 
     @Delete
     suspend fun deletePlaylistTrack(playlistTrackCrossRef: PlaylistTrackCrossRefEntity)
+
+    @Query("DELETE FROM playlists_tracks where playlistId = :playlistId")
+    suspend fun deletePlaylistTracks(playlistId: Int)
 
     @Transaction
     suspend fun addTrackToPlaylist(trackEntity: TrackEntity, playlistEntity: PlaylistEntity) {
@@ -55,7 +61,14 @@ interface PlaylistDao {
     suspend fun deleteTrackFromPlaylist(trackEntity: TrackEntity, playlistEntity: PlaylistEntity) {
         deletePlaylistTrack(PlaylistTrackCrossRefEntity(playlistEntity.playlistId!!,
             trackEntity.trackId))
-        deleteTrack(trackEntity)
+        deleteTracksNoPlaylist()
+    }
+
+    @Transaction
+    suspend fun removePlaylist(playlistEntity: PlaylistEntity){
+        deletePlaylistTracks(playlistEntity.playlistId!!)
+        deletePlaylist(playlistEntity)
+        deleteTracksNoPlaylist()
     }
 
 }
