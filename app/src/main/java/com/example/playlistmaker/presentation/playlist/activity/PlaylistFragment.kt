@@ -70,7 +70,6 @@ class PlaylistFragment: Fragment()  {
     private lateinit var bottomSheetTracksBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetPlaylistBehavior: BottomSheetBehavior<LinearLayout>
 
-
     override fun onResume() {
         super.onResume()
         playlistViewModel.updateData()
@@ -103,7 +102,6 @@ class PlaylistFragment: Fragment()  {
 
         bottomSheetTracksBehavior = BottomSheetBehavior.from(binding.playlistBottomSheet).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
-           // setPeekHeight(binding.playlistMoreButton.top)
         }
 
         bottomSheetPlaylistBehavior = BottomSheetBehavior.from(binding.playlistMenuBottomSheet).apply {
@@ -207,6 +205,8 @@ class PlaylistFragment: Fragment()  {
     private fun showContent(tracks: List<Track>) {
         playlistTracksAdapter.items = tracks
         playlistAdapter.items = listOf(playlist!!)
+        bottomSheetTracksBehavior.peekHeight = binding.playlist.height -
+                binding.playlistMenuButton.bottom
     }
 
     override fun onDestroyView() {
