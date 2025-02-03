@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.playlists
 
+import android.util.Log
 import com.example.playlistmaker.data.AppDatabase
 import com.example.playlistmaker.data.FileStorage
 import com.example.playlistmaker.domain.playlists.api.PlaylistRepository
@@ -18,7 +19,8 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
                              private val fileStorage: FileStorage) : PlaylistRepository{
 
     override suspend fun createPlaylist(playlist: Playlist) {
-        playlist.id = appDatabase.playlistDao().getLastPlaylistId() + 1
+        if (playlist.id == null)
+            playlist.id = appDatabase.playlistDao().getLastPlaylistId() + 1
         playlist.coverUri = fileStorage.saveData(playlistMapper.map(playlist))
         appDatabase.playlistDao().insertPlaylist(playlistMapper.map(playlist))
     }

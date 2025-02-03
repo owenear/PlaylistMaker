@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.core.net.toUri
 import com.example.playlistmaker.data.FileStorage
 import com.example.playlistmaker.data.playlists.dto.PlaylistEntity
@@ -20,7 +21,7 @@ class PlaylistFileStorage(private val context: Context) : FileStorage {
         if (!filePath.exists()){
             filePath.mkdirs()
         }
-        val file = File(filePath, "${playlist.playlistId}_${playlist.name}")
+        val file = File(filePath, "${playlist.playlistId}.jpg")
         val inputStream = context.contentResolver.openInputStream(playlist.coverUri.toUri())
         val outputStream = FileOutputStream(file)
         BitmapFactory

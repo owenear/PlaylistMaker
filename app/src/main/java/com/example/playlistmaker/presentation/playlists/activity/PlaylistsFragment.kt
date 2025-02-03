@@ -43,7 +43,8 @@ class PlaylistsFragment: Fragment()  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(R.id.action_libraryFragment_to_PlaylistCreateFragment)
+            findNavController().navigate(R.id.action_libraryFragment_to_PlaylistCreateFragment,
+                PlaylistCreateFragment.createArgs(null))
         }
 
         binding.playlistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)

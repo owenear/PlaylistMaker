@@ -40,6 +40,9 @@
     <string name="playlist_track_add_success_toast">Добавлено в плейлист %s</string>
     <string name="playlist_track_add_fail_toast">Трек уже добавлен в плейлист %s</string>
 
+    <string name="playlist_create_button">Создать</string>
+    <string name="playlist_update_button">Сохранить</string>
+
     <string name="playlist_dialog_title">Завершить создание плейлиста?</string>
     <string name="playlist_dialog_cancel">Отмена</string>
     <string name="playlist_dialog_ok">Завершить</string>

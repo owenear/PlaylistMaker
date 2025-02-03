@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import com.example.playlistmaker.presentation.player.activity.PlayerFragment
 import com.example.playlistmaker.presentation.player.activity.PlayerPlaylistAdapter
 import com.example.playlistmaker.presentation.playlist.model.PlaylistScreenState
 import com.example.playlistmaker.presentation.playlist.view_model.PlaylistViewModel
+import com.example.playlistmaker.presentation.playlists.activity.PlaylistCreateFragment
 import com.example.playlistmaker.presentation.search.activity.SearchAdapter
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -154,7 +156,8 @@ class PlaylistFragment: Fragment()  {
         }
 
         binding.playlistEditTextView.setOnClickListener {
-            //TODO
+            findNavController().navigate(R.id.action_playlistFragment_to_playlistCreateFragment,
+                PlaylistCreateFragment.createArgs(playlist))
         }
 
         binding.playlistDeleteTextView.setOnClickListener{
@@ -165,6 +168,13 @@ class PlaylistFragment: Fragment()  {
         playlistViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             render(state)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object: OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigateUp()
+                }
+            })
 
     }
 

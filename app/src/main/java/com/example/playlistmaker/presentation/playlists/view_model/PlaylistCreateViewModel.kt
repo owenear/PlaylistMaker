@@ -10,15 +10,22 @@ import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.presentation.playlists.models.PlaylistCreateScreenState
 import kotlinx.coroutines.launch
 
-class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
+class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor,
+    private val playlist: Playlist? = null) : ViewModel() {
 
     private val stateMutableLiveData = MutableLiveData<PlaylistCreateScreenState>(
         PlaylistCreateScreenState.Disabled)
     val stateLiveData : LiveData<PlaylistCreateScreenState> = stateMutableLiveData
 
-    fun createPlaylist(playlistName: String, playlistDescription: String?, playlistUri: Uri?) {
+    init {
+        if (playlist == null) renderState(PlaylistCreateScreenState.Create)
+        else renderState(PlaylistCreateScreenState.Update(playlist))
+    }
+
+    fun createPlaylist(playlistName: String,
+                       playlistDescription: String?, playlistUri: Uri?) {
         viewModelScope.launch {
-            playlistInteractor.createPlaylist(Playlist(null, playlistName,
+            playlistInteractor.createPlaylist(Playlist(playlist?.id, playlistName,
                 playlistDescription, playlistUri))
         }
         renderState(PlaylistCreateScreenState.Created(playlistName))
