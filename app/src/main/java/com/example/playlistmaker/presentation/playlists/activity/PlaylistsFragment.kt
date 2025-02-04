@@ -1,6 +1,7 @@
 package com.example.playlistmaker.presentation.playlists.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,6 +74,7 @@ class PlaylistsFragment: Fragment()  {
     }
 
     private fun showContent(playlists: List<Playlist>) {
+        Log.d("VM STATE", playlists.toString())
         playlistAdapter.items = playlists
         with(binding) {
             placeholderTextView.visibility = View.GONE

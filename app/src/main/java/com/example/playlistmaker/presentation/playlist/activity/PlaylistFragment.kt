@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.domain.playlists.models.Playlist
@@ -104,6 +105,8 @@ class PlaylistFragment: Fragment()  {
 
         Glide.with(this)
             .load(playlist?.coverUri)
+            .skipMemoryCache(true)
+            .diskCacheStrategy( DiskCacheStrategy.NONE )
             .placeholder(R.drawable.baseline_gesture_24)
             .into(binding.coverImageView)
 

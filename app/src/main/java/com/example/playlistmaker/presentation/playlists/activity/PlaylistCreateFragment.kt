@@ -16,16 +16,13 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistCreateBinding
 import com.example.playlistmaker.domain.playlists.models.Playlist
-import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.App
-import com.example.playlistmaker.presentation.playlist.activity.PlaylistFragment
-import com.example.playlistmaker.presentation.playlist.activity.PlaylistFragment.Companion
-import com.example.playlistmaker.presentation.playlist.view_model.PlaylistViewModel
 import com.example.playlistmaker.presentation.playlists.models.PlaylistCreateScreenState
 import com.example.playlistmaker.presentation.playlists.view_model.PlaylistCreateViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -79,6 +76,8 @@ class PlaylistCreateFragment: Fragment() {
                     Log.d("VM STATE", coverUri.toString())
                     Glide.with(this)
                         .load(uri)
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy( DiskCacheStrategy.NONE )
                         .transform(CenterCrop(),RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
                         .into(binding.coverImageView)
                 }
@@ -133,6 +132,8 @@ class PlaylistCreateFragment: Fragment() {
         coverUri = playlist.coverUri
         Glide.with(this)
             .load(playlist.coverUri)
+            .skipMemoryCache(true)
+            .diskCacheStrategy( DiskCacheStrategy.NONE )
             .transform(CenterCrop(),RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
             .into(binding.coverImageView)
     }

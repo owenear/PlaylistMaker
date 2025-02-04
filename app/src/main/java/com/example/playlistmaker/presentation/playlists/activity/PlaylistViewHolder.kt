@@ -3,6 +3,7 @@ package com.example.playlistmaker.presentation.playlists.activity
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -18,6 +19,8 @@ class PlaylistViewHolder(private val binding: RecyclerItemPlaylistLibraryBinding
 
         Glide.with(itemView)
             .load(item.coverUri)
+            .diskCacheStrategy( DiskCacheStrategy.NONE )
+            .skipMemoryCache(true)
             .placeholder(R.drawable.baseline_gesture_24)
             .transform(CenterCrop(),RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
             .into(binding.playlistCoverImageView)
