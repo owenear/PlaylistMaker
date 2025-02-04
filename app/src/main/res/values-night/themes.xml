@@ -48,6 +48,7 @@
     <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSurfaceContainerHigh">@color/grey_2</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="buttonBarPositiveButtonStyle">@style/dialogButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/dialogButton</item>

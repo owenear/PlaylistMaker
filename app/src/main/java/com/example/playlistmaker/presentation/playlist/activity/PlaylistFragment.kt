@@ -226,15 +226,18 @@ class PlaylistFragment: Fragment()  {
                 " · " + playlist.trackCount + " " +
                 resources.getQuantityString(R.plurals.track_plurals,
                     playlist.trackCount, playlist.trackCount)
-        //if (playlistDescriptionTextView.text.isEmpty())
-        //playlistDescriptionTextView.visibility = View.GONE
+        playlistAdapter.items = listOf(playlist)
+        if (playlistDescriptionTextView.text.isEmpty())
+            playlistDescriptionTextView.visibility = View.GONE
+        bottomSheetTracksBehavior.peekHeight = binding.playlist.height -
+                binding.anchor.bottom
     }
 
     private fun showContent(tracks: List<Track>) {
         playlistTracksAdapter.items = tracks
-        playlistAdapter.items = listOf(playlist!!)
-        bottomSheetTracksBehavior.peekHeight = binding.playlist.height -
-                binding.anchor.bottom
+        if (tracks.isEmpty())
+            Toast.makeText(context, getString(R.string.playlist_empty_toast),
+                Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

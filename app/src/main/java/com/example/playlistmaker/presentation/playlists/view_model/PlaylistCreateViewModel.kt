@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.playlists.view_model
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +22,7 @@ class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor
     }
 
     fun createPlaylist(playlistName: String,
-                       playlistDescription: String?, playlistUri: Uri?) {
+                       playlistDescription: String?, playlistUri: String?) {
         viewModelScope.launch {
             playlistInteractor.createPlaylist(Playlist(playlist?.id, playlistName,
                 playlistDescription, playlistUri))

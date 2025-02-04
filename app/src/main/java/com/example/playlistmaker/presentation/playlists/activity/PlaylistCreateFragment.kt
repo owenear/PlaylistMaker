@@ -1,9 +1,7 @@
 package com.example.playlistmaker.presentation.playlists.activity
 
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +32,7 @@ class PlaylistCreateFragment: Fragment() {
     private var _binding: FragmentPlaylistCreateBinding? = null
     private val binding get() = _binding!!
 
-    private var coverUri: Uri? = null
+    private var coverUri: String? = null
 
     private val playlist by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -72,8 +70,7 @@ class PlaylistCreateFragment: Fragment() {
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             uri -> if (uri != null) {
-                    coverUri = uri
-                    Log.d("VM STATE", coverUri.toString())
+                    coverUri = uri.toString()
                     Glide.with(this)
                         .load(uri)
                         .skipMemoryCache(true)
@@ -132,7 +129,7 @@ class PlaylistCreateFragment: Fragment() {
         binding.descriptionInputEditText.setText(playlist.description)
         coverUri = playlist.coverUri
         Glide.with(this)
-            .load(playlist.coverUri)
+            .load(coverUri)
             .skipMemoryCache(true)
             .diskCacheStrategy( DiskCacheStrategy.NONE )
             .transform(CenterCrop(),RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))

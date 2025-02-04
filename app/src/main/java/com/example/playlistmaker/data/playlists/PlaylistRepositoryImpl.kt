@@ -20,7 +20,7 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
     override suspend fun createPlaylist(playlist: Playlist) {
         if (playlist.id == null)
             playlist.id = appDatabase.playlistDao().getLastPlaylistId() + 1
-        playlist.coverUri = fileStorage.saveData(playlistMapper.map(playlist))
+        playlist.coverUri = fileStorage.saveData(playlistMapper.map(playlist)).toString()
         appDatabase.playlistDao().insertPlaylist(playlistMapper.map(playlist))
     }
 
@@ -49,7 +49,7 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
     }
 
     override fun getTracksInPlaylist(playlist: Playlist): Flow<List<Track>> = flow {
-        val trackEntityList = appDatabase.playlistDao().getPlaylistWithTracks(playlist.id!!).tracks
+        val trackEntityList = appDatabase.playlistDao().getTracksInPlaylist(playlist.id!!)
         emit(trackEntityList.map { trackEntity -> trackMapper.mapEntity(trackEntity)})
     }
 

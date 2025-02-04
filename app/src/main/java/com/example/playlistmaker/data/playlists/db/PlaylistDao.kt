@@ -32,6 +32,11 @@ interface PlaylistDao {
     @Query("SELECT * FROM playlists")
     suspend fun getPlaylistsWithTracks(): List<PlaylistWithTracks>
 
+    @Query("SELECT * FROM tracks t JOIN playlists_tracks pt ON t.trackId = pt.trackId " +
+            "JOIN playlists p ON p.playlistId = pt.playlistId WHERE p.playlistId = :playlistId " +
+            "ORDER BY t.trackId DESC")
+    suspend fun getTracksInPlaylist(playlistId: Int): List<TrackEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(trackEntity: TrackEntity)
 
