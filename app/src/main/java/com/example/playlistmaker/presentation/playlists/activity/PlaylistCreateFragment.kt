@@ -38,9 +38,9 @@ class PlaylistCreateFragment: Fragment() {
 
     private val playlist by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getSerializable(PlaylistCreateFragment.ARGS_PLAYLIST, Playlist::class.java)
+            requireArguments().getSerializable(ARGS_PLAYLIST, Playlist::class.java)
         } else {
-            requireArguments().getSerializable(PlaylistCreateFragment.ARGS_PLAYLIST) as Playlist
+            requireArguments().getSerializable(ARGS_PLAYLIST) as Playlist
         }
     }
 
@@ -117,6 +117,7 @@ class PlaylistCreateFragment: Fragment() {
             is PlaylistCreateScreenState.Disabled -> showDisabled()
             is PlaylistCreateScreenState.Enabled -> showEnabled()
             is PlaylistCreateScreenState.Created -> showCreated(state.playlistName)
+            is PlaylistCreateScreenState.Updated -> showUpdated(state.playlistName)
             is PlaylistCreateScreenState.BackPressed -> showBackPressed(state.isPlaylistCreated)
         }
     }
@@ -148,6 +149,12 @@ class PlaylistCreateFragment: Fragment() {
 
     private fun showCreated(playlistName: String) {
         Toast.makeText(context, getString(R.string.playlist_create_success_toast, playlistName),
+            Toast.LENGTH_SHORT).show()
+        findNavController().navigateUp()
+    }
+
+    private fun showUpdated(playlistName: String) {
+        Toast.makeText(context, getString(R.string.playlist_update_success_toast, playlistName),
             Toast.LENGTH_SHORT).show()
         findNavController().navigateUp()
     }

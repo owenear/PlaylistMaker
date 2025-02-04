@@ -226,8 +226,8 @@ class PlaylistFragment: Fragment()  {
                 " · " + playlist.trackCount + " " +
                 resources.getQuantityString(R.plurals.track_plurals,
                     playlist.trackCount, playlist.trackCount)
-        if (playlistDescriptionTextView.text.isEmpty())
-            playlistDescriptionTextView.visibility = View.GONE
+        //if (playlistDescriptionTextView.text.isEmpty())
+        //playlistDescriptionTextView.visibility = View.GONE
     }
 
     private fun showContent(tracks: List<Track>) {
