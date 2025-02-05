@@ -11,7 +11,6 @@ import com.example.playlistmaker.data.playlists.dto.PlaylistTrackCrossRefEntity
 import com.example.playlistmaker.data.playlists.dto.PlaylistWithTracks
 import com.example.playlistmaker.data.playlists.dto.TrackEntity
 
-
 @Dao
 interface PlaylistDao {
 
@@ -32,18 +31,23 @@ interface PlaylistDao {
     @Query("SELECT * FROM playlists")
     suspend fun getPlaylistsWithTracks(): List<PlaylistWithTracks>
 
-    @Query("SELECT * FROM tracks t JOIN playlists_tracks pt ON t.trackId = pt.trackId " +
+    @Query("SELECT * FROM tracks t JOIN playlists_tracks pt ON t.itunesId = pt.itunesId " +
             "JOIN playlists p ON p.playlistId = pt.playlistId WHERE p.playlistId = :playlistId " +
             "ORDER BY t.trackId DESC")
     suspend fun getTracksInPlaylist(playlistId: Int): List<TrackEntity>
 
+    @Query("SELECT * FROM tracks t JOIN playlists_tracks pt ON t.itunesId = pt.itunesId " +
+            "JOIN playlists p ON p.playlistId = pt.playlistId WHERE p.playlistId = :playlistId " +
+            "and t.itunesId = :itunesId")
+    suspend fun getTrackInPlaylistById(playlistId: Int, itunesId: Int): TrackEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(trackEntity: TrackEntity)
 
-    @Delete
-    suspend fun deleteTrack(trackEntity: TrackEntity)
+    @Query("SELECT * FROM tracks WHERE itunesId = :itunesId")
+    suspend fun getTrackByID(itunesId: Int): TrackEntity?
 
-    @Query("DELETE FROM tracks where trackId not in (select trackId from playlists_tracks)")
+    @Query("DELETE FROM tracks where itunesId not in (select itunesId from playlists_tracks)")
     suspend fun deleteTracksNoPlaylist()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -57,15 +61,16 @@ interface PlaylistDao {
 
     @Transaction
     suspend fun addTrackToPlaylist(trackEntity: TrackEntity, playlistEntity: PlaylistEntity) {
-        insertTrack(trackEntity)
+        if (getTrackByID(trackEntity.itunesId) == null)
+            insertTrack(trackEntity)
         insertPlaylistTrack(PlaylistTrackCrossRefEntity(playlistEntity.playlistId!!,
-            trackEntity.trackId))
+            trackEntity.itunesId))
     }
 
     @Transaction
     suspend fun deleteTrackFromPlaylist(trackEntity: TrackEntity, playlistEntity: PlaylistEntity) {
         deletePlaylistTrack(PlaylistTrackCrossRefEntity(playlistEntity.playlistId!!,
-            trackEntity.trackId))
+            trackEntity.itunesId))
         deleteTracksNoPlaylist()
     }
 

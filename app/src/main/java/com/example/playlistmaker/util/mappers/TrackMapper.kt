@@ -41,7 +41,7 @@ class TrackMapper {
 
     fun map(favoriteEntity: FavoriteEntity): Track {
         return Track(
-            favoriteEntity.trackId,
+            favoriteEntity.itunesId,
             favoriteEntity.trackName,
             favoriteEntity.artistName,
             favoriteEntity.trackTime,
@@ -58,7 +58,7 @@ class TrackMapper {
 
     fun mapEntity(trackEntity: TrackEntity): Track {
         return Track(
-            trackEntity.trackId,
+            trackEntity.itunesId,
             trackEntity.trackName,
             trackEntity.artistName,
             trackEntity.trackTime,
@@ -75,6 +75,7 @@ class TrackMapper {
 
     fun mapEntity(track: Track): TrackEntity {
         return TrackEntity(
+            null,
             track.trackId,
             track.trackName,
             track.artistName,
