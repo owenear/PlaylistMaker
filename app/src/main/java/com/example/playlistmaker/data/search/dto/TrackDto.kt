@@ -20,8 +20,8 @@ data class TrackDto (
 	) {
 
 		fun getFormatTrackTime(format: String = "ss"): String {
-			return (trackTime/60000).toString() + ":" +
-					SimpleDateFormat(format,Locale.getDefault()).format(trackTime)
+			val minutes = if (trackTime/60000 < 10) "0${(trackTime/60000)}" else (trackTime/60000).toString()
+			return minutes + ":" + SimpleDateFormat(format,Locale.getDefault()).format(trackTime)
 		}
 
 		fun getYearRelease(): String {
