@@ -8,7 +8,7 @@ data class TrackDto (
 	val trackId: Int,
 	val trackName: String?,
 	val artistName: String?,
-	@SerializedName("trackTimeMillis") val trackTime: Int,
+	@SerializedName("trackTimeMillis") val trackTime: Long,
 	val artworkUrl100: String?,
 	val previewUrl: String?,
 	val collectionName: String?,
@@ -19,9 +19,9 @@ data class TrackDto (
 	val trackTimeFormat: String,
 	) {
 
-		fun getFormatTrackTime(format: String): String {
-			return SimpleDateFormat(format,
-				Locale.getDefault()).format(trackTime)
+		fun getFormatTrackTime(format: String = "ss"): String {
+			return (trackTime/60000).toString() + ":" +
+					SimpleDateFormat(format,Locale.getDefault()).format(trackTime)
 		}
 
 		fun getYearRelease(): String {

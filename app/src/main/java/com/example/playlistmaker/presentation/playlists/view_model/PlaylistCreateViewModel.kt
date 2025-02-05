@@ -23,19 +23,21 @@ class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor
 
     fun createPlaylist(playlistName: String,
                        playlistDescription: String?, playlistUri: String?) {
-        viewModelScope.launch {
-            playlistInteractor.createPlaylist(Playlist(playlist?.id, playlistName,
-                playlistDescription, playlistUri))
+            viewModelScope.launch {
+                playlistInteractor.createPlaylist(
+                    Playlist(
+                        playlist?.id, playlistName,
+                        playlistDescription, playlistUri
+                    )
+                )
+            if (playlist == null) renderState(PlaylistCreateScreenState.Created(playlistName))
+            else renderState(PlaylistCreateScreenState.Updated(playlistName))
         }
-        if (playlist == null)
-            renderState(PlaylistCreateScreenState.Created(playlistName))
-        else
-            renderState(PlaylistCreateScreenState.Updated(playlistName))
     }
 
     fun onBackPressed() {
         renderState(PlaylistCreateScreenState.BackPressed(
-            (stateLiveData.value is PlaylistCreateScreenState.Created)))
+            (stateMutableLiveData.value is PlaylistCreateScreenState.Created || playlist != null)))
     }
 
     fun processInput(playlistName: String) {

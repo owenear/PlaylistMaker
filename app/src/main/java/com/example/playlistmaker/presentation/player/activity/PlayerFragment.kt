@@ -21,6 +21,7 @@ import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
+import com.example.playlistmaker.presentation.playlists.activity.PlaylistCreateFragment
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -144,7 +145,8 @@ class PlayerFragment() : Fragment() {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlay.visibility = View.GONE
                         if (isNewPlaylistButtonClicked)
-                            findNavController().navigate(R.id.action_playerFragment_to_playlistCreateFragment)
+                            findNavController().navigate(R.id.action_playerFragment_to_playlistCreateFragment,
+                                PlaylistCreateFragment.createArgs(null))
                     }
                     else -> {
                         binding.overlay.visibility = View.VISIBLE

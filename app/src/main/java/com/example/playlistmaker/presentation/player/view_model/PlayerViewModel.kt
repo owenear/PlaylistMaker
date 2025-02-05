@@ -107,16 +107,6 @@ class PlayerViewModel(private val track: Track,
 
 	fun onPlaylistClicked(playlist: Playlist) {
 		viewModelScope.launch {
-			/*
-			playlistInteractor.getTracksInPlaylist(playlist).collect { tracks ->
-				if (track in tracks) {
-					renderState(PlayerScreenState.AddResult(true, playlist))
-				} else {
-					playlistInteractor.addTrackToPlaylist(track, playlist)
-					renderState(PlayerScreenState.AddResult(false, playlist))
-				}
-			}
-			*/
 			if (playlistInteractor.isTrackInPlaylist(playlist.id!!, track.trackId)) {
 				renderState(PlayerScreenState.AddResult(true, playlist))
 			} else {

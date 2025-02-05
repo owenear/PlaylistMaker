@@ -9,7 +9,7 @@ data class TrackEntity(
     val itunesId: Int,
     val trackName: String?,
     val artistName: String?,
-    val trackTime: Int,
+    val trackTime: Long,
     val trackTimeFormat: String,
     val artworkUrl100: String?,
     val previewUrl: String,

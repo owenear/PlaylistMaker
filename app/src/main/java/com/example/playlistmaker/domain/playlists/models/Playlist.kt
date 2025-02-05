@@ -8,6 +8,6 @@ data class Playlist(
     val description: String?,
     var coverUri: String?,
     var trackCount: Int = 0,
-    var duration: Int = 0,
+    var duration: Long = 0,
     var durationFormat: String = "0"
 ) : Serializable

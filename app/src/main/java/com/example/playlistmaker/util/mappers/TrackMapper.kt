@@ -12,7 +12,7 @@ class TrackMapper {
             trackDto.trackName,
             trackDto.artistName,
             trackDto.trackTime,
-            trackDto.getFormatTrackTime("mm:ss"),
+            trackDto.getFormatTrackTime(),
             trackDto.artworkUrl100,
             trackDto.previewUrl ?: "",
             trackDto.collectionName,

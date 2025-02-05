@@ -50,9 +50,9 @@
     <string name="playlist_dialog_ok">Завершить</string>
 
     <string name="track_delete_dialog_title">Удалить трек</string>
-    <string name="track_delete_dialog_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
-    <string name="track_delete_dialog_cancel">Отмена</string>
-    <string name="track_delete_dialog_ok">Удалить</string>
+    <string name="track_delete_dialog_message">Хотите удалить трек?</string>
+    <string name="track_delete_dialog_cancel">Нет</string>
+    <string name="track_delete_dialog_ok">Да</string>
 
     <string name="playlist_sharing_empty">В этом плейлисте нет списка треков, которым можно поделиться</string>
     <string name="playlist_sharing">Поделиться</string>

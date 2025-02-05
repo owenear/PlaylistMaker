@@ -95,8 +95,12 @@ class PlaylistCreateFragment: Fragment() {
         }
 
         binding.createPlaylistButton.setOnClickListener {
+            if (playlist?.name != binding.nameInputEditText.text.toString() ||
+                playlist?.description != binding.descriptionInputEditText.text.toString() ||
+                playlist?.coverUri != coverUri)
             playlistCreateViewModel.createPlaylist(binding.nameInputEditText.text.toString(),
                 binding.descriptionInputEditText.text.toString(), coverUri)
+            else playlistCreateViewModel.onBackPressed()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {

@@ -9,8 +9,6 @@ import com.example.playlistmaker.util.mappers.PlaylistMapper
 import com.example.playlistmaker.util.mappers.TrackMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
                              private val playlistMapper: PlaylistMapper,
@@ -33,7 +31,7 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
             playlistsWithTracks -> playlistMapper.map(playlistsWithTracks.playlist).apply {
                 trackCount = playlistsWithTracks.tracks.count()
                 duration = playlistsWithTracks.tracks.sumOf { it.trackTime }
-                durationFormat = SimpleDateFormat("m", Locale.getDefault()).format(duration)
+                durationFormat = (duration/60000).toString()
             }
         }
         emit(playlists)
@@ -44,7 +42,7 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
         emit(playlistMapper.map(playlistWithTracks.playlist).apply {
             trackCount = playlistWithTracks.tracks.count()
             duration = playlistWithTracks.tracks.sumOf { it.trackTime }
-            durationFormat = SimpleDateFormat("m", Locale.getDefault()).format(duration)
+            durationFormat = (duration/60000).toString()
         })
     }
 
