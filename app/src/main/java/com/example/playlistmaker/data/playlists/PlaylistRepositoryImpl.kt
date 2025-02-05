@@ -1,6 +1,5 @@
 package com.example.playlistmaker.data.playlists
 
-import android.util.Log
 import com.example.playlistmaker.data.AppDatabase
 import com.example.playlistmaker.data.FileStorage
 import com.example.playlistmaker.domain.playlists.api.PlaylistRepository
@@ -42,7 +41,6 @@ class PlaylistRepositoryImpl(private val appDatabase: AppDatabase,
 
     override fun getPlaylist(playlist: Playlist): Flow<Playlist> = flow {
         val playlistWithTracks = appDatabase.playlistDao().getPlaylistWithTracks(playlist.id!!)
-        Log.d("VM STATE", playlistWithTracks.toString())
         emit(playlistMapper.map(playlistWithTracks.playlist).apply {
             trackCount = playlistWithTracks.tracks.count()
             duration = playlistWithTracks.tracks.sumOf { it.trackTime }
