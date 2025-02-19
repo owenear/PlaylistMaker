@@ -20,7 +20,8 @@ class PlaylistFileStorage(private val context: Context) : FileStorage {
         if (!filePath.exists()){
             filePath.mkdirs()
         }
-        val file = File(filePath, "${playlist.playlistId}_${playlist.name}")
+        val file = File(filePath, "${playlist.playlistId}.jpg")
+        if (file.toUri() == playlist.coverUri.toUri()) return playlist.coverUri.toUri()
         val inputStream = context.contentResolver.openInputStream(playlist.coverUri.toUri())
         val outputStream = FileOutputStream(file)
         BitmapFactory

@@ -11,7 +11,8 @@ class TrackMapper {
             trackDto.trackId,
             trackDto.trackName,
             trackDto.artistName,
-            trackDto.getFormatTrackTime("mm:ss"),
+            trackDto.trackTime,
+            trackDto.getFormatTrackTime(),
             trackDto.artworkUrl100,
             trackDto.previewUrl ?: "",
             trackDto.collectionName,
@@ -27,6 +28,7 @@ class TrackMapper {
             track.trackId,
             track.trackName,
             track.artistName,
+            track.trackTime,
             track.trackTimeFormat,
             track.artworkUrl100,
             track.previewUrl,
@@ -39,9 +41,10 @@ class TrackMapper {
 
     fun map(favoriteEntity: FavoriteEntity): Track {
         return Track(
-            favoriteEntity.trackId,
+            favoriteEntity.itunesId,
             favoriteEntity.trackName,
             favoriteEntity.artistName,
+            favoriteEntity.trackTime,
             favoriteEntity.trackTimeFormat,
             favoriteEntity.artworkUrl100,
             favoriteEntity.previewUrl,
@@ -55,9 +58,10 @@ class TrackMapper {
 
     fun mapEntity(trackEntity: TrackEntity): Track {
         return Track(
-            trackEntity.trackId,
+            trackEntity.itunesId,
             trackEntity.trackName,
             trackEntity.artistName,
+            trackEntity.trackTime,
             trackEntity.trackTimeFormat,
             trackEntity.artworkUrl100,
             trackEntity.previewUrl,
@@ -71,9 +75,11 @@ class TrackMapper {
 
     fun mapEntity(track: Track): TrackEntity {
         return TrackEntity(
+            null,
             track.trackId,
             track.trackName,
             track.artistName,
+            track.trackTime,
             track.trackTimeFormat,
             track.artworkUrl100,
             track.previewUrl,

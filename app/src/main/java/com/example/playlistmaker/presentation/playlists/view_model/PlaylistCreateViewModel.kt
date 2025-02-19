@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.playlists.view_model
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,23 +9,35 @@ import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.presentation.playlists.models.PlaylistCreateScreenState
 import kotlinx.coroutines.launch
 
-class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
+class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor,
+    private val playlist: Playlist? = null) : ViewModel() {
 
     private val stateMutableLiveData = MutableLiveData<PlaylistCreateScreenState>(
         PlaylistCreateScreenState.Disabled)
     val stateLiveData : LiveData<PlaylistCreateScreenState> = stateMutableLiveData
 
-    fun createPlaylist(playlistName: String, playlistDescription: String?, playlistUri: Uri?) {
-        viewModelScope.launch {
-            playlistInteractor.createPlaylist(Playlist(null, playlistName,
-                playlistDescription, playlistUri))
+    init {
+        if (playlist == null) renderState(PlaylistCreateScreenState.Create)
+        else renderState(PlaylistCreateScreenState.Update(playlist))
+    }
+
+    fun createPlaylist(playlistName: String,
+                       playlistDescription: String?, playlistUri: String?) {
+            viewModelScope.launch {
+                playlistInteractor.createPlaylist(
+                    Playlist(
+                        playlist?.id, playlistName,
+                        playlistDescription, playlistUri
+                    )
+                )
+            if (playlist == null) renderState(PlaylistCreateScreenState.Created(playlistName))
+            else renderState(PlaylistCreateScreenState.Updated(playlistName))
         }
-        renderState(PlaylistCreateScreenState.Created(playlistName))
     }
 
     fun onBackPressed() {
         renderState(PlaylistCreateScreenState.BackPressed(
-            (stateLiveData.value is PlaylistCreateScreenState.Created)))
+            (stateMutableLiveData.value is PlaylistCreateScreenState.Created || playlist != null)))
     }
 
     fun processInput(playlistName: String) {

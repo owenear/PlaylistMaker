@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playlistCreateFragment, R.id.playerFragment -> {
+                R.id.playlistCreateFragment, R.id.playerFragment, R.id.playlistFragment -> {
                     ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                         val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                         v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

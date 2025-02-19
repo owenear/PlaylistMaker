@@ -1,6 +1,6 @@
 package com.example.playlistmaker.presentation.playlists.activity
 
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,27 +9,42 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistCreateBinding
+import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.playlists.models.PlaylistCreateScreenState
 import com.example.playlistmaker.presentation.playlists.view_model.PlaylistCreateViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PlaylistCreateFragment: Fragment() {
 
     private var _binding: FragmentPlaylistCreateBinding? = null
     private val binding get() = _binding!!
 
-    private val playlistCreateViewModel: PlaylistCreateViewModel by viewModel()
-    private var coverUri: Uri? = null
+    private var coverUri: String? = null
+
+    private val playlist by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getSerializable(ARGS_PLAYLIST, Playlist::class.java)
+        } else {
+            requireArguments().getSerializable(ARGS_PLAYLIST) as Playlist
+        }
+    }
+
+    private val playlistCreateViewModel: PlaylistCreateViewModel by viewModel {
+        parametersOf(playlist)
+    }
 
     private val createConfirmDialog by lazy {
         MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialogTheme)
@@ -55,10 +70,11 @@ class PlaylistCreateFragment: Fragment() {
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             uri -> if (uri != null) {
-                    coverUri = uri
+                    coverUri = uri.toString()
                     Glide.with(this)
                         .load(uri)
-                        .placeholder(R.drawable.baseline_gesture_24)
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy( DiskCacheStrategy.NONE )
                         .transform(CenterCrop(),RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
                         .into(binding.coverImageView)
                 }
@@ -79,10 +95,13 @@ class PlaylistCreateFragment: Fragment() {
         }
 
         binding.createPlaylistButton.setOnClickListener {
+            if (playlist?.name != binding.nameInputEditText.text.toString() ||
+                playlist?.description != binding.descriptionInputEditText.text.toString() ||
+                playlist?.coverUri != coverUri)
             playlistCreateViewModel.createPlaylist(binding.nameInputEditText.text.toString(),
                 binding.descriptionInputEditText.text.toString(), coverUri)
+            else playlistCreateViewModel.onBackPressed()
         }
-
 
         requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -94,11 +113,31 @@ class PlaylistCreateFragment: Fragment() {
 
     private fun render(state: PlaylistCreateScreenState) {
         when (state) {
+            is PlaylistCreateScreenState.Create -> showCreate()
+            is PlaylistCreateScreenState.Update -> showUpdate(state.playlist)
             is PlaylistCreateScreenState.Disabled -> showDisabled()
             is PlaylistCreateScreenState.Enabled -> showEnabled()
             is PlaylistCreateScreenState.Created -> showCreated(state.playlistName)
+            is PlaylistCreateScreenState.Updated -> showUpdated(state.playlistName)
             is PlaylistCreateScreenState.BackPressed -> showBackPressed(state.isPlaylistCreated)
         }
+    }
+
+    private fun showCreate() {
+        binding.createPlaylistButton.text = getString(R.string.playlist_create_button)
+    }
+
+    private fun showUpdate(playlist: Playlist) {
+        binding.createPlaylistButton.text = getString(R.string.playlist_update_button)
+        binding.nameInputEditText.setText(playlist.name)
+        binding.descriptionInputEditText.setText(playlist.description)
+        coverUri = playlist.coverUri
+        Glide.with(this)
+            .load(coverUri)
+            .skipMemoryCache(true)
+            .diskCacheStrategy( DiskCacheStrategy.NONE )
+            .transform(CenterCrop(),RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
+            .into(binding.coverImageView)
     }
 
     private fun showDisabled() = with(binding) {
@@ -111,6 +150,12 @@ class PlaylistCreateFragment: Fragment() {
 
     private fun showCreated(playlistName: String) {
         Toast.makeText(context, getString(R.string.playlist_create_success_toast, playlistName),
+            Toast.LENGTH_SHORT).show()
+        findNavController().navigateUp()
+    }
+
+    private fun showUpdated(playlistName: String) {
+        Toast.makeText(context, getString(R.string.playlist_update_success_toast, playlistName),
             Toast.LENGTH_SHORT).show()
         findNavController().navigateUp()
     }
@@ -130,7 +175,8 @@ class PlaylistCreateFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance() = PlaylistCreateFragment()
+        private const val ARGS_PLAYLIST = "playlist"
+        fun createArgs(playlist: Playlist? = null): Bundle = bundleOf(ARGS_PLAYLIST to playlist)
     }
 
 }

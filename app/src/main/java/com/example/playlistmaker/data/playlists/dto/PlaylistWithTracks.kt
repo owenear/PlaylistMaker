@@ -8,7 +8,7 @@ data class PlaylistWithTracks(
     @Embedded val playlist: PlaylistEntity,
     @Relation(
         parentColumn = "playlistId",
-        entityColumn = "trackId",
+        entityColumn = "itunesId",
         associateBy = Junction(PlaylistTrackCrossRefEntity::class)
     )
     val tracks: List<TrackEntity>

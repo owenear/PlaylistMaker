@@ -39,5 +39,4 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor):  V
         stateMutableLiveData.postValue(state)
     }
 
-
 }
