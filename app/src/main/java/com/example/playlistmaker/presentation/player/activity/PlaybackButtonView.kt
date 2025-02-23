@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
@@ -21,6 +22,11 @@ class PlaybackButtonView @JvmOverloads constructor(
     private val playImageBitmap: Bitmap?
     private val pauseImageBitmap: Bitmap?
     private var imageRect = RectF(0f, 0f, 0f, 0f)
+    private var buttonStatus = BUTTON_PLAY
+    set(newValue) {
+        field = newValue
+        invalidate()
+    }
 
     init {
         context.theme.obtainStyledAttributes(
@@ -30,8 +36,8 @@ class PlaybackButtonView @JvmOverloads constructor(
             defStyleRes
         ).apply {
             try {
-                playImageBitmap = getDrawable(R.styleable.PlaybackButtonView_playBackground)?.toBitmap()
-                pauseImageBitmap = getDrawable(R.styleable.PlaybackButtonView_pauseBackground)?.toBitmap()
+                playImageBitmap = getDrawable(R.styleable.PlaybackButtonView_playIcon)?.toBitmap()
+                pauseImageBitmap = getDrawable(R.styleable.PlaybackButtonView_pauseIcon)?.toBitmap()
             } finally {
                 recycle()
             }
@@ -39,14 +45,43 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
         imageRect = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
+        super.onSizeChanged(w, h, oldw, oldh)
     }
 
     override fun onDraw(canvas: Canvas) {
-        playImageBitmap?.let {
-            canvas.drawBitmap(playImageBitmap, null, imageRect, null)
+        when (buttonStatus) {
+            BUTTON_PLAY -> playImageBitmap?.let { canvas.drawBitmap(it, null, imageRect, null) }
+            BUTTON_PAUSE -> pauseImageBitmap?.let { canvas.drawBitmap(it, null, imageRect, null) }
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                return true
+            }
+            MotionEvent.ACTION_UP -> {
+                if (isEnabled) {
+                    buttonStatus = if (buttonStatus == BUTTON_PLAY) BUTTON_PAUSE else BUTTON_PLAY
+                    performClick()
+                    return true
+                }
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+
+    fun setButtonImage(buttonStatus: Int) {
+        when (buttonStatus) {
+            BUTTON_PLAY -> this.buttonStatus = BUTTON_PLAY
+            BUTTON_PAUSE -> this.buttonStatus = BUTTON_PAUSE
+        }
+    }
+
+    companion object {
+        const val BUTTON_PLAY = 0
+        const val BUTTON_PAUSE = 1
     }
 
 }

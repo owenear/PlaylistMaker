@@ -90,7 +90,7 @@
             android:textFontWeight="400"
             app:layout_constraintStart_toStartOf="@id/leftBorder"
             app:layout_constraintEnd_toEndOf="@id/rightBorder"
-            app:layout_constraintBottom_toTopOf="@id/playerPlayButton" />
+            app:layout_constraintBottom_toTopOf="@id/playerPlaybackButton" />
 
         <ImageButton
             android:id="@+id/playerAddButton"
@@ -101,23 +101,10 @@
             android:src="@drawable/baseline_add_to_24"
             android:background="@drawable/round_button"
             android:backgroundTint="?attr/colorSecondary"
-            app:layout_constraintTop_toTopOf="@id/playerPlayButton"
+            app:layout_constraintTop_toTopOf="@id/playerPlaybackButton"
             app:layout_constraintStart_toStartOf="@id/leftBorder"
-            app:layout_constraintEnd_toStartOf="@id/playerPlayButton"
+            app:layout_constraintEnd_toStartOf="@id/playerPlaybackButton"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            />
-
-        <ImageButton
-            android:id="@+id/playerPlayButton"
-            android:layout_width="84dp"
-            android:layout_height="84dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/ic_play_button"
-            app:layout_constraintBottom_toTopOf="@id/timeTextView"
-            app:layout_constraintStart_toEndOf="@id/playerAddButton"
-            app:layout_constraintEnd_toStartOf="@id/playerFavoriteButton"
-            android:backgroundTint="?attr/colorOnPrimary"
-            android:visibility="invisible"
             />
 
         <com.example.playlistmaker.presentation.player.activity.PlaybackButtonView
@@ -125,12 +112,12 @@
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:layout_margin="16dp"
-            app:playBackground="@drawable/ic_play_button"
-            app:pauseBackground="@drawable/ic_pause_button"
+            app:playIcon="@drawable/ic_play_button"
+            app:pauseIcon="@drawable/ic_pause_button"
             app:layout_constraintBottom_toTopOf="@id/timeTextView"
             app:layout_constraintStart_toEndOf="@id/playerAddButton"
             app:layout_constraintEnd_toStartOf="@id/playerFavoriteButton"
-            android:backgroundTint="?attr/colorOnPrimary"
+            android:clickable="true"
             />
 
         <ImageButton
@@ -142,9 +129,9 @@
             android:src="@drawable/ic_favorite_button_false"
             android:background="@drawable/round_button"
             android:backgroundTint="?attr/colorSecondary"
-            app:layout_constraintTop_toTopOf="@id/playerPlayButton"
+            app:layout_constraintTop_toTopOf="@id/playerPlaybackButton"
             app:layout_constraintEnd_toEndOf="@id/rightBorder"
-            app:layout_constraintStart_toEndOf="@id/playerPlayButton"
+            app:layout_constraintStart_toEndOf="@id/playerPlaybackButton"
             />
 
         <TextView
@@ -309,7 +296,6 @@ albumTextView, yearTextView, genreTextView, countryTextView"
         android:background="@drawable/bottom_sheet"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:visibility="invisible"
         app:behavior_hideable="true"
         app:behavior_peekHeight="auto"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
