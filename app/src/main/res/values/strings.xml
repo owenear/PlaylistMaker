@@ -77,4 +77,6 @@
         <item quantity="other">минут</item>
     </plurals>
 
+    <string name="no_network_toast">Отсутствует подключение к интернету</string>
+
 </resources>

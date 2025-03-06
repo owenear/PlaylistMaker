@@ -1,12 +1,14 @@
 package com.example.playlistmaker.presentation.search.activity
 
 import android.content.Context
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -17,10 +19,13 @@ import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.activity.PlayerFragment
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
+import com.example.playlistmaker.util.NetworkBroadcastReceiver
 import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment()  {
+
+    private val networkBroadcastReceiver = NetworkBroadcastReceiver()
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -52,6 +57,18 @@ class SearchFragment : Fragment()  {
             binding.searchInputEditText.text != null &&
             binding.searchInputEditText.text!!.isNotEmpty() )
             binding.searchInputEditText.requestFocus()
+
+        ContextCompat.registerReceiver(
+            requireContext(),
+            networkBroadcastReceiver,
+            IntentFilter(NetworkBroadcastReceiver.ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(networkBroadcastReceiver)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
