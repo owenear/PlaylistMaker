@@ -118,7 +118,7 @@ class PlayerFragment() : Fragment() {
             .transform(RoundedCorners((8 * App.DISPLAY_DENSITY).toInt()))
             .into(binding.coverImageView)
 
-        binding.playerPlayButton.setOnClickListener {
+        binding.playerPlaybackButton.setOnClickListener{
             playerViewModel.playbackControl()
         }
 
@@ -204,23 +204,20 @@ class PlayerFragment() : Fragment() {
     }
 
     private fun showDefault() = with(binding) {
-        playerPlayButton.isEnabled = false
-        playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
+        playerPlaybackButton.isEnabled = false
     }
 
     private fun showPrepared() = with(binding) {
-        playerPlayButton.isEnabled = true
-        playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
+        playerPlaybackButton.isEnabled = true
+        playerPlaybackButton.setButtonImage(PlaybackButtonView.BUTTON_PLAY)
         timeTextView.text = getString(R.string.player_time_default)
     }
 
     private fun showPlaying(playTime: Int) = with(binding) {
-        playerPlayButton.setBackgroundResource(R.drawable.ic_pause_button)
         timeTextView.text = dateFormat.format(playTime)
     }
 
     private fun showPaused(pauseTime: Int) = with(binding) {
-        playerPlayButton.setBackgroundResource(R.drawable.ic_play_button)
         timeTextView.text = dateFormat.format(pauseTime)
     }
 
