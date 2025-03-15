@@ -1,19 +1,18 @@
 package com.example.playlistmaker.data.search.network
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.search.dto.Response
 import com.example.playlistmaker.data.search.dto.SearchRequest
+import com.example.playlistmaker.data.NetworkConnector
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RetrofitNetworkClient(private val context: Context,
-							private val itunesApiService: ItunesApi) : NetworkClient {
+class RetrofitNetworkClient(private val itunesApiService: ItunesApi,
+							private val networkConnector: NetworkConnector
+) : NetworkClient {
 
 	override suspend fun doRequest(dto: Any): Response {
-		if (!isConnected()) return Response().apply { resultCode = -1 }
+		if (!networkConnector.isConnected()) return Response().apply { resultCode = -1 }
 		if (dto !is SearchRequest) return Response().apply { resultCode = 400 }
 		return withContext(Dispatchers.IO) {
 			try {
@@ -25,6 +24,7 @@ class RetrofitNetworkClient(private val context: Context,
 		}
 	}
 
+/*
 	private fun isConnected(): Boolean {
 		val connectivityManager = context.getSystemService(
 			Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -38,5 +38,5 @@ class RetrofitNetworkClient(private val context: Context,
 		}
 		return false
 	}
-
+*/
 }

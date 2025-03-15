@@ -7,10 +7,12 @@ import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.SharedStorage
 import com.example.playlistmaker.data.AppDatabase
 import com.example.playlistmaker.data.FileStorage
+import com.example.playlistmaker.data.NetworkConnector
 import com.example.playlistmaker.data.playlists.storage.PlaylistFileStorage
 import com.example.playlistmaker.util.mappers.TrackHistoryMapper
 import com.example.playlistmaker.util.mappers.TrackMapper
 import com.example.playlistmaker.data.search.network.ItunesApi
+import com.example.playlistmaker.data.search.network.NetworkConnectorImpl
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.search.storage.TrackHistorySharedStorage
 import com.example.playlistmaker.data.settings.storage.ThemeSharedStorage
@@ -40,8 +42,12 @@ val dataModule = module {
             .build()
     }
 
+    single<NetworkConnector> {
+        NetworkConnectorImpl(androidContext())
+    }
+
     single<NetworkClient> {
-        RetrofitNetworkClient(androidContext(), get())
+        RetrofitNetworkClient(get(), get())
     }
 
     single<SharedPreferences> {

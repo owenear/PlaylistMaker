@@ -1,5 +1,6 @@
 package com.example.playlistmaker.presentation.search.activity
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Bundle
@@ -21,11 +22,12 @@ import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.util.NetworkBroadcastReceiver
 import com.example.playlistmaker.util.debounce
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment()  {
 
-    private val networkBroadcastReceiver = NetworkBroadcastReceiver()
+    private val networkBroadcastReceiver: BroadcastReceiver by inject()
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!

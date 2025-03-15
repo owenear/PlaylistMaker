@@ -1,5 +1,7 @@
 package com.example.playlistmaker.presentation.player.activity
 
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,14 +25,18 @@ import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.example.playlistmaker.presentation.playlists.activity.PlaylistCreateFragment
+import com.example.playlistmaker.util.NetworkBroadcastReceiver
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerFragment() : Fragment() {
+
+    private val networkBroadcastReceiver: BroadcastReceiver by inject()
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
@@ -64,11 +71,19 @@ class PlayerFragment() : Fragment() {
     override fun onPause() {
         super.onPause()
         playerViewModel.playbackControl(true)
+        requireContext().unregisterReceiver(networkBroadcastReceiver)
     }
 
     override fun onResume() {
         super.onResume()
         playerViewModel.updateData()
+
+        ContextCompat.registerReceiver(
+            requireContext(),
+            networkBroadcastReceiver,
+            IntentFilter(NetworkBroadcastReceiver.ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
