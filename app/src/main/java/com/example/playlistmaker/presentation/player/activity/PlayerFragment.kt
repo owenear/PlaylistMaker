@@ -1,15 +1,22 @@
 package com.example.playlistmaker.presentation.player.activity
 
+import android.Manifest
 import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -25,7 +32,8 @@ import com.example.playlistmaker.presentation.App
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.example.playlistmaker.presentation.playlists.activity.PlaylistCreateFragment
-import com.example.playlistmaker.util.NetworkBroadcastReceiver
+import com.example.playlistmaker.services.MusicService
+import com.example.playlistmaker.services.NetworkBroadcastReceiver
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.android.ext.android.inject
@@ -37,6 +45,28 @@ import java.util.Locale
 class PlayerFragment() : Fragment() {
 
     private val networkBroadcastReceiver: BroadcastReceiver by inject()
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            playerViewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            playerViewModel.removeAudioPlayerControl()
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindMusicService()
+        } else {
+            Toast.makeText(requireContext(), "Can't start foreground service!",
+                Toast.LENGTH_LONG).show()
+        }
+    }
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
@@ -62,6 +92,18 @@ class PlayerFragment() : Fragment() {
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
+
+    private fun bindMusicService() {
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra("track_url", trackItem?.previewUrl)
+        }
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireContext().unbindService(serviceConnection)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
@@ -70,7 +112,7 @@ class PlayerFragment() : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        playerViewModel.playbackControl(true)
+        //playerViewModel.playbackControl(true)
         requireContext().unregisterReceiver(networkBroadcastReceiver)
     }
 
@@ -88,6 +130,12 @@ class PlayerFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService()
+        }
 
         binding.playerToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
@@ -245,6 +293,7 @@ class PlayerFragment() : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        unbindMusicService()
         _binding = null
     }
 
