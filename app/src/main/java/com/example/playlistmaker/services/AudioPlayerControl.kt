@@ -7,4 +7,6 @@ interface AudioPlayerControl {
     fun getPlayerState(): StateFlow<PlayerScreenState>
     fun startPlayer()
     fun pausePlayer()
+    fun startNotification()
+    fun stopNotification()
 }

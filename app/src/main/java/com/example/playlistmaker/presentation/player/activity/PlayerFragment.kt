@@ -63,7 +63,7 @@ class PlayerFragment() : Fragment() {
         if (isGranted) {
             bindMusicService()
         } else {
-            Toast.makeText(requireContext(), "Can't start foreground service!",
+            Toast.makeText(requireContext(), getString(R.string.player_service_cant_start),
                 Toast.LENGTH_LONG).show()
         }
     }
@@ -95,7 +95,7 @@ class PlayerFragment() : Fragment() {
 
     private fun bindMusicService() {
         val intent = Intent(requireContext(), MusicService::class.java).apply {
-            putExtra("track_url", trackItem?.previewUrl)
+            putExtra(ARGS_TRACK, trackItem)
         }
         requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
@@ -112,14 +112,14 @@ class PlayerFragment() : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        //playerViewModel.playbackControl(true)
+        playerViewModel.startNotification()
         requireContext().unregisterReceiver(networkBroadcastReceiver)
     }
 
     override fun onResume() {
         super.onResume()
+        playerViewModel.stopNotification()
         playerViewModel.updateData()
-
         ContextCompat.registerReceiver(
             requireContext(),
             networkBroadcastReceiver,
@@ -292,14 +292,14 @@ class PlayerFragment() : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         unbindMusicService()
+        super.onDestroyView()
         _binding = null
     }
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 500L
-        private const val ARGS_TRACK = "trackItem"
+        const val ARGS_TRACK = "trackItem"
         fun createArgs(trackItem: Track): Bundle = bundleOf(ARGS_TRACK to trackItem)
     }
 

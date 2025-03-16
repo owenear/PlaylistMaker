@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.player.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +24,6 @@ class PlayerViewModel(private val track: Track,
 
 	init {
 		updateData()
-
 	}
 
 	fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
@@ -58,18 +56,18 @@ class PlayerViewModel(private val track: Track,
 		}
 	}
 
-	private fun renderState(state: PlayerScreenState) {
-		Log.d("VM STATE", state.toString())
-		stateMutableLiveData.postValue(state)
-	}
-
 	fun removeAudioPlayerControl() {
 		audioPlayerControl = null
 	}
 
-	override fun onCleared() {
-		removeAudioPlayerControl()
-		super.onCleared()
+	fun startNotification(){
+		if (stateMutableLiveData.value is PlayerScreenState.Playing)
+			audioPlayerControl?.startNotification()
+	}
+
+	fun stopNotification(){
+		if (stateMutableLiveData.value is PlayerScreenState.Playing)
+			audioPlayerControl?.stopNotification()
 	}
 
 	fun onFavoriteClicked() {
@@ -97,6 +95,15 @@ class PlayerViewModel(private val track: Track,
 				renderState(PlayerScreenState.AddResult(false, playlist))
 			}
 		}
+	}
+
+	private fun renderState(state: PlayerScreenState) {
+		stateMutableLiveData.postValue(state)
+	}
+
+	override fun onCleared() {
+		removeAudioPlayerControl()
+		super.onCleared()
 	}
 
 }
