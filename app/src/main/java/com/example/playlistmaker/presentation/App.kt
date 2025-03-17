@@ -6,6 +6,7 @@ import android.content.res.Resources.getSystem
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
 import com.example.playlistmaker.di.repositoryModule
+import com.example.playlistmaker.di.serviceModule
 import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.settings.api.ThemeInteractor
 import org.koin.android.ext.android.inject
@@ -20,7 +21,7 @@ class App: Application() {
 		super.onCreate()
 		startKoin {
 			androidContext(this@App)
-			modules(dataModule, repositoryModule, interactorModule, viewModelModule)
+			modules(dataModule, repositoryModule, interactorModule, viewModelModule, serviceModule)
 		}
 		val systemTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 		themeInteractor.setTheme(themeInteractor.getTheme(systemTheme == Configuration.UI_MODE_NIGHT_YES))

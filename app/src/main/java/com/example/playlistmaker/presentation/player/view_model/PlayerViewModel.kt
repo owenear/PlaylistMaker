@@ -5,29 +5,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.favorites.api.FavoriteInteractor
-import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.playlists.api.PlaylistInteractor
 import com.example.playlistmaker.domain.playlists.models.Playlist
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.player.models.PlayerScreenState
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import com.example.playlistmaker.services.AudioPlayerControl
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(private val track: Track,
-	private val mediaPlayerInteractor: MediaPlayerInteractor,
 	private val favoriteInteractor: FavoriteInteractor,
 	private val playlistInteractor: PlaylistInteractor
 	): ViewModel() {
 
 	private val stateMutableLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Default)
 	val stateLiveData : LiveData<PlayerScreenState> = stateMutableLiveData
-	private var playTimeJob: Job? = null
+
+	private var audioPlayerControl: AudioPlayerControl? = null
 
 	init {
 		updateData()
-		mediaPlayerInteractor.preparePlayer(track.previewUrl,
-			{ onPreparedListener() }, { onCompletionListener() })
+	}
+
+	fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+		this.audioPlayerControl = audioPlayerControl
+		viewModelScope.launch {
+			audioPlayerControl.getPlayerState().collect {
+				renderState(it)
+			}
+		}
 	}
 
 	fun updateData() {
@@ -44,49 +49,25 @@ class PlayerViewModel(private val track: Track,
 		}
 	}
 
-	private fun onPreparedListener(){
-		renderState(PlayerScreenState.Prepared)
-	}
-
-	private fun onCompletionListener(){
-		playTimeJob?.cancel()
-		renderState(PlayerScreenState.Prepared)
-	}
-
-	private fun startPlayer() {
-		mediaPlayerInteractor.startPlayer()
-		updatePlayTime()
-	}
-
-	private fun pausePlayer() {
-		playTimeJob?.cancel()
-		mediaPlayerInteractor.pausePlayer()
-		renderState(PlayerScreenState.Paused(mediaPlayerInteractor.getPlayTime()))
-	}
-
 	fun playbackControl(onActivityPause: Boolean = false) {
 		when(stateMutableLiveData.value) {
-			is PlayerScreenState.Playing -> pausePlayer()
-			else -> if (!onActivityPause) startPlayer()
+			is PlayerScreenState.Playing -> audioPlayerControl?.pausePlayer()
+			else -> if (!onActivityPause) audioPlayerControl?.startPlayer()
 		}
 	}
 
-	private fun renderState(state: PlayerScreenState) {
-		stateMutableLiveData.postValue(state)
+	fun removeAudioPlayerControl() {
+		audioPlayerControl = null
 	}
 
-	override fun onCleared() {
-		mediaPlayerInteractor.releasePlayer()
-		super.onCleared()
+	fun startNotification(){
+		if (stateMutableLiveData.value is PlayerScreenState.Playing)
+			audioPlayerControl?.startNotification()
 	}
 
-	private fun updatePlayTime() {
-		playTimeJob = viewModelScope.launch {
-			while (true) {
-				renderState(PlayerScreenState.Playing(mediaPlayerInteractor.getPlayTime()))
-				delay(PLAY_TIME_DELAY)
-			}
-		}
+	fun stopNotification(){
+		if (stateMutableLiveData.value is PlayerScreenState.Playing)
+			audioPlayerControl?.stopNotification()
 	}
 
 	fun onFavoriteClicked() {
@@ -116,8 +97,13 @@ class PlayerViewModel(private val track: Track,
 		}
 	}
 
-	companion object {
-		private const val PLAY_TIME_DELAY = 500L
+	private fun renderState(state: PlayerScreenState) {
+		stateMutableLiveData.postValue(state)
+	}
+
+	override fun onCleared() {
+		removeAudioPlayerControl()
+		super.onCleared()
 	}
 
 }
