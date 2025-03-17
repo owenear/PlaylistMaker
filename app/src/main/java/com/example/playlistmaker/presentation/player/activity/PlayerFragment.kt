@@ -94,14 +94,18 @@ class PlayerFragment() : Fragment() {
 
 
     private fun bindMusicService() {
-        val intent = Intent(requireContext(), MusicService::class.java).apply {
-            putExtra(ARGS_TRACK, trackItem)
+        if (trackItem != null) {
+            val intent = Intent(requireContext(), MusicService::class.java).apply {
+                putExtra(ARGS_TRACK, trackItem)
+            }
+            requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         }
-        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     private fun unbindMusicService() {
-        requireContext().unbindService(serviceConnection)
+        if (trackItem != null) {
+            requireContext().unbindService(serviceConnection)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
