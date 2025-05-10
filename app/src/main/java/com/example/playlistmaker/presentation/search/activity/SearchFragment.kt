@@ -9,6 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -21,6 +26,9 @@ import com.example.playlistmaker.presentation.player.activity.PlayerFragment
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.services.NetworkBroadcastReceiver
+import com.example.playlistmaker.ui.search.Search
+import com.example.playlistmaker.ui.settings.Settings
+import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
 import com.example.playlistmaker.util.debounce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,8 +37,8 @@ class SearchFragment : Fragment()  {
 
     private val networkBroadcastReceiver: BroadcastReceiver by inject()
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    //private var _binding: FragmentSearchBinding? = null
+    //private val binding get() = _binding!!
 
     private val searchViewModel by viewModel<SearchViewModel>()
 
@@ -47,19 +55,29 @@ class SearchFragment : Fragment()  {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+        //_binding = FragmentSearchBinding.inflate(inflater, container, false)
+        //return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                PlaylistMakerTheme {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        Search(modifier = Modifier.padding(innerPadding), searchViewModel)
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        /*
         if (binding.searchInputEditText.hasFocus() && binding.searchInputEditText.text.isNullOrEmpty())
             searchViewModel.processQuery(SEARCH_STRING_DEF)
         if (!binding.searchInputEditText.hasFocus() &&
             binding.searchInputEditText.text != null &&
             binding.searchInputEditText.text!!.isNotEmpty() )
             binding.searchInputEditText.requestFocus()
-
+        */
         ContextCompat.registerReceiver(
             requireContext(),
             networkBroadcastReceiver,
@@ -75,6 +93,8 @@ class SearchFragment : Fragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /*
         binding.searchRecyclerView.adapter = searchAdapter
         binding.searchHistoryRecyclerView.adapter = historyAdapter
 
@@ -122,6 +142,8 @@ class SearchFragment : Fragment()  {
             render(state)
         }
 
+         */
+
     }
 
     private fun trackListClickListener(trackItem: Track) {
@@ -130,6 +152,8 @@ class SearchFragment : Fragment()  {
         findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
             PlayerFragment.createArgs(trackItem))
     }
+
+    /*
 
     private fun render(state: SearchScreenState) {
         when (state) {
@@ -207,11 +231,12 @@ class SearchFragment : Fragment()  {
         }
     }
 
+     */
     override fun onDestroyView() {
         super.onDestroyView()
-        if (binding.searchInputEditText.text.isNullOrEmpty())
-            searchViewModel.processInitial()
-        _binding = null
+//        if (binding.searchInputEditText.text.isNullOrEmpty())
+  //          searchViewModel.processInitial()
+    //    _binding = null
     }
 
     companion object {
