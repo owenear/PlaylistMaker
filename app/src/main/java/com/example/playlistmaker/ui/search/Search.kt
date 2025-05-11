@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.search
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import coil3.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.models.Track
@@ -64,7 +63,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
     Box(modifier = Modifier.fillMaxSize(1f)) {
 
         Column(modifier = Modifier
-            .fillMaxWidth(1f)
+            .fillMaxSize(1f)
             .padding(16.dp, 0.dp)) {
 
             Box(modifier = Modifier.height(56.dp)) {
@@ -78,7 +77,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
             BasicTextField(
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(0.dp, 24.dp)
+                    .padding(0.dp, 16.dp)
                     .onFocusChanged {
                         if (it.isFocused)
                             searchViewModel.processQuery(searchQuery)
@@ -148,7 +147,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
             when (searchState) {
                 is SearchScreenState.Loading -> Loading()
                 is SearchScreenState.SearchContent -> {
-                    SearchContent((searchState as SearchScreenState.SearchContent).trackList) {
+                    SearchContent(Modifier, (searchState as SearchScreenState.SearchContent).trackList) {
                         track -> clickListener(track) }
                     keyboardController?.hide()
                 }
@@ -230,16 +229,20 @@ fun HistoryContent(trackList: List<Track>,
                    trackClickListener: (Track) -> Unit) {
     Column(modifier = Modifier
         .fillMaxWidth(1f)
-        .padding(0.dp, 0.dp),
+        .padding(0.dp, 24.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(modifier = Modifier.padding(0.dp, 16.dp),
-            text = stringResource(R.string.search_history),
-            style = MaterialTheme.typography.titleLarge)
-        SearchContent(trackList) { track -> trackClickListener(track) }
+        Row(modifier = Modifier.height(52.dp)) {
+            Text(modifier = Modifier.align(Alignment.CenterVertically),
+                text = stringResource(R.string.search_history),
+                style = MaterialTheme.typography.titleLarge,)
+        }
+        SearchContent(Modifier
+            .height(min((trackList.count()*62).dp, 310.dp)), trackList) {
+            track -> trackClickListener(track) }
         Button(
-            modifier = Modifier.padding(0.dp, 16.dp),
+            modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp),
             shape = RoundedCornerShape(54.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -259,14 +262,15 @@ fun HistoryContent(trackList: List<Track>,
 
 
 @Composable
-fun SearchContent(trackList: List<Track>, clickListener: (Track) -> Unit) {
-    LazyColumn (Modifier.fillMaxWidth(1f)) {
+fun SearchContent(modifier: Modifier, trackList: List<Track>, clickListener: (Track) -> Unit) {
+    LazyColumn (modifier.fillMaxWidth(1f)) {
         for (track in trackList) {
             item {
                 Row(
                     Modifier
                         .fillMaxWidth(1f)
-                        .padding(0.dp, 4.dp)
+                        .height(62.dp)
+                        .padding(0.dp, 0.dp)
                         .clickable {
                             clickListener(track)
                         },
@@ -348,7 +352,7 @@ fun SearchPreview(){
                 BasicTextField(
                     modifier = Modifier
                         .fillMaxWidth(1f)
-                        .padding(0.dp, 24.dp),
+                        .padding(0.dp, 16.dp),
                     value = searchQuery,
                     onValueChange = { newQuery ->
                         searchQuery = newQuery
