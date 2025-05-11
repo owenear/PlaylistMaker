@@ -61,7 +61,9 @@ class SearchFragment : Fragment()  {
             setContent {
                 PlaylistMakerTheme {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        Search(modifier = Modifier.padding(innerPadding), searchViewModel)
+                        Search(modifier = Modifier.padding(innerPadding), searchViewModel) {
+                            trackItem -> clickListenerDebounce(trackItem)
+                        }
                     }
                 }
             }
@@ -93,6 +95,11 @@ class SearchFragment : Fragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        clickListenerDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope, false) {
+                trackItem -> trackListClickListener(trackItem)
+        }
 
         /*
         binding.searchRecyclerView.adapter = searchAdapter

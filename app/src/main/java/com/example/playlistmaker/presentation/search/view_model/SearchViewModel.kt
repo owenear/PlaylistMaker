@@ -20,7 +20,7 @@ class SearchViewModel(
 	private val stateMutableLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.Initial)
 	val stateLiveData : LiveData<SearchScreenState> = stateMutableLiveData
 
-	private lateinit var query: String
+	private var query: String = ""
 	private val trackHistory = trackHistoryInteractor.getHistory()
 
 	private var searchJob: Job? = null
@@ -30,7 +30,8 @@ class SearchViewModel(
 			query.isEmpty() -> {
 				searchJob?.cancel()
 				this.query = query
-				renderState(SearchScreenState.HistoryContent(trackHistory.trackList))
+				if (trackHistory.trackList.isNotEmpty())
+					renderState(SearchScreenState.HistoryContent(trackHistory.trackList))
 			}
 			query != this.query  -> {
 				renderState(SearchScreenState.Initial)
@@ -51,7 +52,7 @@ class SearchViewModel(
 	fun clearHistory(){
 		trackHistory.clear()
 		trackHistoryInteractor.saveHistory(trackHistory)
-		renderState(SearchScreenState.HistoryContent(trackHistory.trackList))
+		renderState(SearchScreenState.Initial)
 	}
 
 	private fun searchDebounce(query: String) {

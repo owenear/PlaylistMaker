@@ -1,12 +1,15 @@
 package com.example.playlistmaker.ui.search
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +20,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,11 +34,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -44,14 +54,14 @@ import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
 
 
 @Composable
-fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel)  {
+fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
+           clickListener: (Track) -> Unit)  {
 
     val searchState by searchViewModel.stateLiveData.observeAsState()
     var searchQuery: String by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
-
-        if (searchState is SearchScreenState.Loading) ProgressBar()
 
         Column(modifier = Modifier
             .fillMaxWidth(1f)
@@ -68,17 +78,21 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel)  {
             BasicTextField(
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(0.dp, 24.dp),
+                    .padding(0.dp, 24.dp)
+                    .onFocusChanged {
+                        if (it.isFocused)
+                            searchViewModel.processQuery(searchQuery)
+                    },
                 value = searchQuery,
                 onValueChange = { newQuery ->
                     searchQuery = newQuery
+                    searchViewModel.processQuery(searchQuery)
                 },
                 cursorBrush = SolidColor(colorResource(R.color.blue)),
                 singleLine = true,
                 textStyle = MaterialTheme.typography.bodyLarge,
-                keyboardActions = KeyboardActions(onDone = {
-                    searchViewModel.search(searchQuery)
-                }),
+                keyboardActions = KeyboardActions(onDone = { searchViewModel.search(searchQuery)
+                                    keyboardController?.hide() }),
                 decorationBox = { innerTextField ->
                     Row(
                         modifier = Modifier
@@ -117,7 +131,10 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel)  {
                             .width(24.dp)) {
                             if (searchQuery.isNotBlank()) {
                                 Image(
-                                    modifier = Modifier.clickable(onClick = { searchQuery = "" }),
+                                    modifier = Modifier.clickable(onClick = {
+                                        searchQuery = ""
+                                        searchViewModel.processQuery(searchQuery)
+                                    }),
                                     painter = painterResource(id = R.drawable.baseline_close_24),
                                     contentDescription = null,
                                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onTertiary)
@@ -125,54 +142,157 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel)  {
                             }
                         }
                     }
-
                 }
             )
 
-            if (searchState is SearchScreenState.SearchContent)
-                SearchResult((searchState as SearchScreenState.SearchContent).trackList)
-
-
+            when (searchState) {
+                is SearchScreenState.Loading -> Loading()
+                is SearchScreenState.SearchContent -> {
+                    SearchContent((searchState as SearchScreenState.SearchContent).trackList) {
+                        track -> clickListener(track) }
+                    keyboardController?.hide()
+                }
+                is SearchScreenState.HistoryContent -> {
+                    HistoryContent((searchState as SearchScreenState.HistoryContent).trackList, {
+                        searchViewModel.clearHistory() }) { track -> clickListener(track) }
+                }
+                is SearchScreenState.Error -> {
+                    Error(painterResource(id = R.drawable.ic_net_error),
+                        stringResource(id = R.string.search_net_error))
+                    { searchViewModel.search(searchQuery) }
+                }
+                is SearchScreenState.Empty -> {
+                    Error(painterResource(id = R.drawable.ic_nothing_found),
+                        stringResource(id = R.string.search_nothing_found))
+                }
+                else -> return
+            }
         }
     }
 }
 
 @Composable
-fun ProgressBar(){
-    Box(Modifier.fillMaxSize(1f)) {
+fun Error(image: Painter, text: String, updateClickListener: (() -> Unit)? = null) {
+    Column(modifier = Modifier
+        .fillMaxWidth(1f)
+        .padding(0.dp, 98.dp, 0.dp, 0.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier.size(120.dp),
+            painter = image,
+            contentDescription = null,
+        )
+        Text(
+            modifier = Modifier.padding(0.dp, 16.dp),
+            text = text,
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center
+        )
+        if (updateClickListener != null)
+            Button(
+                shape = RoundedCornerShape(54.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ) ,
+                contentPadding = PaddingValues(8.dp, 0.dp),
+                onClick = { updateClickListener.invoke() },
+                content = {
+                    Text(modifier = Modifier.padding(0.dp, 0.dp),
+                        text = stringResource(R.string.search_update_button),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary)
+                },
+            )
+    }
+}
+
+@Composable
+fun Loading(){
+    Box(Modifier
+        .fillMaxHeight(0.3f)
+        .fillMaxWidth(1f)) {
         CircularProgressIndicator(
             modifier = Modifier
                 .width(44.dp)
-                .align(Alignment.Center),
+                .align(Alignment.BottomCenter),
             color = MaterialTheme.colorScheme.secondary,
             trackColor = colorResource(R.color.blue),
         )
     }
 }
 
+@Composable
+fun HistoryContent(trackList: List<Track>,
+                   clearHistoryClickListener: () -> Unit,
+                   trackClickListener: (Track) -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxWidth(1f)
+        .padding(0.dp, 0.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(modifier = Modifier.padding(0.dp, 16.dp),
+            text = stringResource(R.string.search_history),
+            style = MaterialTheme.typography.titleLarge)
+        SearchContent(trackList) { track -> trackClickListener(track) }
+        Button(
+            modifier = Modifier.padding(0.dp, 16.dp),
+            shape = RoundedCornerShape(54.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.primary
+            ) ,
+            contentPadding = PaddingValues(8.dp, 0.dp),
+            onClick = { clearHistoryClickListener.invoke() },
+            content = {
+                Text(modifier = Modifier.padding(0.dp, 0.dp),
+                    text = stringResource(R.string.search_history_clear_button),
+                style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary)
+            },
+        )
+    }
+}
+
 
 @Composable
-fun SearchResult(trackList: List<Track>) {
+fun SearchContent(trackList: List<Track>, clickListener: (Track) -> Unit) {
     LazyColumn (Modifier.fillMaxWidth(1f)) {
         for (track in trackList) {
             item {
                 Row(
-                    Modifier.fillMaxWidth(1f).padding(0.dp, 8.dp),
+                    Modifier
+                        .fillMaxWidth(1f)
+                        .padding(0.dp, 4.dp)
+                        .clickable {
+                            clickListener(track)
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AsyncImage(
-                        modifier = Modifier.size(44.dp).padding(0.dp),
+                        modifier = Modifier
+                            .size(44.dp)
+                            .padding(0.dp),
                         model = track.artworkUrl100,
                         contentDescription = null,
                         placeholder = painterResource(R.drawable.baseline_gesture_24)
                     )
-                    Column(Modifier.fillMaxWidth(0.8f).padding(8.dp, 0.dp)) {
+                    Column(Modifier
+                        .fillMaxWidth(0.9f)
+                        .padding(8.dp, 0.dp),
+                        verticalArrangement = Arrangement.SpaceBetween) {
                         Text(text = track.trackName.toString(),
+                            style = MaterialTheme.typography.bodyLarge,
                             maxLines = 1)
                         Text(text = track.artistName.toString() + " · "
                                 + track.trackTimeFormat.toString(),
-                            maxLines = 1)
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            color = MaterialTheme.colorScheme.onTertiary)
                     }
                     Image(
                         modifier = Modifier.width(24.dp),
@@ -199,7 +319,9 @@ fun SearchResultPreview() {
             previewUrl= "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/32/31/34/3231342b-d7dc-1faf-ec62-b71e9a914d2a/mzaf_258319441300988437.plus.aac.p.m4a",
             collectionName= "Flight of the Birds - Single", releaseYear="2014", primaryGenreName= "Electronica", country= "USA", isFavorite=false)
     )
-    SearchResult(trackList)
+    PlaylistMakerTheme {
+        HistoryContent(trackList, {}) {}
+    }
 }
 
 
@@ -283,6 +405,9 @@ fun SearchPreview(){
 
                     }
                 )
+
+                Error(painterResource(id = R.drawable.ic_nothing_found),
+                    stringResource(id = R.string.search_nothing_found))
             }
         }
     }
