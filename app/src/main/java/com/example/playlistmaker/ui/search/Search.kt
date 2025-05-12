@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,6 +49,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
+import com.example.playlistmaker.ui.PageHead
+import com.example.playlistmaker.ui.theme.Blue
 import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
 
 
@@ -57,7 +59,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
            clickListener: (Track) -> Unit)  {
 
     val searchState by searchViewModel.stateLiveData.observeAsState()
-    var searchQuery: String by remember { mutableStateOf("") }
+    var searchQuery: String by rememberSaveable { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
@@ -66,13 +68,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
             .fillMaxSize(1f)
             .padding(16.dp, 0.dp)) {
 
-            Box(modifier = Modifier.height(56.dp)) {
-                Text(
-                    modifier = Modifier.align(Alignment.Center),
-                    text = stringResource(id = R.string.search_button),
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
+            PageHead(stringResource(id = R.string.search_button))
 
             BasicTextField(
                 modifier = Modifier
@@ -87,7 +83,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                     searchQuery = newQuery
                     searchViewModel.processQuery(searchQuery)
                 },
-                cursorBrush = SolidColor(colorResource(R.color.blue)),
+                cursorBrush = SolidColor(Blue),
                 singleLine = true,
                 textStyle = MaterialTheme.typography.bodyLarge,
                 keyboardActions = KeyboardActions(onDone = { searchViewModel.search(searchQuery)
@@ -98,7 +94,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                             .fillMaxWidth(1f)
                             .height(36.dp)
                             .background(
-                                MaterialTheme.colorScheme.primaryContainer,
+                                MaterialTheme.colorScheme.secondary,
                                 RoundedCornerShape(percent = 10)
                             ),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -110,7 +106,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                                 .width(24.dp),
                             painter = painterResource(id = R.drawable.search_14),
                             contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onTertiary)
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
                         )
                         Box(
                             modifier = Modifier
@@ -121,7 +117,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                                 Text(
                                     text = stringResource(id = R.string.search_button),
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onTertiary
+                                    color = MaterialTheme.colorScheme.onSecondary
                                 )
                             innerTextField()
                         }
@@ -136,7 +132,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                                     }),
                                     painter = painterResource(id = R.drawable.baseline_close_24),
                                     contentDescription = null,
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onTertiary)
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
                                 )
                             }
                         }
@@ -217,8 +213,7 @@ fun Loading(){
             modifier = Modifier
                 .width(44.dp)
                 .align(Alignment.BottomCenter),
-            color = MaterialTheme.colorScheme.secondary,
-            trackColor = colorResource(R.color.blue),
+            trackColor = Blue,
         )
     }
 }
@@ -291,7 +286,8 @@ fun SearchContent(modifier: Modifier, trackList: List<Track>, clickListener: (Tr
                         verticalArrangement = Arrangement.SpaceBetween) {
                         Text(text = track.trackName.toString(),
                             style = MaterialTheme.typography.bodyLarge,
-                            maxLines = 1)
+                            maxLines = 1,
+                            color = MaterialTheme.colorScheme.onPrimary)
                         Text(text = track.artistName.toString() + " · "
                                 + track.trackTimeFormat.toString(),
                             style = MaterialTheme.typography.bodySmall,
@@ -341,13 +337,7 @@ fun SearchPreview(){
                 .fillMaxWidth(1f)
                 .padding(16.dp, 0.dp)) {
 
-                Box(modifier = Modifier.height(56.dp)) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = stringResource(id = R.string.search_button),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                }
+                PageHead(stringResource(id = R.string.search_button))
 
                 BasicTextField(
                     modifier = Modifier
@@ -357,7 +347,7 @@ fun SearchPreview(){
                     onValueChange = { newQuery ->
                         searchQuery = newQuery
                     },
-                    cursorBrush = SolidColor(colorResource(R.color.blue)),
+                    cursorBrush = SolidColor(Blue),
                     singleLine = true,
                     textStyle = MaterialTheme.typography.bodyLarge,
                     decorationBox = { innerTextField ->
@@ -366,7 +356,7 @@ fun SearchPreview(){
                                 .fillMaxWidth(1f)
                                 .height(36.dp)
                                 .background(
-                                    MaterialTheme.colorScheme.primaryContainer,
+                                    MaterialTheme.colorScheme.secondary,
                                     RoundedCornerShape(percent = 10)
                                 ),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -389,7 +379,7 @@ fun SearchPreview(){
                                     Text(
                                         text = stringResource(id = R.string.search_button),
                                         style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onTertiary
+                                        color = MaterialTheme.colorScheme.onSecondary
                                     )
                                 innerTextField()
                             }
@@ -401,7 +391,7 @@ fun SearchPreview(){
                                         modifier = Modifier.clickable(onClick = { searchQuery = "" }),
                                         painter = painterResource(id = R.drawable.baseline_close_24),
                                         contentDescription = null,
-                                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onTertiary)
+                                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
                                     )
                                 }
                             }
@@ -409,7 +399,6 @@ fun SearchPreview(){
 
                     }
                 )
-
                 Error(painterResource(id = R.drawable.ic_nothing_found),
                     stringResource(id = R.string.search_nothing_found))
             }

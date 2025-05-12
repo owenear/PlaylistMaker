@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +24,11 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.presentation.settings.view_model.SettingsViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import com.example.playlistmaker.ui.PageHead
+import com.example.playlistmaker.ui.theme.Blue
+import com.example.playlistmaker.ui.theme.Grey
+import com.example.playlistmaker.ui.theme.LightBlue
+import com.example.playlistmaker.ui.theme.LightGrey
 
 
 @Composable
@@ -36,13 +40,7 @@ fun Settings(modifier: Modifier = Modifier, settingsViewModel: SettingsViewModel
     val practicumOfferLink = stringResource(R.string.practicum_offer_link)
 
     Column(modifier = Modifier.fillMaxWidth(1f).padding(16.dp, 0.dp)) {
-        Box(modifier = Modifier.height(56.dp)) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = stringResource(id = R.string.settings_button),
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
+        PageHead(stringResource(id = R.string.settings_button))
         Column(modifier = Modifier.padding(0.dp, 24.dp).fillMaxWidth(1f)) {
             SettingRowSwitch(stringResource(R.string.settings_night), settingsViewModel)
             SettingsRowImage(stringResource(R.string.settings_share),
@@ -78,12 +76,12 @@ fun SettingRowSwitch(text: String, settingsViewModel: SettingsViewModel){
                 settingsViewModel.setTheme(!checked)
             },
             colors = SwitchDefaults.colors(
-                checkedBorderColor = MaterialTheme.colorScheme.secondary,
-                checkedThumbColor = MaterialTheme.colorScheme.onSecondary,
-                checkedTrackColor = MaterialTheme.colorScheme.secondary,
-                uncheckedBorderColor = MaterialTheme.colorScheme.secondary,
-                uncheckedThumbColor = MaterialTheme.colorScheme.onSecondary,
-                uncheckedTrackColor = MaterialTheme.colorScheme.secondary
+                checkedBorderColor = LightBlue,
+                checkedThumbColor = Blue,
+                checkedTrackColor = LightBlue,
+                uncheckedBorderColor = LightGrey,
+                uncheckedThumbColor = Grey,
+                uncheckedTrackColor = LightGrey
             )
         )
     }
