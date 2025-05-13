@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -36,20 +34,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
-import coil3.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.search.models.SearchScreenState
 import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
+import com.example.playlistmaker.ui.ErrorContent
 import com.example.playlistmaker.ui.PageHead
+import com.example.playlistmaker.ui.SearchContent
 import com.example.playlistmaker.ui.theme.Blue
 import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
 
@@ -152,55 +149,17 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                         searchViewModel.clearHistory() }) { track -> clickListener(track) }
                 }
                 is SearchScreenState.Error -> {
-                    Error(painterResource(id = R.drawable.ic_net_error),
+                    ErrorContent(Modifier, painterResource(id = R.drawable.ic_net_error),
                         stringResource(id = R.string.search_net_error))
                     { searchViewModel.search(searchQuery) }
                 }
                 is SearchScreenState.Empty -> {
-                    Error(painterResource(id = R.drawable.ic_nothing_found),
+                    ErrorContent(Modifier, painterResource(id = R.drawable.ic_nothing_found),
                         stringResource(id = R.string.search_nothing_found))
                 }
                 else -> return
             }
         }
-    }
-}
-
-@Composable
-fun Error(image: Painter, text: String, updateClickListener: (() -> Unit)? = null) {
-    Column(modifier = Modifier
-        .fillMaxWidth(1f)
-        .padding(0.dp, 98.dp, 0.dp, 0.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            modifier = Modifier.size(120.dp),
-            painter = image,
-            contentDescription = null,
-        )
-        Text(
-            modifier = Modifier.padding(0.dp, 16.dp),
-            text = text,
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center
-        )
-        if (updateClickListener != null)
-            Button(
-                shape = RoundedCornerShape(54.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.primary
-                ) ,
-                contentPadding = PaddingValues(8.dp, 0.dp),
-                onClick = { updateClickListener.invoke() },
-                content = {
-                    Text(modifier = Modifier.padding(0.dp, 0.dp),
-                        text = stringResource(R.string.search_update_button),
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.primary)
-                },
-            )
     }
 }
 
@@ -255,56 +214,6 @@ fun HistoryContent(trackList: List<Track>,
     }
 }
 
-
-@Composable
-fun SearchContent(modifier: Modifier, trackList: List<Track>, clickListener: (Track) -> Unit) {
-    LazyColumn (modifier.fillMaxWidth(1f)) {
-        for (track in trackList) {
-            item {
-                Row(
-                    Modifier
-                        .fillMaxWidth(1f)
-                        .height(62.dp)
-                        .padding(0.dp, 0.dp)
-                        .clickable {
-                            clickListener(track)
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .size(44.dp)
-                            .padding(0.dp),
-                        model = track.artworkUrl100,
-                        contentDescription = null,
-                        placeholder = painterResource(R.drawable.baseline_gesture_24)
-                    )
-                    Column(Modifier
-                        .fillMaxWidth(0.9f)
-                        .padding(8.dp, 0.dp),
-                        verticalArrangement = Arrangement.SpaceBetween) {
-                        Text(text = track.trackName.toString(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            maxLines = 1,
-                            color = MaterialTheme.colorScheme.onPrimary)
-                        Text(text = track.artistName.toString() + " · "
-                                + track.trackTimeFormat.toString(),
-                            style = MaterialTheme.typography.bodySmall,
-                            maxLines = 1,
-                            color = MaterialTheme.colorScheme.onTertiary)
-                    }
-                    Image(
-                        modifier = Modifier.width(24.dp),
-                        painter = painterResource(id = R.drawable.arrow_forward),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onTertiary)
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
@@ -399,7 +308,7 @@ fun SearchPreview(){
 
                     }
                 )
-                Error(painterResource(id = R.drawable.ic_nothing_found),
+                ErrorContent(Modifier, painterResource(id = R.drawable.ic_nothing_found),
                     stringResource(id = R.string.search_nothing_found))
             }
         }
