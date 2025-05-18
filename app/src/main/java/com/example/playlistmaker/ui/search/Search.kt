@@ -92,7 +92,7 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                             .height(36.dp)
                             .background(
                                 MaterialTheme.colorScheme.secondary,
-                                RoundedCornerShape(percent = 10)
+                                RoundedCornerShape(10.dp)
                             ),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
@@ -149,12 +149,14 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
                         searchViewModel.clearHistory() }) { track -> clickListener(track) }
                 }
                 is SearchScreenState.Error -> {
-                    ErrorContent(Modifier, painterResource(id = R.drawable.ic_net_error),
+                    ErrorContent(Modifier.padding(0.dp, 98.dp, 0.dp, 0.dp),
+                        painterResource(id = R.drawable.ic_net_error),
                         stringResource(id = R.string.search_net_error))
                     { searchViewModel.search(searchQuery) }
                 }
                 is SearchScreenState.Empty -> {
-                    ErrorContent(Modifier, painterResource(id = R.drawable.ic_nothing_found),
+                    ErrorContent(Modifier.padding(0.dp, 98.dp, 0.dp, 0.dp),
+                        painterResource(id = R.drawable.ic_nothing_found),
                         stringResource(id = R.string.search_nothing_found))
                 }
                 else -> return

@@ -24,9 +24,7 @@ import com.example.playlistmaker.R
 @Composable
 fun ErrorContent(modifier: Modifier = Modifier, image: Painter, text: String,
                  updateClickListener: (() -> Unit)? = null) {
-    Column(modifier = modifier
-        .fillMaxWidth(1f)
-        .padding(0.dp, 98.dp, 0.dp, 0.dp),
+    Column(modifier = modifier.fillMaxWidth(1f),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

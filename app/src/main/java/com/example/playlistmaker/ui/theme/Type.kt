@@ -39,6 +39,13 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
 
+    bodyMedium = TextStyle(
+        fontFamily = FontFamily(Font(R.font.ys_display_regular, FontWeight.Normal)),
+        fontWeight = FontWeight.W400,
+        fontSize = 12.sp,
+        letterSpacing = 0.sp
+    ),
+
     bodySmall = TextStyle(
         fontFamily = FontFamily(Font(R.font.ys_display_regular, FontWeight.Normal)),
         fontWeight = FontWeight.W400,

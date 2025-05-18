@@ -33,7 +33,8 @@ fun Favorites(modifier: Modifier = Modifier, favoritesViewModel: FavoritesViewMo
                     track -> clickListener(track) }
             }
             else -> {
-                ErrorContent(Modifier, painterResource(id = R.drawable.ic_nothing_found),
+                ErrorContent(Modifier.padding(0.dp, 108.dp, 0.dp, 0.dp),
+                    painterResource(id = R.drawable.ic_nothing_found),
                     stringResource(id = R.string.library_favourites_default))
             }
         }
