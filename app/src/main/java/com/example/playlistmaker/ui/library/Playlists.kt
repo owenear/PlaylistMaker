@@ -46,9 +46,8 @@ fun Playlists(modifier: Modifier = Modifier, playlistsViewModel: PlaylistsViewMo
     val playlistsState by playlistsViewModel.stateLiveData.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
-
         Column(modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth(1f),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -118,7 +117,8 @@ fun PlaylistItem(playlist: Playlist, clickListener: (Playlist) -> Unit) {
                 contentScale = ContentScale.Crop,
                 model = playlist.coverUri,
                 contentDescription = null,
-                placeholder = painterResource(R.drawable.baseline_gesture_24)
+                placeholder = painterResource(R.drawable.baseline_gesture_24),
+                error = painterResource(R.drawable.baseline_gesture_24)
             )
         }
         Column(Modifier.padding(0.dp, 0.dp),
