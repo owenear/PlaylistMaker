@@ -17,6 +17,11 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -34,6 +39,8 @@ import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.example.playlistmaker.presentation.playlists.activity.PlaylistCreateFragment
 import com.example.playlistmaker.services.MusicService
 import com.example.playlistmaker.services.NetworkBroadcastReceiver
+import com.example.playlistmaker.ui.player.Player
+import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.android.ext.android.inject
@@ -68,8 +75,8 @@ class PlayerFragment() : Fragment() {
         }
     }
 
-    private var _binding: FragmentPlayerBinding? = null
-    private val binding get() = _binding!!
+    //private var _binding: FragmentPlayerBinding? = null
+    //private val binding get() = _binding!!
 
     private val trackItem by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -84,14 +91,16 @@ class PlayerFragment() : Fragment() {
     }
     private lateinit var clickListenerDebounce: (Playlist) -> Unit
 
+    /*
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
 
     private val playerPlaylistAdapter by lazy {
         PlayerPlaylistAdapter() { playlist -> clickListenerDebounce(playlist) }
     }
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-
+    */
 
     private fun bindMusicService() {
         if (trackItem != null) {
@@ -110,8 +119,18 @@ class PlayerFragment() : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        _binding = FragmentPlayerBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                PlaylistMakerTheme {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        Player(
+                            modifier = Modifier.padding(innerPadding),
+                            trackItem, playerViewModel
+                        ) { findNavController().navigateUp() }
+                    }
+                }
+            }
+        }
     }
 
     override fun onPause() {
@@ -141,6 +160,7 @@ class PlayerFragment() : Fragment() {
             bindMusicService()
         }
 
+        /*
         binding.playerToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -229,7 +249,7 @@ class PlayerFragment() : Fragment() {
             isNewPlaylistButtonClicked = true
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
-
+        */
         requireActivity().onBackPressedDispatcher.addCallback(
             object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -243,6 +263,7 @@ class PlayerFragment() : Fragment() {
         playerViewModel.onPlaylistClicked(playlist)
     }
 
+    /*
     private fun render(state: PlayerScreenState) {
         when (state) {
             is PlayerScreenState.Default -> showDefault()
@@ -294,11 +315,11 @@ class PlayerFragment() : Fragment() {
         else
             binding.playerFavoriteButton.setImageResource(R.drawable.ic_favorite_button_false)
     }
-
+    */
     override fun onDestroyView() {
         unbindMusicService()
         super.onDestroyView()
-        _binding = null
+    //    _binding = null
     }
 
     companion object {

@@ -12,12 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
 
 @Composable
-fun PageHead(pageName: String, isBackArrow: Boolean = false,
+fun PageHead(pageName: String = "", isBackArrow: Boolean = false,
              clickListener: (() -> Unit)? = null) {
     Row(modifier = Modifier.height(56.dp),
         horizontalArrangement = Arrangement.Start,
@@ -30,6 +31,7 @@ fun PageHead(pageName: String, isBackArrow: Boolean = false,
                     .clickable { clickListener?.invoke() },
                 painter = painterResource(id = R.drawable.arrow_back),
                 contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
             )
         }
         Text(
