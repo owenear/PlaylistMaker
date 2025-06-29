@@ -214,7 +214,7 @@ fun PlaylistCreate(modifier: Modifier = Modifier,
                                 modifier = Modifier.padding(0.dp, 0.dp),
                                 text = stringResource(R.string.playlist_create_button),
                                 style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.primary
+                                color = White
                             )
                         },
                         enabled = !playlistName.isBlank()
@@ -249,5 +249,4 @@ fun playlistTextField(modifier: Modifier, text: String, label: String): String {
     )
     return value
 }
-
 
