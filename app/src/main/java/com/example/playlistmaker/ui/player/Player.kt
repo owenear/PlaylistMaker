@@ -1,7 +1,5 @@
 package com.example.playlistmaker.ui.player
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -74,6 +72,7 @@ fun Player(
 ){
     val context = LocalContext.current
     val playerState by playerViewModel.stateLiveData.observeAsState()
+
     var isPrepared by remember { mutableStateOf(false) }
     var playTime by remember { mutableStateOf("00:00") }
     var isFavorite by remember { mutableStateOf(false) }
@@ -81,7 +80,7 @@ fun Player(
 
     val scope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState()
-    val shouldShowBottomSheet = remember { mutableStateOf(false) }
+    var shouldShowBottomSheet by remember { mutableStateOf(false) }
 
     var playlists by remember { mutableStateOf(listOf<Playlist>()) }
 
@@ -107,23 +106,24 @@ fun Player(
         }
         is PlayerScreenState.Playlists -> {
             playlists = (playerState as PlayerScreenState.Playlists).playlists
-            Log.d("VM STATE", playlists.toString())
         }
         is PlayerScreenState.AddResult -> {
-            if ((playerState as PlayerScreenState.AddResult).isTrackInPlaylist)
-                Toast.makeText(context, stringResource(R.string.playlist_track_add_fail_toast,
-                    (playerState as PlayerScreenState.AddResult).playlist.name),
-                    Toast.LENGTH_SHORT).show()
-            else {
-                LaunchedEffect(scope) {
+            LaunchedEffect(key1 = playerState) {
+                if ((playerState as PlayerScreenState.AddResult).isTrackInPlaylist)
+                        Toast.makeText(
+                            context, context.getString(
+                                R.string.playlist_track_add_fail_toast,
+                                (playerState as PlayerScreenState.AddResult).playlist.name
+                            ),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                else {
                     bottomSheetState.hide()
+                    shouldShowBottomSheet = false
+                    Toast.makeText(context, context.getString(R.string.playlist_track_add_success_toast,
+                        (playerState as PlayerScreenState.AddResult).playlist.name),
+                        Toast.LENGTH_SHORT).show()
                 }
-                shouldShowBottomSheet.value = false
-                Toast.makeText(context, stringResource(R.string.playlist_track_add_success_toast,
-                        (playerState as PlayerScreenState.AddResult).playlist.name
-                    ),
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
     }
@@ -180,7 +180,7 @@ fun Player(
                 ) {
                     AddButton(painterResource(id = R.drawable.baseline_add_to_24)) {
                         playerViewModel.updateData()
-                        shouldShowBottomSheet.value = true
+                        shouldShowBottomSheet = true
                         scope.launch { bottomSheetState.partialExpand() }
                     }
                     Image(
@@ -211,21 +211,20 @@ fun Player(
             }
             TrackData(track)
         }
-
         PlaylistListBottomSheet(
-            visible = shouldShowBottomSheet.value,
+            visible = shouldShowBottomSheet,
             bottomSheetState = bottomSheetState,
-            onDismissRequest = { shouldShowBottomSheet.value = false },
+            onDismissRequest = { shouldShowBottomSheet = false },
             hideBottomSheet = {
                 scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
                     if (!bottomSheetState.isVisible) {
-                        shouldShowBottomSheet.value = false
+                        shouldShowBottomSheet = false
                     }
                 }
             },
             playlistList = playlists,
             clickListener = {
-                playlist -> playerViewModel.onPlaylistClicked(playlist)
+               playlist -> playerViewModel.onPlaylistClicked(playlist)
             }
         )
     }
@@ -300,15 +299,17 @@ fun PlaylistListBottomSheet(
     playlistList: List<Playlist>,
     clickListener: (Playlist) -> Unit
 ) {
-    if (visible)
+    if (visible) {
         ModalBottomSheet(
             onDismissRequest = { onDismissRequest() },
             sheetState = bottomSheetState,
             containerColor = MaterialTheme.colorScheme.primary
         ) {
-            PlaylistContent(Modifier.padding(8.dp, 16.dp), playlistList) {
-                playlist -> clickListener(playlist) }
+            PlaylistContent(Modifier.padding(8.dp, 16.dp), playlistList) { playlist ->
+                clickListener(playlist)
+            }
         }
+    }
 }
 
 
