@@ -140,8 +140,8 @@ fun Search(modifier: Modifier = Modifier, searchViewModel: SearchViewModel,
             when (searchState) {
                 is SearchScreenState.Loading -> Loading()
                 is SearchScreenState.SearchContent -> {
-                    SearchContent(Modifier, (searchState as SearchScreenState.SearchContent).trackList) {
-                        track -> clickListener(track) }
+                    SearchContent(Modifier, (searchState as SearchScreenState.SearchContent).trackList,
+                        { track -> clickListener(track) }, {} )
                     keyboardController?.hide()
                 }
                 is SearchScreenState.HistoryContent -> {
@@ -195,8 +195,8 @@ fun HistoryContent(trackList: List<Track>,
                 style = MaterialTheme.typography.titleLarge,)
         }
         SearchContent(Modifier
-            .height(min((trackList.count()*62).dp, 310.dp)), trackList) {
-            track -> trackClickListener(track) }
+            .height(min((trackList.count()*62).dp, 310.dp)), trackList,
+            { track -> trackClickListener(track) }, {})
         Button(
             modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp),
             shape = RoundedCornerShape(54.dp),

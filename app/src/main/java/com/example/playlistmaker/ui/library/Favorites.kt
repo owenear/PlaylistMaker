@@ -29,8 +29,8 @@ fun Favorites(modifier: Modifier = Modifier, favoritesViewModel: FavoritesViewMo
         when (favoritesState) {
             is FavoritesScreenState.Content -> {
                 SearchContent(Modifier.padding(0.dp, 24.dp, 0.dp, 0.dp),
-                    (favoritesState as FavoritesScreenState.Content).trackList) {
-                    track -> clickListener(track) }
+                    (favoritesState as FavoritesScreenState.Content).trackList,
+                    { track -> clickListener(track) }, {})
             }
             else -> {
                 ErrorContent(Modifier.padding(0.dp, 108.dp, 0.dp, 0.dp),

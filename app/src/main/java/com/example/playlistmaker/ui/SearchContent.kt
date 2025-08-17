@@ -1,7 +1,8 @@
 package com.example.playlistmaker.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,8 +25,10 @@ import coil3.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.models.Track
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SearchContent(modifier: Modifier, trackList: List<Track>, clickListener: (Track) -> Unit) {
+fun SearchContent(modifier: Modifier, trackList: List<Track>, clickListener: (Track) -> Unit,
+                  longClickListener: (Track) -> Unit ) {
     LazyColumn (modifier.fillMaxWidth(1f)) {
         items(trackList) { track ->
             Row(
@@ -33,9 +36,10 @@ fun SearchContent(modifier: Modifier, trackList: List<Track>, clickListener: (Tr
                     .fillMaxWidth(1f)
                     .height(62.dp)
                     .padding(0.dp, 0.dp)
-                    .clickable {
-                        clickListener(track)
-                    },
+                    .combinedClickable (
+                        onClick = { clickListener(track) },
+                        onLongClick = { longClickListener(track) },
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

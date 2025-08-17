@@ -29,7 +29,6 @@ class PlaylistViewModel(private val playlist: Playlist,
             }
             playlistInteractor.getTracksInPlaylist(playlist).collect {
                 tracks -> renderState(PlaylistScreenState.Content(tracks))
-
             }
         }
     }
