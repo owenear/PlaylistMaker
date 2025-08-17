@@ -175,6 +175,7 @@ fun PlaylistCompose(
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
+                    .background(color = LightGrey)
                     .padding(0.dp, 16.dp, 0.dp, 0.dp),
                 verticalArrangement = Arrangement.Top
             ) {

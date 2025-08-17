@@ -18,7 +18,6 @@ import com.example.playlistmaker.domain.search.models.Track
 import com.example.playlistmaker.presentation.favorites.models.FavoritesScreenState
 import com.example.playlistmaker.presentation.favorites.view_model.FavoritesViewModel
 import com.example.playlistmaker.presentation.player.activity.PlayerFragment
-import com.example.playlistmaker.presentation.search.activity.SearchAdapter
 import com.example.playlistmaker.ui.library.Favorites
 import com.example.playlistmaker.ui.search.Search
 import com.example.playlistmaker.ui.theme.PlaylistMakerTheme
