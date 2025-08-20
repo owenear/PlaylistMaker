@@ -82,8 +82,9 @@ fun PlaylistCompose(
     var playlist by remember { mutableStateOf(playlist) }
     var tracks by remember { mutableStateOf(listOf<Track>()) }
 
-    var sharingString = "${playlist.name}\n${playlist.description}\n${playlist.trackCount} " +
-            pluralStringResource(id = R.plurals.track_plurals, count = playlist.trackCount) + "\n"
+    val sharingString = "${playlist.name}\n${playlist.description}\n" +
+            pluralStringResource(id = R.plurals.track_plurals, count = playlist.trackCount,
+                playlist.trackCount) + "\n"
 
     val scope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState()
@@ -197,15 +198,15 @@ fun PlaylistCompose(
 
                 Text(
                     modifier = Modifier.padding(16.dp, 4.dp),
-                    text = playlist.durationFormat + " "
-                            + pluralStringResource(
+                    text = pluralStringResource(
                         id = R.plurals.time_plurals,
-                        count = playlist.durationFormat.toInt()
+                        count = playlist.durationFormat.toInt(),
+                        playlist.durationFormat.toInt()
                     )
-                            + " · " + playlist.trackCount.toString() + " "
-                            + pluralStringResource(
+                            + " · " + pluralStringResource(
                         id = R.plurals.track_plurals,
-                        count = playlist.trackCount
+                        count = playlist.trackCount,
+                        playlist.trackCount
                     ),
                     style = MaterialTheme.typography.bodyLarge,
                     maxLines = 1,

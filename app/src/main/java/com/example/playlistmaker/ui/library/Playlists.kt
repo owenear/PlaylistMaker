@@ -129,8 +129,9 @@ fun PlaylistItem(playlist: Playlist, clickListener: (Playlist) -> Unit) {
                 maxLines = 1,
                 color = MaterialTheme.colorScheme.onPrimary)
             Text(modifier = Modifier.height(16.dp),
-                text = playlist.trackCount.toString() + " " +
-                    pluralStringResource(id = R.plurals.track_plurals, count = playlist.trackCount),
+                text = pluralStringResource(id = R.plurals.track_plurals,
+                    count = playlist.trackCount,
+                    playlist.trackCount),
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
                 color = MaterialTheme.colorScheme.onPrimary)

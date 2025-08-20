@@ -54,9 +54,10 @@ fun PlaylistContent(modifier: Modifier, playlistList: List<Playlist>, clickListe
                         style = MaterialTheme.typography.bodyLarge,
                         maxLines = 1,
                         color = MaterialTheme.colorScheme.onPrimary)
-                    Text(text = playlist.trackCount.toString() + " " +
-                            pluralStringResource(id = R.plurals.track_plurals,
-                                count = playlist.trackCount),
+                    Text(text = pluralStringResource(id = R.plurals.track_plurals,
+                                count = playlist.trackCount,
+                        playlist.trackCount
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 1,
                         color = MaterialTheme.colorScheme.onTertiary)
