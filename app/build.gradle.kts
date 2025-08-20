@@ -2,11 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.example.playlistmaker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.playlistmaker"
@@ -29,6 +30,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     compileOptions {
@@ -38,9 +40,29 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
 
 dependencies {
+    val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation(libs.material3)
+
+    // Android Studio Preview support
+    implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
+
+    // Optional - Integration with activities
+    implementation(libs.androidx.activity.compose)
+    // Optional - Integration with ViewModels
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Optional - Integration with LiveData
+    implementation(libs.androidx.runtime.livedata)
+    
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
@@ -63,5 +85,4 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.kotlinx.coroutines.android)
-
 }

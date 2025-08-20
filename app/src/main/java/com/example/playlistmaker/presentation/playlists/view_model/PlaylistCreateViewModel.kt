@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor,
     private val playlist: Playlist? = null) : ViewModel() {
 
-    private val stateMutableLiveData = MutableLiveData<PlaylistCreateScreenState>(
-        PlaylistCreateScreenState.Disabled)
+    private val stateMutableLiveData = MutableLiveData<PlaylistCreateScreenState>()
     val stateLiveData : LiveData<PlaylistCreateScreenState> = stateMutableLiveData
 
     init {
@@ -38,11 +37,6 @@ class PlaylistCreateViewModel(private val playlistInteractor: PlaylistInteractor
     fun onBackPressed() {
         renderState(PlaylistCreateScreenState.BackPressed(
             (stateMutableLiveData.value is PlaylistCreateScreenState.Created || playlist != null)))
-    }
-
-    fun processInput(playlistName: String) {
-        if (playlistName.isEmpty()) renderState(PlaylistCreateScreenState.Disabled)
-        else renderState(PlaylistCreateScreenState.Enabled)
     }
 
     private fun renderState(state: PlaylistCreateScreenState) {

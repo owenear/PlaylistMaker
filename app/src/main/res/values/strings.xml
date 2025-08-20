@@ -65,17 +65,17 @@
     <string name="playlist_delete_dialog_ok">Да</string>
 
     <plurals name="track_plurals">
-        <item quantity="one">трек</item>
-        <item quantity="few">трека</item>
-        <item quantity="many">треков</item>
-        <item quantity="other">треков</item>
+        <item quantity="one">%d трек</item>
+        <item quantity="few">%d трека</item>
+        <item quantity="many">%d треков</item>
+        <item quantity="other">%d треков</item>
     </plurals>
 
     <plurals name="time_plurals">
-        <item quantity="one">минута</item>
-        <item quantity="few">минуты</item>
-        <item quantity="many">минут</item>
-        <item quantity="other">минут</item>
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d минут</item>
     </plurals>
 
     <string name="no_network_toast">Отсутствует подключение к интернету</string>
